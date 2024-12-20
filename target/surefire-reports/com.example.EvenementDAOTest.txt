@@ -1,0 +1,16 @@
+-------------------------------------------------------------------------------
+Test set: com.example.EvenementDAOTest
+-------------------------------------------------------------------------------
+Tests run: 4, Failures: 3, Errors: 0, Skipped: 0, Time elapsed: 1.318 s <<< FAILURE! - in com.example.EvenementDAOTest
+com.example.EvenementDAOTest.testAjouterEvenement  Time elapsed: 0.535 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: not <null>
+	at com.example.EvenementDAOTest.testAjouterEvenement(EvenementDAOTest.java:22)
+
+com.example.EvenementDAOTest.testAfficherEvenements  Time elapsed: 0.281 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: <true> but was: <false>
+	at com.example.EvenementDAOTest.testAfficherEvenements(EvenementDAOTest.java:39)
+
+com.example.EvenementDAOTest.testUpdateEvenement  Time elapsed: 0.154 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: not <null>
+	at com.example.EvenementDAOTest.testUpdateEvenement(EvenementDAOTest.java:61)
+
