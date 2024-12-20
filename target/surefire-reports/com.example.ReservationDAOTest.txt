@@ -1,24 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.example.ReservationDAOTest
 -------------------------------------------------------------------------------
-Tests run: 5, Failures: 5, Errors: 0, Skipped: 0, Time elapsed: 0.582 s <<< FAILURE! - in com.example.ReservationDAOTest
-com.example.ReservationDAOTest.testAfficherReservations  Time elapsed: 0.146 s  <<< FAILURE!
-org.opentest4j.AssertionFailedError: expected: <true> but was: <false>
-	at com.example.ReservationDAOTest.testAfficherReservations(ReservationDAOTest.java:57)
-
-com.example.ReservationDAOTest.testVerifierDisponible  Time elapsed: 0.112 s  <<< FAILURE!
-org.opentest4j.AssertionFailedError: expected: <0> but was: <1>
-	at com.example.ReservationDAOTest.testVerifierDisponible(ReservationDAOTest.java:156)
-
-com.example.ReservationDAOTest.testUpdateReservation  Time elapsed: 0.063 s  <<< FAILURE!
-org.opentest4j.AssertionFailedError: expected: not <null>
-	at com.example.ReservationDAOTest.testUpdateReservation(ReservationDAOTest.java:123)
-
-com.example.ReservationDAOTest.testSupprimerReservation  Time elapsed: 0.122 s  <<< FAILURE!
-org.opentest4j.AssertionFailedError: expected: not <null>
-	at com.example.ReservationDAOTest.testSupprimerReservation(ReservationDAOTest.java:90)
-
-com.example.ReservationDAOTest.testAjouterReservation  Time elapsed: 0.132 s  <<< FAILURE!
-org.opentest4j.AssertionFailedError: expected: <true> but was: <false>
-	at com.example.ReservationDAOTest.testAjouterReservation(ReservationDAOTest.java:32)
-
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.419 s - in com.example.ReservationDAOTest

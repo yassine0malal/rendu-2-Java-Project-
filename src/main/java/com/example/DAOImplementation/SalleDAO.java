@@ -1,5 +1,4 @@
 package com.example.DAOImplementation;
-import com.example.PostgreSQLConnection;
 import com.example.Models.Salle;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,12 +7,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class SalleDAO implements GenericDAO<Salle> {
-    
+    private Connection conexion;
     public SalleDAO() {
+    }
+    public void setConexion(Connection conexion) {
+        this.conexion = conexion;
     }
 
     public void ajouter (Salle salle){
-        try (Connection conexion = PostgreSQLConnection.getConnection()) {
             String query = "INSERT INTO salles (nom_salle, capacite) VALUES (?, ?)";
             try (PreparedStatement prep = conexion.prepareStatement(query)) {
                 prep.setString(1, salle.getNom());
@@ -27,15 +28,10 @@ public class SalleDAO implements GenericDAO<Salle> {
                 e.printStackTrace();
                 System.out.println("Error: " + e.getMessage());
             }
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            System.out.println("Error: de connecxion a la base de données");
-        }
+        
     }
 
     public void supprimer(int id){
-        try (Connection conexion = PostgreSQLConnection.getConnection()) {
             String query = "DELETE FROM salles WHERE id_salle = ?";
             try (PreparedStatement prep = conexion.prepareStatement(query)) {
                 prep.setInt(1, id);
@@ -48,15 +44,11 @@ public class SalleDAO implements GenericDAO<Salle> {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+      
     }
 
     @Override
     public void update(Salle salle){
-        try (Connection conexion = PostgreSQLConnection.getConnection()) {
             String query = "UPDATE salles SET capacite = ? ,nom_salle= ? WHERE id_salle = ?";
             try (PreparedStatement prep = conexion.prepareStatement(query)) {
                 prep.setInt(1, salle.getCapacite());
@@ -72,16 +64,10 @@ public class SalleDAO implements GenericDAO<Salle> {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            System.out.println("Error: de connecxion a la base de donnees");
-        }
     }
 
     @Override
     public ArrayList<Salle> afficher(){
-        try (Connection conexion = PostgreSQLConnection.getConnection()) {
             String query = "SELECT * FROM salles";
             ArrayList <Salle> salles = new ArrayList<>();
             try (PreparedStatement prep = conexion.prepareStatement(query)) {
@@ -99,17 +85,11 @@ public class SalleDAO implements GenericDAO<Salle> {
                 e.printStackTrace();
                 System.out.println("Error: de sql moi ");
             }
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            System.out.println("Error: de connecxion a la base de donnees");
-        }
         return null;
     }
 
     @Override
     public Salle get(int id) {
-        try (Connection conexion = PostgreSQLConnection.getConnection()) {
             String query = "SELECT * FROM salles WHERE id_salle = ?";
             Salle salle = null;
             try (PreparedStatement prep = conexion.prepareStatement(query)) {
@@ -130,11 +110,6 @@ public class SalleDAO implements GenericDAO<Salle> {
                 e.printStackTrace();
                 System.out.println("Error: de connecxion a la base de donnees");
             }
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            System.out.println("Error: de connecxion a la base de donnees");
-        }
                 return null;
         
     }

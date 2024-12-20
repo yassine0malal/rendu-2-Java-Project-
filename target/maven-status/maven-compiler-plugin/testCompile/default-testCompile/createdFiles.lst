@@ -1,2 +1,5 @@
+com\example\EvenementDAOTest.class
 com\example\UserDAOTest.class
-com\example\AppTest.class
+com\example\SalleDAOTest.class
+com\example\TerrainDAOTest.class
+com\example\ReservationDAOTest.class

@@ -1,4 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: com.example.UserDAOTest
 -------------------------------------------------------------------------------
-Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.715 s - in com.example.UserDAOTest
+Tests run: 4, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.212 s <<< FAILURE! - in com.example.UserDAOTest
+com.example.UserDAOTest.testAfficherUsers  Time elapsed: 0.054 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: <1> but was: <2>
+	at com.example.UserDAOTest.testAfficherUsers(UserDAOTest.java:57)
+

@@ -1,5 +1,4 @@
 package com.example.DAOImplementation;
-import com.example.PostgreSQLConnection;
 import com.example.Models.Reservation;
 import java.sql.Connection;
 import java.sql.Date;
@@ -9,14 +8,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ReservationDAO implements GenericDAO<Reservation> {
-    // Connection connexion = PostgreSQLConnection.getConnection();
+    private Connection conexion;
+    public void setConexion(Connection conexion) {
+        this.conexion = conexion;
+    }
     public ReservationDAO() {
     }
 
     @Override
     public void ajouter(Reservation reservation) {
-        try (Connection conexion = PostgreSQLConnection.getConnection()) {
-            if (this.verifierDisponible(reservation.getDate_reservation(), reservation.getId_salle()) == 0) {
+
+                if (this.verifierDisponible(reservation.getDate_reservation(), reservation.getId_salle()) == 0) {
                 System.out.println("La salle n'est pas disponible pour cette date");
                 return;
             }
@@ -34,16 +36,11 @@ public class ReservationDAO implements GenericDAO<Reservation> {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            System.out.println("Error connecting to the database.");
-        }
     }
 
     public int verifierDisponible( Date date, int id_salle) {
         String query = "SELECT * FROM reservations WHERE date_reservation = ? AND id_salle = ?";
-        try (PreparedStatement prep = PostgreSQLConnection.getConnection().prepareStatement(query)) {
+        try (PreparedStatement prep = conexion.prepareStatement(query)) {
             prep.setDate(1, date);
             prep.setInt(2, id_salle);
             ResultSet result = prep.executeQuery();
@@ -61,7 +58,6 @@ public class ReservationDAO implements GenericDAO<Reservation> {
 
     @Override
     public ArrayList<Reservation> afficher() {
-        try (Connection conexion = PostgreSQLConnection.getConnection()) {
             String query = "SELECT * FROM reservations";
             ArrayList<Reservation> reservations = new ArrayList<>();
             try (PreparedStatement prep = conexion.prepareStatement(query)) {
@@ -81,17 +77,12 @@ public class ReservationDAO implements GenericDAO<Reservation> {
                 e.printStackTrace();
                 System.out.println("Error executing the query.");
             }
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            System.out.println("error de connexion !");
-        }   
+       
         return null;
     }
 
     @Override
     public void supprimer(int id) {
-        try (Connection conexion = PostgreSQLConnection.getConnection()) {
             String query = "DELETE FROM reservations WHERE id_reservation = ?";
             try (PreparedStatement prep = conexion.prepareStatement(query)) {
                 prep.setInt(1, id);
@@ -105,17 +96,11 @@ public class ReservationDAO implements GenericDAO<Reservation> {
                 e.printStackTrace();
                 System.out.println("Error deleting event.");
             }
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            System.out.println("Error connecting to the database.");
-        }
 
     }
 
     @Override
     public void update(Reservation reservation) {
-        try (Connection conexion = PostgreSQLConnection.getConnection()) {
             String query = "UPDATE reservations SET id_user = ?, id_terrain = ?, id_event = ?, id_salle = ?, date_reservation = ? WHERE id_reservation = ?";
             try (PreparedStatement prep = conexion.prepareStatement(query)) {
                 prep.setInt(1, reservation.getId_user());
@@ -133,18 +118,12 @@ public class ReservationDAO implements GenericDAO<Reservation> {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            System.out.println("Error connecting to the database.");
-        }
     }
 
     @Override
     public Reservation get(int id){
-        try (Connection connection = PostgreSQLConnection.getConnection()) {
             String query = "SELECT * FROM reservations WHERE id_reservation = ?";
-            try (PreparedStatement prep = connection.prepareStatement(query)) {
+            try (PreparedStatement prep = conexion.prepareStatement(query)) {
                 prep.setInt(1, id);
                 ResultSet result = prep.executeQuery();
                 if (result.next()){
@@ -161,10 +140,6 @@ public class ReservationDAO implements GenericDAO<Reservation> {
             e.printStackTrace();
             
    }
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
         return null;
 }
 

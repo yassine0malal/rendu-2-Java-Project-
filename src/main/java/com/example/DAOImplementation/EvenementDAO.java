@@ -1,5 +1,4 @@
 package com.example.DAOImplementation;
-import com.example.PostgreSQLConnection;
 import com.example.Models.Evenement;
 
 import java.sql.Connection;
@@ -9,14 +8,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class EvenementDAO implements GenericDAO<Evenement> {
-
+private Connection conexion;
     public EvenementDAO() {
+    }
+
+    public void setConnection(Connection connexion) {
+        this.conexion = connexion;
     }
 
     @Override
     public void ajouter(Evenement evenement) {
 
-        try (Connection conexion = PostgreSQLConnection.getConnection()) {
             String query = "INSERT INTO evenements (nom, date_event, description, id_user,id) VALUES (?,?, ?, ?,?)";
             try (PreparedStatement prep = conexion.prepareStatement(query)) {
                 prep.setString(1, evenement.getNomEvent());
@@ -35,15 +37,10 @@ public class EvenementDAO implements GenericDAO<Evenement> {
                 e.printStackTrace();
                 System.out.println("ggff");
             }
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
     }
 
     @Override
     public ArrayList<Evenement> afficher() {
-        try (Connection conexion = PostgreSQLConnection.getConnection()) {
             String query = "SELECT * FROM evenements";
             ArrayList<Evenement> evenements = new ArrayList<>();
             try (PreparedStatement prep = conexion.prepareStatement(query)) {
@@ -64,16 +61,11 @@ public class EvenementDAO implements GenericDAO<Evenement> {
                 e.printStackTrace();
                 
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("connection failed");
-        }
         return null;
     }
 
     @Override
     public void supprimer(int id) {
-        try (Connection conexion = PostgreSQLConnection.getConnection()) {
             String query = "DELETE FROM evenements WHERE id = ?";
             try (PreparedStatement prep = conexion.prepareStatement(query)) {
                 prep.setInt(1, id);
@@ -86,17 +78,12 @@ public class EvenementDAO implements GenericDAO<Evenement> {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("connection failed");
-        }
     }
 
 
     @Override
     public void update(Evenement evenement) {
-        try {
-            Connection conexion = PostgreSQLConnection.getConnection();
+        
 
             String query = "UPDATE evenements SET nom = ?, date_event = ?, description = ?, id_user = ? WHERE id = ?";
             try (PreparedStatement prep = conexion.prepareStatement(query)) {
@@ -115,16 +102,10 @@ public class EvenementDAO implements GenericDAO<Evenement> {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        } catch (Exception e) {
-            // TODO: handle exception
-            e.printStackTrace();
-            System.out.println("connection failed");
-        }
     }
 
     @Override
     public Evenement get(int id) {
-        try (Connection conexion = PostgreSQLConnection.getConnection()) {
             String query = "SELECT * FROM evenements WHERE id = ?";
             try (PreparedStatement prep = conexion.prepareStatement(query)) {
                 prep.setInt(1, id);
@@ -145,10 +126,6 @@ public class EvenementDAO implements GenericDAO<Evenement> {
                 e.printStackTrace();
                 System.out.println("connection failed");
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("connection failed");
-        }
         return null;
     }
 
