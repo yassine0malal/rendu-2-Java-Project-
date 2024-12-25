@@ -1,8 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.example.EvenementDAOTest
--------------------------------------------------------------------------------
-Tests run: 4, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.671 s <<< FAILURE! - in com.example.EvenementDAOTest
-com.example.EvenementDAOTest.testAfficherEvenements  Time elapsed: 0.102 s  <<< FAILURE!
-org.opentest4j.AssertionFailedError: expected: <Séminaire> but was: <Reunion>
-	at com.example.EvenementDAOTest.testAfficherEvenements(EvenementDAOTest.java:59)
-

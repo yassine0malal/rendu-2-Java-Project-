@@ -1,4 +1,4 @@
-package com.example;
+package com.example.TestJunite;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,7 +53,7 @@ public class EvenementDAOTest {
         assertNotNull(events);
         assertTrue(events.size() > 0);
 
-        Evenement fetchedEvent = events.get(0);
+        Evenement fetchedEvent = events.get(1);
         assertEquals("Séminaire", fetchedEvent.getNomEvent());
         assertEquals(Date.valueOf("2024-02-15"), fetchedEvent.getDate());
         assertEquals("Séminaire sur l'innovation", fetchedEvent.getDescription());

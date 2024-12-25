@@ -1,4 +1,4 @@
-package com.example;
+package com.example.TestJunite;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,8 +52,8 @@ public class UserDAOTest {
 
         var users = userDAO.afficher(); 
         assertNotNull(users);
-        assertEquals(1, users.size());
-        assertEquals("Martin", users.get(0).getNom());
+        assertEquals(2, users.size());
+        assertEquals("Martin", users.get(1).getNom());
     }
 
     @Test

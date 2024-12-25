@@ -1,4 +1,4 @@
-package com.example;
+package com.example.TestJunite;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,6 +21,7 @@ public class TerrainDAOTest {
     public void setup() throws Exception {
         TransactionManager.beginTransaction();
         connection = TransactionManager.getCurrentConnection();
+        terrainDAO.setConnection(connection); 
     }
 
     @AfterEach

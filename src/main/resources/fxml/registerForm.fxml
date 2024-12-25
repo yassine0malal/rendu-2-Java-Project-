@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+
+<GridPane xmlns:fx="http://javafx.com/fxml" alignment="CENTER" hgap="10" vgap="10" style="-fx-background-color: #f9f9f9; -fx-padding: 20;" fx:controller="com.example.JavaFx.RegisterController">
+    <!-- Title -->
+    <Label text="User Registration" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #333;" GridPane.columnSpan="2" GridPane.halignment="CENTER"/>
+
+    <!-- Username Field -->
+    <Label text="Username:" GridPane.rowIndex="1" GridPane.columnIndex="0" style="-fx-font-size: 14px;"/>
+    <TextField fx:id="usernameField" promptText="Enter your username" GridPane.rowIndex="1" GridPane.columnIndex="1" style="-fx-font-size: 14px; -fx-pref-width: 250px;"/>
+
+    <!-- Email Field -->
+    <Label text="Email:" GridPane.rowIndex="2" GridPane.columnIndex="0" style="-fx-font-size: 14px;"/>
+    <TextField fx:id="emailField" promptText="Enter your email" GridPane.rowIndex="2" GridPane.columnIndex="1" style="-fx-font-size: 14px; -fx-pref-width: 250px;"/>
+
+    <!-- Password Field -->
+    <Label text="Password:" GridPane.rowIndex="3" GridPane.columnIndex="0" style="-fx-font-size: 14px;"/>
+    <PasswordField fx:id="passwordField" promptText="Enter your password" GridPane.rowIndex="3" GridPane.columnIndex="1" style="-fx-font-size: 14px; -fx-pref-width: 250px;"/>
+
+    <!-- Confirm Password Field -->
+    <Label text="Confirm Password:" GridPane.rowIndex="4" GridPane.columnIndex="0" style="-fx-font-size: 14px;"/>
+    <PasswordField fx:id="confirmPasswordField" promptText="Re-enter your password" GridPane.rowIndex="4" GridPane.columnIndex="1" style="-fx-font-size: 14px; -fx-pref-width: 250px;"/>
+
+    <!-- Register Button -->
+    <Button text="Register" onAction="#handleRegister" GridPane.rowIndex="5" GridPane.columnIndex="1" GridPane.halignment="RIGHT" style="-fx-font-size: 14px; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-padding: 5 20; -fx-cursor: hand;"/>
+</GridPane>
