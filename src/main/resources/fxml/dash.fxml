@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="700.0" styleClass="parent" stylesheets="@../styles/dasboard.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <left>
+      <AnchorPane prefHeight="200.0" prefWidth="100.0" styleClass="sideBar" BorderPane.alignment="CENTER">
+         <children>
+            <FontAwesomeIconView glyphName="BARS" layoutX="38.0" layoutY="36.0" size="2em" tabSize="0" AnchorPane.leftAnchor="35.0" />
+            <VBox spacing="10.0" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="145.0">
+               <children>
+                  <FontAwesomeIconView fx:id="event_id" fill="#270df2" glyphName="TICKET" size="1.5em" styleClass="sideBar_opt" tabSize="0">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </FontAwesomeIconView>
+                  <FontAwesomeIconView fx:id="salle_id" glyphName="HOME" size="1.5em" styleClass="sideBar_opt" tabSize="0" />
+                  <FontAwesomeIconView fx:id="terrain_id" glyphName="TROPHY" size="1.5em" styleClass="sideBar_opt" tabSize="0" />
+                  <FontAwesomeIconView fx:id="reservation_id" glyphName="ID_CARD" size="1.5em" styleClass="sideBar_opt" tabSize="0" />
+                  <FontAwesomeIconView fx:id="user_id" glyphName="USER" size="1.5em" styleClass="sideBar_opt" tabSize="0" />
+               </children>
+               <styleClass>
+                  <String fx:value="sideBar_opt" />
+                  <String fx:value="sideBar_opt" />
+               </styleClass>
+            </VBox>
+            <Separator layoutX="6.0" layoutY="109.0" prefHeight="1.0" prefWidth="97.0" AnchorPane.leftAnchor="6.0" />
+            <Circle fill="#f3f3f3" layoutX="46.0" layoutY="360.0" radius="15.0" stroke="BLACK" strokeType="INSIDE" />
+         </children>
+      </AnchorPane>
+   </left>
+</BorderPane>

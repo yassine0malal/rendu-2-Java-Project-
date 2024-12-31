@@ -41,6 +41,9 @@
         <scope>test</scope>
     </dependency>
 
+ 
+
+
  <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
 <dependency>
     <groupId>org.postgresql</groupId>
@@ -59,6 +62,8 @@
             <artifactId>javafx-fxml</artifactId>
             <version>13</version>
         </dependency>
+
+
 
 
 </dependencies>
@@ -138,7 +143,7 @@
                         <!-- Usage: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>com.example.JavaFx.MainJavaFx</mainClass>
+                            <mainClass>com.example.JavaFx.DashbordCode</mainClass>
                         </configuration>
                     </execution>
                 </executions>

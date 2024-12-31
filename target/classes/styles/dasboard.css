@@ -1,0 +1,11 @@
+.prent{
+    -fx-background-color: #FFFFFF;
+    -fx-background-redius: 30px;
+}
+.sideBar{
+    -fx-background-color: #FFFFFF;
+    -fx-background-redius: 30px 30px 0px 0px;
+}
+.sideBar_opt{
+    -fx-fill:#656565;
+}

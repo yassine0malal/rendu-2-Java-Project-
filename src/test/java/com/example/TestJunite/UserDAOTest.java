@@ -53,7 +53,7 @@ public class UserDAOTest {
         var users = userDAO.afficher(); 
         assertNotNull(users);
         assertEquals(2, users.size());
-        assertEquals("Martin", users.get(1).getNom());
+        assertEquals("Martin", users.get(0).getNom());
     }
 
     @Test
