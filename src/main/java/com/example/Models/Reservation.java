@@ -2,7 +2,6 @@ package com.example.Models;
 import java.sql.Date;
 
 public class Reservation {
-    private static int counter = 0;
     private int id_reservation;
     private int id_user;
     private int id_terrain;
@@ -45,7 +44,6 @@ public class Reservation {
         this.id_user = id_user;
     }
     public Reservation(){
-    id_reservation = ++counter;
     }
     public void setId_reservation(int id_reservation) {
         this.id_reservation = id_reservation;
@@ -53,7 +51,7 @@ public class Reservation {
 
     public Reservation(int id_user, int id_terrain, int id_salle, int id_event, Date date_reservation) {
         this.id_user = id_user;
-        this.id_terrain = id_terrain;
+        this.id_terrain = id_terrain;   
         this.id_salle = id_salle;
         this.id_event = id_event;
         this.date_reservation = date_reservation;

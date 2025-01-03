@@ -1,0 +1,23 @@
+@font-face {
+    font-family: "yassine";
+    src: url("/fonts/Ubuntu/Ubuntu-Bold.ttf");
+}
+
+.root {
+    -fx-font-family: "yassine";
+    -fx-background-color: #4af923;
+}
+
+/* .button {
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+    -fx-background-color: #34495E;
+    -fx-cursor: hand;
+}
+.button:hover {
+    -fx-background-color: #6a16ae;
+}
+.label {
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+} */

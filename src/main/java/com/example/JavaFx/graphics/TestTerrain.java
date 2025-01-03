@@ -34,7 +34,7 @@ public class TestTerrain extends GridPane {
         this.setHgap(10);
         this.setVgap(10);
         this.setPadding(new Insets(20));
-        this.setStyle("-fx-background-color: #f9f9f9;");
+        this.setStyle("-fx-background-color: #DEDEDE;");
 
         contentArea = new AnchorPane();
         contentArea.setPrefSize(800, 600);

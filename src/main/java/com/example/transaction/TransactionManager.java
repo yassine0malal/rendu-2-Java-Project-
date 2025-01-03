@@ -38,7 +38,7 @@ public class TransactionManager {
         }
     }
 
-    private static void closeConnection() throws SQLException {
+    public static void closeConnection() throws SQLException {
         if (connection != null) {
             connection.close();
             connection = null;

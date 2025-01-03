@@ -35,13 +35,12 @@ public class UserDAO implements GenericDAO<User> {
                 }
             }
 
-            String query = "INSERT INTO utilisateurs (id, nom, prenom, email, type) VALUES (?, ?, ?, ?, ?)";
+            String query = "INSERT INTO utilisateurs (nom, prenom, email, type) VALUES (?, ?, ?, ?)";
             try (PreparedStatement prep = connexion.prepareStatement(query)) {
-                prep.setInt(1, user.getId());
-                prep.setString(2, user.getNom());
-                prep.setString(3, user.getPrenom());
-                prep.setString(4, user.getEmail());
-                prep.setString(5, user.getTypeUser());
+                prep.setString(1, user.getNom());
+                prep.setString(2, user.getPrenom());
+                prep.setString(3, user.getEmail());
+                prep.setString(4, user.getTypeUser());
 
                 int rowsInserted = prep.executeUpdate();
                 if (rowsInserted > 0) {
@@ -63,7 +62,7 @@ public class UserDAO implements GenericDAO<User> {
                  ResultSet rs = stmt.executeQuery(query)) {
                 while (rs.next()) {
                     User user = new User();
-                    user.setId(rs.getInt("id"));
+                    user.setId(rs.getInt("id_user"));
                     user.setNom(rs.getString("nom"));
                     user.setPrenom(rs.getString("prenom"));
                     user.setEmail(rs.getString("email"));
@@ -81,7 +80,7 @@ public class UserDAO implements GenericDAO<User> {
     @Override
     public void update(User user) {
         try {
-            String query = "UPDATE utilisateurs SET nom = ?, prenom = ?, email = ?, type = ? WHERE id = ?";
+            String query = "UPDATE utilisateurs SET nom = ?, prenom = ?, email = ?, type = ? WHERE id_user = ?";
             try (PreparedStatement prep = connexion.prepareStatement(query)) {
                 prep.setString(1, user.getNom());
                 prep.setString(2, user.getPrenom());
@@ -104,7 +103,7 @@ public class UserDAO implements GenericDAO<User> {
     @Override
     public void supprimer(int id) {
         try {
-            String query = "DELETE FROM utilisateurs WHERE id = ?";
+            String query = "DELETE FROM utilisateurs WHERE id_user = ?";
             try (PreparedStatement prep = connexion.prepareStatement(query)) {
                 prep.setInt(1, id);
                 int rowsDeleted = prep.executeUpdate();
@@ -123,13 +122,13 @@ public class UserDAO implements GenericDAO<User> {
     @Override
     public User get(int id) {
         try {
-            String query = "SELECT * FROM utilisateurs WHERE id = ?";
+            String query = "SELECT * FROM utilisateurs WHERE id_user = ?";
             try (PreparedStatement prep = connexion.prepareStatement(query)) {
                 prep.setInt(1, id);
                 try (ResultSet rs = prep.executeQuery()) {
                     if (rs.next()) {
                         User user = new User();
-                        user.setId(rs.getInt("id"));
+                        user.setId(rs.getInt("id_user"));
                         user.setNom(rs.getString("nom"));
                         user.setPrenom(rs.getString("prenom"));
                         user.setEmail(rs.getString("email"));
