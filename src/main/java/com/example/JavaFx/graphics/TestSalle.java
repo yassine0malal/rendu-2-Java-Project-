@@ -1,7 +1,6 @@
 package com.example.JavaFx.graphics;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 import com.example.DAOImplementation.SalleDAO;
 import com.example.Models.Salle;
@@ -40,14 +39,24 @@ public class TestSalle extends GridPane {
         contentArea.setPrefSize(800, 600);
 
         crudMenu = new HBox(10);
-        crudMenu.setPadding(new Insets(10));
+        crudMenu.setPadding(new Insets(20,20,20,330));
         crudMenu.setSpacing(10);
+        crudMenu.setStyle("""
+            -fx-background-color: #4682B4;
+            -fx-padding: 10 0 10 200px;
+            -fx-border-radius: 15px;
+            -fx-background-radius: 15px;
+            -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 8, 0, 4, 4);
+        """);
+        crudMenu.setMinWidth(800);
 
         Button addSalleButton = new Button("Add Salle");
         Button displaySalleButton = new Button("Display Salles");
 
         addSalleButton.setOnAction(e -> displayAddSalleForm());
         displaySalleButton.setOnAction(e -> displayAllSalles());
+        addSalleButton.setStyle("-fx-font-size: 14px; -fx-background-color:rgb(54, 115, 237); -fx-text-fill: white; -f-decoration: none; -fx-background-radius: 15px;");
+        displaySalleButton.setStyle("-fx-font-size: 14px; -fx-background-color:rgb(54, 115, 237); -fx-text-fill: white; -f-decoration: none; -fx-background-radius: 15px;");
 
         crudMenu.getChildren().addAll(addSalleButton, displaySalleButton);
         this.add(crudMenu, 0, 0);
@@ -61,10 +70,11 @@ public class TestSalle extends GridPane {
     private void displayAddSalleForm() {
         clearContentArea();
         if (salleTable != null) {
-            salleTable.getItems().clear();
+            // salleTable.getItems().clear();
+            this.getChildren().remove(salleTable);
         }
         if (addSalleForm != null) {
-            addSalleForm.getChildren().clear();
+            this.getChildren().remove(addSalleForm);
         }
 
         addSalleForm = new GridPane();
@@ -72,7 +82,7 @@ public class TestSalle extends GridPane {
         addSalleForm.setHgap(10);
         addSalleForm.setVgap(10);
         addSalleForm.setPadding(new Insets(20));
-        addSalleForm.setStyle("-fx-background-color: #f9f9f9;");
+        addSalleForm.setStyle("-fx-background-color: #f9f9f9; -fx-border-radius: 15px; -fx-background-radius: 15px;");
 
         Label titleLabel = new Label("Salle Registration");
         titleLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #333;");
@@ -134,7 +144,7 @@ public class TestSalle extends GridPane {
     private void displayAllSalles() {
         clearContentArea();
         if (addSalleForm != null) {
-            addSalleForm.getChildren().clear();
+            this.getChildren().remove(addSalleForm);
             
         }
         if (salleTable != null) {
@@ -142,12 +152,14 @@ public class TestSalle extends GridPane {
             
         }
     
-        TableView<Salle> salleTable = new TableView<>();
+       salleTable = new TableView<>();
         salleTable.setPrefWidth(800);
         salleTable.setPrefHeight(400);
+        salleTable.setStyle("-fx-border-radius: 15px; -fx-background-radius: 15px;");
     
         // ID Column
         TableColumn<Salle, Integer> idColumn = new TableColumn<>("ID");
+        // idColumn.setStyle(" -fx-background-radius: 15px; -fx-border-radius: 15px;");
         idColumn.setPrefWidth(60);
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
     

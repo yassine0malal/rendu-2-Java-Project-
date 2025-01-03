@@ -1,5 +1,7 @@
 package com.example.JavaFx;
 
+import java.util.Stack;
+
 import com.example.JavaFx.graphics.TestEvent;
 import com.example.JavaFx.graphics.TestReservation;
 import com.example.JavaFx.graphics.TestSalle;
@@ -10,9 +12,10 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class DashbordCode extends Application {
@@ -24,15 +27,17 @@ public class DashbordCode extends Application {
     public void start(Stage primaryStage) {
         // Initialize the root layout
         root = new BorderPane();
-        // Scene scene = new Scene(root, 800, 600);
-
-
+        Image image = new Image(getClass().getResourceAsStream("/images/dashboard.jpg"));
+        root.setStyle("-fx-background-image: url('images/dashboard.jpg'); -fx-background-size: cover;");
         // Create the main navigation menu
         VBox navigationMenu = createNavigationMenu();
 
         // Set the navigation menu on the left
         root.setLeft(navigationMenu);
-        root.setBottom(new Label("© 2021 All rights reserved"));
+        StackPane stackPane = new StackPane();
+        stackPane.getChildren().add(new Label("© 2025 All rights reserved"));
+        stackPane.setStyle("-fx-background-color:rgb(152, 203, 255); -fx-text-fill: white; -fx-font-size: 14px; -fx-cursor: hand;");
+        root.setBottom(stackPane);
 
         // Set up the initial page (Home Page)
         // loadSallePage();
@@ -68,6 +73,7 @@ public class DashbordCode extends Application {
 
         userPageButton.setOnMouseEntered(e -> userPageButton.setStyle("-fx-background-color:rgb(28, 65, 105); -fx-text-fill: white; -fx-font-size: 14px; -fx-cursor: hand;"));
         userPageButton.setOnMouseExited(e -> userPageButton.setStyle("-fx-background-color: #34495E; -fx-text-fill: white; -fx-font-size: 14px; -fx-cursor: hand;"));
+
         EventButton.setOnMouseEntered(e -> EventButton.setStyle("-fx-background-color:rgb(28, 65, 105); -fx-text-fill: white; -fx-font-size: 14px; -fx-cursor: hand;"));
         EventButton.setOnMouseExited(e -> EventButton.setStyle("-fx-background-color: #34495E; -fx-text-fill: white; -fx-font-size: 14px; -fx-cursor: hand;"));
         salleButton.setOnMouseEntered(e -> salleButton.setStyle("-fx-background-color:rgb(28, 65, 105); -fx-text-fill: white; -fx-font-size: 14px; -fx-cursor: hand;"));
@@ -79,10 +85,7 @@ public class DashbordCode extends Application {
 
 
         Label l1 = new Label("Menu");
-        l1.setFont(Font.font("SpaceMono-BoldItalic", 20));
-
-        salleButton.setFont(Font.font("SpaceMono-BoldItalic", 14));
-        // l1.setStyle("-fx-text-fill: white; -fx-padding: 10; -fx-font-weight: bold; -fx-font-size: 20px; -fx-cursor: hand; -fx-justify-content: center; -fx-alignment: center;");
+        l1.setStyle("-fx-text-fill: white; -fx-padding: 10; -fx-font-weight: bold; -fx-font-size: 20px; -fx-cursor: hand; -fx-justify-content: center; -fx-alignment: center;");
 
 
 

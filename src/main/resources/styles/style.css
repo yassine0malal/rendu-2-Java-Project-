@@ -1,7 +1,7 @@
-@font-face {
+/* @font-face {
     font-family: "yassine";
     src: url("/fonts/Ubuntu/Ubuntu-Bold.ttf");
-}
+} */
 
 .root {
     -fx-font-family: "yassine";
