@@ -17,6 +17,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 
 public class TestTerrain extends GridPane {
 
@@ -42,9 +43,46 @@ public class TestTerrain extends GridPane {
         crudMenu = new HBox(10);
         crudMenu.setPadding(new Insets(10));
         crudMenu.setSpacing(10);
+        crudMenu.setStyle("""
+    -fx-background-color: linear-gradient(to right, #4A90E2, #50B3A2); /* Gradient from blue to aqua */
+    -fx-padding: 10 0 10 200px; /* Top, Right, Bottom, Left padding */
+    -fx-border-radius: 20px; /* Smooth rounded edges */
+    -fx-background-radius: 20px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0, 4, 4); /* Soft drop shadow */
+    -fx-border-width: 2px;
+    -fx-border-color: rgba(255, 255, 255, 0.2); /* Subtle border */
+""");
+crudMenu.setOnMouseEntered(e -> {
+    crudMenu.setStyle("""
+        -fx-background-color: linear-gradient(to right, #50B3A2, #4A90E2); /* Reversed gradient on hover */
+        -fx-padding: 10 0 10 200px;
+        -fx-border-radius: 20px;
+        -fx-background-radius: 20px;
+        -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 15, 0, 5, 5);
+        -fx-border-width: 2px;
+        -fx-border-color: rgba(255, 255, 255, 0.4); /* More visible border on hover */
+    """);
+});
+crudMenu.setOnMouseExited(e -> {
+    crudMenu.setStyle("""
+        -fx-background-color: linear-gradient(to right, #4A90E2, #50B3A2); /* Reset to original gradient */
+        -fx-padding: 10 0 10 200px;
+        -fx-border-radius: 20px;
+        -fx-background-radius: 20px;
+        -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0, 4, 4);
+        -fx-border-width: 2px;
+        -fx-border-color: rgba(255, 255, 255, 0.2); /* Reset border */
+    """);
+});
+
+        crudMenu.setMinWidth(1000);
+
 
         Button addTerrainButton = new Button("Add Terrain");
         Button displayTerrainButton = new Button("Display Terrains");
+        addTerrainButton.setStyle("-fx-font-size: 14px; -fx-background-color:#5211e9; -fx-text-fill: white; -f-decoration: none; -fx-background-radius: 15px;");
+        displayTerrainButton.setStyle("-fx-font-size: 14px; -fx-background-color:#5211e9; -fx-text-fill: white; -f-decoration: none; -fx-background-radius: 15px;");
+
 
         addTerrainButton.setOnAction(e -> displayAddTerrainForm());
         displayTerrainButton.setOnAction(e -> displayAllTerrains());
@@ -52,58 +90,87 @@ public class TestTerrain extends GridPane {
         crudMenu.getChildren().addAll(addTerrainButton, displayTerrainButton);
         this.add(crudMenu, 0, 0);
 
-        Label emptyLabel = new Label("Select an action from the navbar above");
+                Label emptyLabel = new Label("Select an action from the navbar above");
         emptyLabel.setStyle("-fx-font-size: 18px;");
-        contentArea.getChildren().add(emptyLabel);
+        StackPane stackPane = new StackPane(emptyLabel);
+        stackPane.setPrefSize(1000, 600);
+        stackPane.setStyle("-fx-content-display: center; -fx-alignment: center;");
+
+        contentArea.getChildren().add(stackPane);
+
         this.add(contentArea, 0, 1, 2, 1);
     }
 
     private void displayAddTerrainForm() {
+        // Clear the content area to remove any previous content
         clearContentArea();
+    
+        // Remove any existing terrain table data
         if (terrainTable != null) {
-            terrainTable.getItems().clear();
+            this.getChildren().remove(terrainTable);
         }
+    
+        // Clear and reset the terrain form if it exists
         if (addTerrainForm != null) {
-            addTerrainForm.getChildren().clear();
-            
+            this.getChildren().remove(addTerrainForm);
         }
-        
+    
+        // Initialize the terrain form layout
         addTerrainForm = new GridPane();
         addTerrainForm.setAlignment(Pos.CENTER);
         addTerrainForm.setHgap(10);
         addTerrainForm.setVgap(10);
         addTerrainForm.setPadding(new Insets(20));
-        addTerrainForm.setStyle("-fx-background-color: #f9f9f9;");
-
+        addTerrainForm.setStyle(
+                "-fx-background-color: #f9f9f9; -fx-border-radius: 15px; -fx-background-radius: 15px; -fx-padding: 20;");
+    
+        // Add a title for the form
         Label titleLabel = new Label("Terrain Registration");
         titleLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #333;");
         addTerrainForm.add(titleLabel, 0, 0, 2, 1);
         GridPane.setHalignment(titleLabel, HPos.CENTER);
-
+    
+        // Add terrain name field
         Label nameLabel = new Label("Terrain Name:");
         nameLabel.setStyle("-fx-font-size: 14px;");
         nameField = new TextField();
         nameField.setPromptText("Enter terrain name");
+        nameField.setStyle("-fx-font-size: 14px; -fx-pref-width: 250px;");
         addTerrainForm.add(nameLabel, 0, 1);
         addTerrainForm.add(nameField, 1, 1);
-
+    
+        // Add terrain type field
         Label typeLabel = new Label("Terrain Type:");
         typeLabel.setStyle("-fx-font-size: 14px;");
         typeField = new TextField();
         typeField.setPromptText("Enter terrain type");
+        typeField.setStyle("-fx-font-size: 14px; -fx-pref-width: 250px;");
         addTerrainForm.add(typeLabel, 0, 2);
         addTerrainForm.add(typeField, 1, 2);
-
+    
+        // Add register button
         registerButton = new Button("Register");
-        registerButton.setStyle("-fx-font-size: 14px; -fx-background-color: #4CAF50; -fx-text-fill: white;");
+        registerButton.setStyle(
+                "-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-border-radius: 5px; -fx-padding: 10px 20px;");
+        registerButton.setOnMouseEntered(e -> registerButton.setStyle(
+                "-fx-background-color:rgb(158, 226, 13); -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-border-radius: 5px; -fx-padding: 10px 20px;"));
+        registerButton.setOnMouseExited(e -> registerButton.setStyle(
+                "-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-border-radius: 5px; -fx-padding: 10px 20px;"));
         addTerrainForm.add(registerButton, 1, 3);
         GridPane.setHalignment(registerButton, HPos.RIGHT);
-
-        this.add(addTerrainForm, 0, 1, 2, 1);
-
+    
+        // Add form to the content area and ensure proper positioning
+        contentArea.getChildren().add(addTerrainForm);
+        AnchorPane.setTopAnchor(addTerrainForm, 50.0);
+        AnchorPane.setLeftAnchor(addTerrainForm, 100.0);
+        AnchorPane.setRightAnchor(addTerrainForm, 100.0);
+    
+        this.add(contentArea, 0, 1, 2, 1);
+    
+        // Set action for register button
         registerButton.setOnAction(event -> handleRegister());
     }
-
+    
     private void handleRegister() {
         String name = nameField.getText();
         String type = typeField.getText();
@@ -135,30 +202,33 @@ public class TestTerrain extends GridPane {
     private void displayAllTerrains() {
         clearContentArea();
         if (addTerrainForm != null) {
-            addTerrainForm.getChildren().clear();
+            this.getChildren().remove(addTerrainForm);
         }
       
 
     
         terrainTable = new TableView<>();
-        terrainTable.setPrefWidth(800);
-        terrainTable.setPrefHeight(400);
+        terrainTable.setPrefWidth(1000);
+        terrainTable.setPrefHeight(TableView.USE_COMPUTED_SIZE);
+        terrainTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        terrainTable.setStyle("-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0, 4, 4); -fx-border-color: rgba(71, 68, 68, 0.2);");
+        terrainTable.setStyle("-fx-border-radius: 15px; -fx-background-radius: 15px; -fx-padding: 20; -fx-border-width: 2px;");
     
-        TableColumn<Terrain, Integer> idColumn = new TableColumn<>("Number.");
-        idColumn.setPrefWidth(60);
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        // TableColumn<Terrain, Integer> idColumn = new TableColumn<>("Number");
+        // idColumn.setPrefWidth(333.4);
+        // idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
     
         TableColumn<Terrain, String> nameColumn = new TableColumn<>("Name");
-        nameColumn.setPrefWidth(200);
+        nameColumn.setPrefWidth(333.4);
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("nom"));
     
         TableColumn<Terrain, String> typeColumn = new TableColumn<>("Type");
-        typeColumn.setPrefWidth(200);
+        typeColumn.setPrefWidth(333.4);
         typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
     
         // Add an "Action" column
         TableColumn<Terrain, Void> actionColumn = new TableColumn<>("Action");
-        actionColumn.setPrefWidth(150);
+        actionColumn.setPrefWidth(333.4);
     
         actionColumn.setCellFactory(param -> new TableCell<>() {
             private final Button updateButton = new Button("Update");
@@ -191,7 +261,7 @@ public class TestTerrain extends GridPane {
             }
         });
     
-        terrainTable.getColumns().addAll(idColumn, nameColumn, typeColumn, actionColumn);
+        terrainTable.getColumns().addAll(nameColumn, typeColumn, actionColumn);
         terrainTable.setItems(getTerrainsFromDatabase());
     
         contentArea.getChildren().add(terrainTable);
@@ -267,8 +337,6 @@ public class TestTerrain extends GridPane {
             showAlert(Alert.AlertType.ERROR, "Error", "Failed to update terrain.");
         }
     }
-    
-    
     
     // Method to handle delete action
     private void handleDelete(Terrain terrain) {

@@ -25,24 +25,20 @@ public class DashbordCode extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        // Initialize the root layout
         root = new BorderPane();
-        Image image = new Image(getClass().getResourceAsStream("/images/dashboard.jpg"));
-        root.setStyle("-fx-background-image: url('images/dashboard.jpg'); -fx-background-size: cover;");
-        // Create the main navigation menu
+        // Image image = new Image(getClass().getResourceAsStream("/images/dashboard.jpg"));
+        // root.setStyle("-fx-background-image: url('images/dashboard.jpg'); -fx-background-size: cover;");
         VBox navigationMenu = createNavigationMenu();
 
-        // Set the navigation menu on the left
         root.setLeft(navigationMenu);
         StackPane stackPane = new StackPane();
         stackPane.getChildren().add(new Label("© 2025 All rights reserved"));
-        stackPane.setStyle("-fx-background-color:rgb(152, 203, 255); -fx-text-fill: white; -fx-font-size: 14px; -fx-cursor: hand;");
+        stackPane.setStyle("-fx-background-color:#98cbff; -fx-text-fill: white; -fx-font-size: 14px; -fx-cursor: hand;");
         root.setBottom(stackPane);
 
         // Set up the initial page (Home Page)
         // loadSallePage();
 
-        // Create and set the scene
         Scene scene = new Scene(root, 800, 600);
         scene.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
         primaryStage.setTitle("JavaFX Project ");
@@ -53,60 +49,109 @@ public class DashbordCode extends Application {
 
     private VBox createNavigationMenu() {
         VBox navigationMenu = new VBox(10);
-        navigationMenu.setStyle("-fx-background-color: #2C3E50; -fx-padding: 10;");
         navigationMenu.setPrefWidth(200);
-
-        // Create buttons
-        Button salleButton = new Button("Salle");
-        Button EventButton = new Button("Event");
-        Button reservationButton = new Button("Reservation");
-        Button userPageButton = new Button("User");
-        Button terrainPageButton = new Button("Terrain");
-        
-
-
-        styleButton(salleButton);
-        styleButton(EventButton);
-        styleButton(reservationButton);
-        styleButton(userPageButton);
-        styleButton(terrainPageButton);
-
-        userPageButton.setOnMouseEntered(e -> userPageButton.setStyle("-fx-background-color:rgb(28, 65, 105); -fx-text-fill: white; -fx-font-size: 14px; -fx-cursor: hand;"));
-        userPageButton.setOnMouseExited(e -> userPageButton.setStyle("-fx-background-color: #34495E; -fx-text-fill: white; -fx-font-size: 14px; -fx-cursor: hand;"));
-
-        EventButton.setOnMouseEntered(e -> EventButton.setStyle("-fx-background-color:rgb(28, 65, 105); -fx-text-fill: white; -fx-font-size: 14px; -fx-cursor: hand;"));
-        EventButton.setOnMouseExited(e -> EventButton.setStyle("-fx-background-color: #34495E; -fx-text-fill: white; -fx-font-size: 14px; -fx-cursor: hand;"));
-        salleButton.setOnMouseEntered(e -> salleButton.setStyle("-fx-background-color:rgb(28, 65, 105); -fx-text-fill: white; -fx-font-size: 14px; -fx-cursor: hand;"));
-        salleButton.setOnMouseExited(e -> salleButton.setStyle("-fx-background-color: #34495E; -fx-text-fill: white; -fx-font-size: 14px; -fx-cursor: hand;"));
-        terrainPageButton.setOnMouseEntered(e -> terrainPageButton.setStyle("-fx-background-color:rgb(28, 65, 105); -fx-text-fill: white; -fx-font-size: 14px; -fx-cursor: hand;"));
-        terrainPageButton.setOnMouseExited(e -> terrainPageButton.setStyle("-fx-background-color: #34495E; -fx-text-fill: white; -fx-font-size: 14px; -fx-cursor: hand;"));
-        reservationButton.setOnMouseEntered(e -> reservationButton.setStyle("-fx-background-color:rgb(28, 65, 105); -fx-text-fill: white; -fx-font-size: 14px; -fx-cursor: hand;"));
-        reservationButton.setOnMouseExited(e -> reservationButton.setStyle("-fx-background-color: #34495E; -fx-text-fill: white; -fx-font-size: 14px; -fx-cursor: hand;"));
-
-
-        Label l1 = new Label("Menu");
-        l1.setStyle("-fx-text-fill: white; -fx-padding: 10; -fx-font-weight: bold; -fx-font-size: 20px; -fx-cursor: hand; -fx-justify-content: center; -fx-alignment: center;");
-
-
-
-        // Set button actions to load specific pages
+        navigationMenu.setStyle("""
+            -fx-background-color: linear-gradient(to right, #4A90E2, #50B3A2); 
+            -fx-padding: 10 0 10 0; 
+            -fx-border-radius: 15px 0px 0px 15px; 
+            -fx-background-radius: 15px 0px 0px 15px;
+            -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0, 4, 4); 
+            -fx-border-width: 2px;
+            -fx-border-color: rgba(255, 255, 255, 0.2); 
+        """);
+    
+        navigationMenu.setOnMouseEntered(e -> navigationMenu.setStyle("""
+            -fx-background-color: linear-gradient(to right, #50B3A2, #4A90E2); 
+            -fx-padding: 10 0 10 0;
+            -fx-border-radius: 15px 0px 0px 15px;
+            -fx-background-radius: 15px 0px 0px 15px;
+            -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 15, 0, 5, 5);
+            -fx-border-width: 2px;
+            -fx-border-color: rgba(255, 255, 255, 0.4); 
+        """));
+    
+        navigationMenu.setOnMouseExited(e -> navigationMenu.setStyle("""
+            -fx-background-color: linear-gradient(to right,#4a90e2, #50B3A2); /* Reset to original gradient */
+            -fx-padding: 10 0 10 0;
+            -fx-border-radius: 15px 0px 0px 15px;
+            -fx-background-radius: 15px 0px 0px 15px;
+            -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0, 4, 4);
+            -fx-border-width: 2px;
+            -fx-border-color: rgba(255, 255, 255, 0.2); 
+        """));
+    
+        Button salleButton = createStyledButton("Salle");
+        Button eventButton = createStyledButton("Event");
+        Button reservationButton = createStyledButton("Reservation");
+        Button userPageButton = createStyledButton("User");
+        Button terrainPageButton = createStyledButton("Terrain");
+    
+        addHoverEffectToButton(salleButton);
+        addHoverEffectToButton(eventButton);
+        addHoverEffectToButton(reservationButton);
+        addHoverEffectToButton(userPageButton);
+        addHoverEffectToButton(terrainPageButton);
+    
+        Label menuLabel = new Label("Menu");
+        menuLabel.setStyle("""
+            -fx-text-fill: white;
+            -fx-padding: 10;
+            -fx-font-weight: bold;
+            -fx-font-size: 20px;
+            -fx-text-alignment: center;
+        """);
+    
         salleButton.setOnAction(e -> loadSallePage());
-        EventButton.setOnAction(e -> loadEventsPage());
+        eventButton.setOnAction(e -> loadEventsPage());
         reservationButton.setOnAction(e -> loadReservationPage());
-        userPageButton.setOnAction(event -> {
-            testUser userPage = new testUser();
-            root.setCenter(userPage); // Assuming 'root' is a BorderPane
-        });
-        terrainPageButton.setOnAction(event -> {
-            TestTerrain terrainPage = new TestTerrain();
-            root.setCenter(terrainPage); // Assuming 'root' is a BorderPane
-        });
-
-        // Add buttons to the menu
-        navigationMenu.getChildren().addAll(l1,userPageButton, EventButton, reservationButton, salleButton, terrainPageButton);
-
+        userPageButton.setOnAction(event -> root.setCenter(new testUser()));
+        terrainPageButton.setOnAction(event -> root.setCenter(new TestTerrain()));
+    
+        navigationMenu.getChildren().addAll(menuLabel, userPageButton, salleButton, reservationButton, eventButton, terrainPageButton);
+    
         return navigationMenu;
     }
+    
+    private Button createStyledButton(String text) {
+        Button button = new Button(text);
+        button.setStyle("""
+            -fx-background-color: linear-gradient(to right, #4A90E2, #50B3A2);
+            -fx-text-fill: white; 
+            -fx-font-size: 14px;
+            -fx-cursor: hand;
+            -fx-border-radius: 5px;
+            -fx-background-radius: 5px;
+            -fx-padding: 8 15;
+            -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 5, 0, 2, 2);
+        """);
+        button.setPrefWidth(180);
+        return button;
+    }
+    
+    // Method to add hover effect to a button
+    private void addHoverEffectToButton(Button button) {
+        button.setOnMouseEntered(e -> button.setStyle("""
+            -fx-background-color: linear-gradient(to right, #50B3A2, #4A90E2); 
+            -fx-text-fill: white;
+            -fx-font-size: 14px;
+            -fx-cursor: hand;
+            -fx-border-radius: 5px;
+            -fx-background-radius: 5px;
+            -fx-padding: 8 15;
+            -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 8, 0, 3, 3); 
+        """));
+        button.setOnMouseExited(e -> button.setStyle("""
+            -fx-background-color: linear-gradient(to right, #4A90E2, #50B3A2); /* Reset to original gradient */
+            -fx-text-fill: white;
+            -fx-font-size: 14px;
+            -fx-cursor: hand;
+            -fx-border-radius: 5px;
+            -fx-background-radius: 5px;
+            -fx-padding: 8 15;
+            -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 5, 0, 2, 2); /* Reset shadow */
+        """));
+    }
+    
 
    
     private void loadSallePage() {

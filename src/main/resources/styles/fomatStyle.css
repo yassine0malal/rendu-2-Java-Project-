@@ -1,0 +1,74 @@
+/* General Styles */
+.root {
+    -fx-background-color: #DEDEDE;
+    -fx-font-family: Arial, sans-serif;
+}
+
+/* Crud Menu Styles */
+.hbox-crud-menu {
+    -fx-background-color: #4682B4;
+    -fx-padding: 10 0 10 200px;
+    -fx-border-radius: 15px;
+    -fx-background-radius: 15px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 8, 0, 4, 4);
+}
+
+/* Button Styles */
+.button-crud-menu {
+    -fx-font-size: 14px;
+    -fx-background-color: #5211e9;
+    -fx-text-fill: white;
+    -fx-background-radius: 15px;
+}
+
+.button-register {
+    -fx-font-size: 14px;
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+}
+
+.button-update {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+}
+
+.button-delete {
+    -fx-background-color: #f44336;
+    -fx-text-fill: white;
+}
+
+/* Form Styles */
+.gridpane-add-terrain-form {
+    -fx-background-color: #f9f9f9;
+    -fx-border-radius: 15px;
+    -fx-background-radius: 15px;
+    -fx-padding: 20px;
+}
+
+/* Title Label Style */
+.label-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333;
+}
+
+/* Field Label Styles */
+.label-field {
+    -fx-font-size: 14px;
+}
+
+/* Text Field Styles */
+.text-field {
+    -fx-font-size: 14px;
+    -fx-pref-width: 250px;
+}
+
+/* Table Styles */
+.table-view {
+    -fx-pref-width: 800px;
+    -fx-pref-height: 400px;
+}
+
+.table-column {
+    -fx-font-size: 14px;
+}

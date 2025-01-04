@@ -22,6 +22,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 
 public class TestEvent extends GridPane {
 
@@ -35,6 +36,8 @@ public class TestEvent extends GridPane {
     private AnchorPane contentArea;
     private GridPane addEventForm;
     private TableView<Evenement> eventTable;
+    private ComboBox<String> userComboBox;
+
 
     public TestEvent() {
         // Set grid properties
@@ -53,71 +56,143 @@ public class TestEvent extends GridPane {
         crudMenu.setSpacing(10);
         crudMenu.setMinWidth(800);
         crudMenu.setStyle("-fx-text-color: #f9f9f9; -fx-font-size: 18px; -fx-font-weight: bold;");
+        crudMenu.setStyle("""
+            -fx-background-color: linear-gradient(to right, #4A90E2, #50B3A2); /* Gradient from blue to aqua */
+            -fx-padding: 10 0 10 200px; /* Top, Right, Bottom, Left padding */
+            -fx-border-radius: 20px; /* Smooth rounded edges */
+            -fx-background-radius: 20px;
+            -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0, 4, 4); /* Soft drop shadow */
+            -fx-border-width: 2px;
+            -fx-border-color: rgba(255, 255, 255, 0.2); /* Subtle border */
+        """);
+        crudMenu.setOnMouseEntered(e -> {
+            crudMenu.setStyle("""
+                -fx-background-color: linear-gradient(to right, #50B3A2, #4A90E2); /* Reversed gradient on hover */
+                -fx-padding: 10 0 10 200px;
+                -fx-border-radius: 20px;
+                -fx-background-radius: 20px;
+                -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 15, 0, 5, 5);
+                -fx-border-width: 2px;
+                -fx-border-color: rgba(255, 255, 255, 0.4); /* More visible border on hover */
+            """);
+        });
+        crudMenu.setOnMouseExited(e -> {
+            crudMenu.setStyle("""
+                -fx-background-color: linear-gradient(to right, #4A90E2, #50B3A2); /* Reset to original gradient */
+                -fx-padding: 10 0 10 200px;
+                -fx-border-radius: 20px;
+                -fx-background-radius: 20px;
+                -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0, 4, 4);
+                -fx-border-width: 2px;
+                -fx-border-color: rgba(255, 255, 255, 0.2); /* Reset border */
+            """);
+        });
+        
+        crudMenu.setMinWidth(1000);
+
 
         Button addEventButton = new Button("Add Event");
-        addEventButton.setStyle("-fx-background-color: transparent; -fx-border-width: 0;");
         Button displayEventsButton = new Button("Display Events");
+        addEventButton.setStyle("-fx-font-size: 14px; -fx-background-color:#5211e9; -fx-text-fill: white; -f-decoration: none; -fx-background-radius: 15px;");
+        displayEventsButton.setStyle("-fx-font-size: 14px; -fx-background-color:#5211e9; -fx-text-fill: white; -f-decoration: none; -fx-background-radius: 15px;a");
+
+        // addEventButton.setStyle("-fx-background-color: transparent; -fx-border-width: 0;");
 
         addEventButton.setOnAction(e -> displayAddEventForm());
         displayEventsButton.setOnAction(e -> displayAllEvents());
 
         crudMenu.getChildren().addAll(addEventButton, displayEventsButton);
         this.add(crudMenu, 0, 0);
-        crudMenu.setStyle("-fx-background-color:#E44621;");
 
         // Empty content area
-        Label emptyLabel = new Label("Select an action from the navbar above");
+               Label emptyLabel = new Label("Select an action from the navbar above");
         emptyLabel.setStyle("-fx-font-size: 18px;");
-        contentArea.getChildren().add(emptyLabel);
+        StackPane stackPane = new StackPane(emptyLabel);
+        stackPane.setPrefSize(1000, 600);
+        stackPane.setStyle("-fx-content-display: center; -fx-alignment: center;");
+
+        contentArea.getChildren().add(stackPane);
+
         this.add(contentArea, 0, 1, 2, 1);
     }
 
-    private ComboBox<String> userComboBox;
 
-    private void displayAddEventForm() {
+    public void displayAddEventForm() {
+        // Clear the content area
         clearContentArea();
+    
+        // Initialize the event form layout
         addEventForm = new GridPane();
         addEventForm.setAlignment(Pos.CENTER);
         addEventForm.setHgap(10);
         addEventForm.setVgap(10);
         addEventForm.setPadding(new Insets(20));
-        addEventForm.setStyle("-fx-background-color: #f9f9f9;");
+        addEventForm.setStyle(
+                "-fx-background-color: #f9f9f9; -fx-border-radius: 15px; -fx-background-radius: 15px; -fx-padding: 20;");
     
+        // Add the title
         Label titleLabel = new Label("Add New Event");
         titleLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #333;");
         addEventForm.add(titleLabel, 0, 0, 2, 1);
         GridPane.setHalignment(titleLabel, HPos.CENTER);
     
+        // Add Event Name field
         Label eventNameLabel = new Label("Event Name:");
+        eventNameLabel.setStyle("-fx-font-size: 14px;");
         eventNameField = new TextField();
+        eventNameField.setPromptText("Enter event name");
+        eventNameField.setStyle("-fx-font-size: 14px; -fx-pref-width: 250px;");
         addEventForm.add(eventNameLabel, 0, 1);
         addEventForm.add(eventNameField, 1, 1);
     
+        // Add Event Description field
         Label eventDescriptionLabel = new Label("Description:");
+        eventDescriptionLabel.setStyle("-fx-font-size: 14px;");
         eventDescriptionField = new TextField();
+        eventDescriptionField.setPromptText("Enter event description");
+        eventDescriptionField.setStyle("-fx-font-size: 14px; -fx-pref-width: 250px;");
         addEventForm.add(eventDescriptionLabel, 0, 2);
         addEventForm.add(eventDescriptionField, 1, 2);
     
+        // Add Event Date Picker
         Label eventDateLabel = new Label("Event Date:");
+        eventDateLabel.setStyle("-fx-font-size: 14px;");
         eventDatePicker = new DatePicker();
+        eventDatePicker.setStyle("-fx-font-size: 14px;");
         addEventForm.add(eventDateLabel, 0, 3);
         addEventForm.add(eventDatePicker, 1, 3);
     
+        // Add User ComboBox
         Label userIdLabel = new Label("User:");
+        userIdLabel.setStyle("-fx-font-size: 14px;");
         userComboBox = new ComboBox<>(getUsersFromDatabase());
+        userComboBox.setPromptText("Select a user");
+        userComboBox.setStyle("-fx-font-size: 14px; -fx-pref-width: 250px;");
         addEventForm.add(userIdLabel, 0, 4);
         addEventForm.add(userComboBox, 1, 4);
     
+        // Add Add Event button
         addEventButton = new Button("Add Event");
+        addEventButton.setStyle(
+                "-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-border-radius: 5px; -fx-padding: 10px 20px;");
+        addEventButton.setOnMouseEntered(e -> addEventButton.setStyle(
+                "-fx-background-color:rgb(158, 226, 13); -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-border-radius: 5px; -fx-padding: 10px 20px;"));
+        addEventButton.setOnMouseExited(e -> addEventButton.setStyle(
+                "-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-border-radius: 5px; -fx-padding: 10px 20px;"));
         addEventButton.setOnAction(e -> handleAddEvent());
         addEventForm.add(addEventButton, 1, 5);
         GridPane.setHalignment(addEventButton, HPos.RIGHT);
     
+        // Add the form to the content area with proper anchoring
         contentArea.getChildren().add(addEventForm);
+        AnchorPane.setTopAnchor(addEventForm, 50.0);
+        AnchorPane.setLeftAnchor(addEventForm, 100.0);
+        AnchorPane.setRightAnchor(addEventForm, 100.0);
+    
+        this.add(contentArea, 0, 1, 2, 1);
     }
     
-
-    private void handleAddEvent() {
+    public void handleAddEvent() {
         String eventName = eventNameField.getText();
         String eventDescription = eventDescriptionField.getText();
         Date eventDate = null;
@@ -186,29 +261,35 @@ public class TestEvent extends GridPane {
         }
     }
     
-    private void displayAllEvents() {
+    public void displayAllEvents() {
         clearContentArea();
     
         eventTable = new TableView<>();
-        eventTable.setPrefWidth(600);
-        eventTable.setPrefHeight(400);
-    
-        // Columns for event details
+        eventTable.setPrefWidth(990);
+        eventTable.setPrefHeight(TableView.USE_COMPUTED_SIZE);
+        eventTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        eventTable.setStyle("-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0, 4, 4); -fx-border-color: rgba(71, 68, 68, 0.2);");
+
         TableColumn<Evenement, String> nameColumn = new TableColumn<>("Event Name");
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("nomEvent"));
+        nameColumn.setMinWidth(100);
     
         TableColumn<Evenement, String> descriptionColumn = new TableColumn<>("Description");
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+        descriptionColumn.setMinWidth(180);
     
         TableColumn<Evenement, Date> dateColumn = new TableColumn<>("Date");
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
+        dateColumn.setMinWidth(180);
     
 
         TableColumn<Evenement, String> userNameColumn = new TableColumn<>("User Name");
+        userNameColumn.setMinWidth(180);
         userNameColumn.setCellValueFactory(cellData -> {
             System.out.println(cellData.getValue().getId_user());
         int userId = cellData.getValue().getId_user();
         String userName = getUserNameById(userId); // Fetch username based on user ID
+        eventTable.setStyle("-fx-background-color: #f9f9f9; -fx-border-radius: 15px; -fx-background-radius: 15px; -fx-padding: 20; -fx-border-width: 2px; -fx-border-color: #DEDEDE;");
         return new SimpleStringProperty(userName);
     });
 
@@ -216,6 +297,8 @@ public class TestEvent extends GridPane {
     
         // Action column
         TableColumn<Evenement, Void> actionColumn = new TableColumn<>("Action");
+        actionColumn.setMinWidth(180);
+        // actionColumn.setStyle("-fx-background-color: #f9f9f9; -fx-border-clolor:rgb(189, 185, 185); -fx-border-color:rgb(199, 193, 193); -fx-border-width: 1px; ");
         actionColumn.setCellFactory(param -> new TableCell<>() {
             private final Button updateButton = new Button("Update");
             private final Button deleteButton = new Button("Delete");
@@ -257,7 +340,7 @@ public class TestEvent extends GridPane {
 
 
 
-private String getUserNameById(int userId) {
+public String getUserNameById(int userId) {
     try {
     TransactionManager.beginTransaction();
     Connection connexion = TransactionManager.getCurrentConnection();
@@ -286,13 +369,7 @@ private String getUserNameById(int userId) {
 
 
 
-
-
-
-
-
-    // Modify Event Form
-    private void modifyEventForm(Evenement evenement) {
+    public void modifyEventForm(Evenement evenement) {
         clearContentArea();
     
         addEventForm = new GridPane();
@@ -344,9 +421,7 @@ private String getUserNameById(int userId) {
     
         contentArea.getChildren().add(addEventForm);
     }
-    
-    
-    private void handleUpdateEvent(Evenement evenement) {
+    public void handleUpdateEvent(Evenement evenement) {
         try {
             TransactionManager.beginTransaction();
             EvenementDAO eventDAO = new EvenementDAO();
@@ -360,7 +435,7 @@ private String getUserNameById(int userId) {
             showAlert(Alert.AlertType.ERROR, "Error", "Failed to update the event.");
         }
     }
-    private void handleDeleteEvent(Evenement evenement) {
+    public void handleDeleteEvent(Evenement evenement) {
         try {
             TransactionManager.beginTransaction();
             EvenementDAO eventDAO = new EvenementDAO();
@@ -374,7 +449,7 @@ private String getUserNameById(int userId) {
             showAlert(Alert.AlertType.ERROR, "Error", "Failed to delete the event.");
         }
     }
-    private ObservableList<String> getUsersFromDatabase() {
+    public ObservableList<String> getUsersFromDatabase() {
         ObservableList<String> users = FXCollections.observableArrayList();
         try {
             TransactionManager.beginTransaction();
@@ -391,7 +466,7 @@ private String getUserNameById(int userId) {
         }
         return users;
     }
-    private ObservableList<Evenement> getEventsFromDatabase() {
+    public ObservableList<Evenement> getEventsFromDatabase() {
         ObservableList<Evenement> events = FXCollections.observableArrayList();
         try {
             TransactionManager.beginTransaction();
@@ -407,11 +482,11 @@ private String getUserNameById(int userId) {
         return events;
     }
 
-    private void clearContentArea() {
+    public void clearContentArea() {
         contentArea.getChildren().clear();
     }
 
-    private void showAlert(Alert.AlertType alertType, String title, String message) {
+    public void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(null);

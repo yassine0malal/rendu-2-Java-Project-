@@ -4,8 +4,10 @@
 } */
 
 .root {
-    -fx-font-family: "yassine";
-    -fx-background-color: #4af923;
+    /* -fx-font-family: "yassine"; */
+    -fx-background-color: linear-gradient(to right, #50B3A2, #4A90E2); /* Reversed gradient on hover */
+    -fx-background-radius: 15px;
+    -fx-background-radius: 15px 15px 15px 15px;
 }
 
 /* .button {

@@ -17,6 +17,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 
 public class testUser extends GridPane { // Extend GridPane
     private TextField usernameField;
@@ -48,23 +49,65 @@ public class testUser extends GridPane { // Extend GridPane
         crudMenu = new HBox(10);
         crudMenu.setPadding(new Insets(10));
         crudMenu.setSpacing(10);
+        crudMenu.setStyle("""
+    -fx-background-color: linear-gradient(to right, #4A90E2, #50B3A2); /* Gradient from blue to aqua */
+    -fx-padding: 10 0 10 200px; /* Top, Right, Bottom, Left padding */
+    -fx-border-radius: 20px; /* Smooth rounded edges */
+    -fx-background-radius: 20px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0, 4, 4); /* Soft drop shadow */
+    -fx-border-width: 2px;
+    -fx-border-color: rgba(255, 255, 255, 0.2); /* Subtle border */
+""");
+crudMenu.setOnMouseEntered(e -> {
+    crudMenu.setStyle("""
+        -fx-background-color: linear-gradient(to right, #50B3A2, #4A90E2); /* Reversed gradient on hover */
+        -fx-padding: 10 0 10 200px;
+        -fx-border-radius: 20px;
+        -fx-background-radius: 20px;
+        -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 15, 0, 5, 5);
+        -fx-border-width: 2px;
+        -fx-border-color: rgba(255, 255, 255, 0.4); /* More visible border on hover */
+    """);
+});
+crudMenu.setOnMouseExited(e -> {
+    crudMenu.setStyle("""
+        -fx-background-color: linear-gradient(to right, #4A90E2, #50B3A2); /* Reset to original gradient */
+        -fx-padding: 10 0 10 200px;
+        -fx-border-radius: 20px;
+        -fx-background-radius: 20px;
+        -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0, 4, 4);
+        -fx-border-width: 2px;
+        -fx-border-color: rgba(255, 255, 255, 0.2); /* Reset border */
+    """);
+    
+});
+
+        
+        crudMenu.setMinWidth(1000);
+
 
         Button addUserButton = new Button("Add User");
-        Button deleteUserButton = new Button("Daisplay Users");
+        Button displayUserButton = new Button("Daisplay Users");
+        addUserButton.setStyle("-fx-font-size: 14px; -fx-background-color:#5211e9; -fx-text-fill: white; -f-decoration: none; -fx-background-radius: 15px;");
+        displayUserButton.setStyle("-fx-font-size: 14px; -fx-background-color:#5211e9; -fx-text-fill: white; -f-decoration: none; -fx-background-radius: 15px;");
+
 
         addUserButton.setOnAction(e -> displayAddUserForm());
-        deleteUserButton.setOnAction(e -> displayAllUsers());
+        displayUserButton.setOnAction(e -> displayAllUsers());
 
-        crudMenu.getChildren().addAll(addUserButton, deleteUserButton);
+        crudMenu.getChildren().addAll(addUserButton, displayUserButton);
         this.add(crudMenu, 0, 0);
 
         // Empty content area initially
         Label emptyLabel = new Label("Select an action from the navbar above");
         emptyLabel.setStyle("-fx-font-size: 18px;");
-        contentArea.getChildren().add(emptyLabel);
+        StackPane stackPane = new StackPane(emptyLabel);
+        stackPane.setPrefSize(1000, 600);
+        stackPane.setStyle("-fx-content-display: center; -fx-alignment: center;");
+
+        contentArea.getChildren().add(stackPane);
         this.add(contentArea, 0, 1, 2, 1); // Place contentArea below the navbar
 
-        // Register Button (you can remove this if not needed)
         registerButton = new Button("Register");
         registerButton.setStyle(
                 "-fx-font-size: 14px; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-padding: 5 20; -fx-cursor: hand;");
@@ -72,20 +115,31 @@ public class testUser extends GridPane { // Extend GridPane
         registerButton.setOnAction(event -> handleRegister());
     }
 
-    private void displayAddUserForm() {
+    public void displayAddUserForm() {
+        // Remove the user table if it's present
+        if (userTable != null) {
+            this.getChildren().remove(userTable);
+        }
+    
+        // Clear content area to ensure no overlapping content
         clearContentArea();
+    
+        // Initialize the add user form
         addUserForm = new GridPane();
         addUserForm.setAlignment(Pos.CENTER);
         addUserForm.setHgap(10);
         addUserForm.setVgap(10);
         addUserForm.setPadding(new Insets(20));
-        addUserForm.setStyle("-fx-background-color: #F5F7FB;");
-
+        addUserForm.setStyle(
+                "-fx-background-color: #F9F9F9; -fx-border-radius: 15px; -fx-background-radius: 15px; -fx-padding: 20;");
+    
+        // Add a title for the form
         Label titleLabel = new Label("User Registration");
         titleLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #333;");
-        addUserForm.add(titleLabel, 0, 0, 2, 1); // Add to grid
+        addUserForm.add(titleLabel, 0, 0, 2, 1);
         GridPane.setHalignment(titleLabel, HPos.CENTER);
-
+    
+        // Add username field
         Label usernameLabel = new Label("Username:");
         usernameLabel.setStyle("-fx-font-size: 14px;");
         usernameField = new TextField();
@@ -93,17 +147,17 @@ public class testUser extends GridPane { // Extend GridPane
         usernameField.setStyle("-fx-font-size: 14px; -fx-pref-width: 250px;");
         addUserForm.add(usernameLabel, 0, 1);
         addUserForm.add(usernameField, 1, 1);
-
-        // Last Name Field
-        Label lastNameLabel = new Label("LastName:");
+    
+        // Add last name field
+        Label lastNameLabel = new Label("Last Name:");
         lastNameLabel.setStyle("-fx-font-size: 14px;");
         lastNameField = new TextField();
         lastNameField.setPromptText("Enter your last name");
         lastNameField.setStyle("-fx-font-size: 14px; -fx-pref-width: 250px;");
         addUserForm.add(lastNameLabel, 0, 2);
         addUserForm.add(lastNameField, 1, 2);
-
-        // Email Field
+    
+        // Add email field
         Label emailLabel = new Label("Email:");
         emailLabel.setStyle("-fx-font-size: 14px;");
         emailField = new TextField();
@@ -111,34 +165,49 @@ public class testUser extends GridPane { // Extend GridPane
         emailField.setStyle("-fx-font-size: 14px; -fx-pref-width: 250px;");
         addUserForm.add(emailLabel, 0, 3);
         addUserForm.add(emailField, 1, 3);
-
-        // User Type Field
+    
+        // Add user type field
         Label userTypeLabel = new Label("User Type:");
         userTypeLabel.setStyle("-fx-font-size: 14px;");
         userTypeComboBox = new ChoiceBox<>();
-        userTypeComboBox.getItems().addAll("ETUDIANT", "PROFESSEUR"); // Add user types
+        userTypeComboBox.getItems().addAll("ETUDIANT", "PROFESSEUR");
         userTypeComboBox.setStyle("-fx-font-size: 14px; -fx-pref-width: 250px;");
         addUserForm.add(userTypeLabel, 0, 4);
         addUserForm.add(userTypeComboBox, 1, 4);
-
-        // Register Button
+    
+        // Add register button
         registerButton = new Button("Register");
         registerButton.setStyle(
-                "-fx-font-size: 14px; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-padding: 5 20; -fx-cursor: hand;");
+                "-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-border-radius: 5px; -fx-padding: 10px 20px;");
+        registerButton.setOnMouseEntered(e -> registerButton.setStyle(
+                "-fx-background-color:rgb(158, 226, 13); -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-border-radius: 5px; -fx-padding: 10px 20px;"));
+        registerButton.setOnMouseExited(e -> registerButton.setStyle(
+                "-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-border-radius: 5px; -fx-padding: 10px 20px;"));
         addUserForm.add(registerButton, 1, 6);
         GridPane.setHalignment(registerButton, HPos.RIGHT);
-        this.add(addUserForm, 0, 1, 2, 1); // Add form to grid
-
+    
         // Add action to button
         registerButton.setOnAction(event -> handleRegister());
-
+    
+        // Add form to the content area and ensure proper positioning
+        contentArea.getChildren().add(addUserForm);
+        AnchorPane.setTopAnchor(addUserForm, 50.0);
+        AnchorPane.setLeftAnchor(addUserForm, 100.0);
+        AnchorPane.setRightAnchor(addUserForm, 100.0);
+    
+        this.add(contentArea, 0, 1, 2, 1);
     }
-
-    private void handleRegister() {
+    
+    public void handleRegister() {
         String username = usernameField.getText();
         String lastName = lastNameField.getText();
         String email = emailField.getText();
         String userType = userTypeComboBox.getValue();
+
+        if (username.isEmpty() || lastName.isEmpty() || email.isEmpty() || userType == null) {
+            showAlert(Alert.AlertType.ERROR, "Error", "All fields are required!");
+            return;
+        }
 
         try {
             TransactionManager.beginTransaction();
@@ -167,28 +236,35 @@ public class testUser extends GridPane { // Extend GridPane
     }
 
     // Method to display the Delete User form
-    private void displayAllUsers() {
+    public void displayAllUsers() {
         if (addUserForm != null) {
-            addUserForm.getChildren().clear();
+            this.getChildren().remove(addUserForm);
         }
         clearContentArea();
 
         // Initialisation du TableView
         userTable = new TableView<>();
-        userTable.setPrefWidth(600);
-        userTable.setPrefHeight(400);
+        userTable.setPrefWidth(1000);
+        userTable.setPrefHeight(TableView.USE_COMPUTED_SIZE);
+        userTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        userTable.setStyle("-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0, 4, 4); -fx-border-color: rgba(71, 68, 68, 0.2);");
+        userTable.setStyle("-fx-border-radius: 15px; -fx-background-radius: 15px; -fx-padding: 20; -fx-border-width: 2px;");
 
         // Colonnes existantes
         TableColumn<User, String> usernameColumn = new TableColumn<>("Username");
+        usernameColumn.setPrefWidth(200);
         usernameColumn.setCellValueFactory(new PropertyValueFactory<>("prenom"));
 
         TableColumn<User, String> lastNameColumn = new TableColumn<>("Last Name");
+        lastNameColumn.setPrefWidth(200);
         lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("nom"));
 
         TableColumn<User, String> emailColumn = new TableColumn<>("Email");
+        emailColumn.setPrefWidth(200);
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
 
         TableColumn<User, String> userTypeColumn = new TableColumn<>("User Type");
+        userTypeColumn.setPrefWidth(200);
         userTypeColumn.setCellValueFactory(new PropertyValueFactory<>("typeUser"));
 
         // Nouvelle colonne Action
@@ -228,13 +304,10 @@ public class testUser extends GridPane { // Extend GridPane
             }
         });
 
-        // Ajouter les colonnes au TableView
         userTable.getColumns().addAll(usernameColumn, lastNameColumn, emailColumn, userTypeColumn, actionColumn);
 
-        // Charger les données dans le TableView
         userTable.setItems(getUsersFromDatabase());
 
-        // Afficher le TableView dans la zone de contenu
         contentArea.getChildren().add(userTable);
         this.add(contentArea, 0, 4, 2, 1);
     }
@@ -262,13 +335,13 @@ public class testUser extends GridPane { // Extend GridPane
     }
 
     // Method to clear the content area and grid pane also
-    private void clearContentArea() {
+    public void clearContentArea() {
 
         contentArea.getChildren().clear();
 
     }
 
-    private ObservableList<User> getUsersFromDatabase() {
+    public ObservableList<User> getUsersFromDatabase() {
         ObservableList<User> users = FXCollections.observableArrayList();
         try {
             TransactionManager.beginTransaction();
@@ -370,7 +443,7 @@ public class testUser extends GridPane { // Extend GridPane
 
     }
 
-    private void handleModifayButton(User modifyuser) {
+    public void handleModifayButton(User modifyuser) {
 
         try {
             TransactionManager.beginTransaction();
