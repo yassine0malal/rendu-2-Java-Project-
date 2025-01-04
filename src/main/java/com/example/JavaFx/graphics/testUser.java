@@ -2,10 +2,19 @@ package com.example.JavaFx.graphics;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Properties;
 
 import com.example.DAOImplementation.UserDAO;
 import com.example.Models.User;
 import com.example.transaction.TransactionManager;
+
+import java.util.Properties;
+import javax.mail.*;
+import javax.mail.internet.*;
+
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -198,43 +207,117 @@ crudMenu.setOnMouseExited(e -> {
         this.add(contentArea, 0, 1, 2, 1);
     }
     
+
+
+public boolean isValidEmail(String email) {
+    // Regular expression to validate email format
+    String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+    Pattern pattern = Pattern.compile(emailRegex);
+    Matcher matcher = pattern.matcher(email);
+    return matcher.matches();
+}
+
     public void handleRegister() {
         String username = usernameField.getText();
         String lastName = lastNameField.getText();
         String email = emailField.getText();
         String userType = userTypeComboBox.getValue();
-
+    
         if (username.isEmpty() || lastName.isEmpty() || email.isEmpty() || userType == null) {
             showAlert(Alert.AlertType.ERROR, "Error", "All fields are required!");
             return;
         }
-
+        if (!isValidEmail(email)) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Invalid email format!");
+            return;
+        }
+    
         try {
             TransactionManager.beginTransaction();
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("erreur de connexion");
+            showAlert(Alert.AlertType.ERROR, "Error", "Failed to connect to the database.");
+            return;
         }
-
+    
         UserDAO userDAO = new UserDAO();
         userDAO.setConnection(TransactionManager.getCurrentConnection());
         User user = new User(username, lastName, email, userType);
+        if (userDAO.verifyEmailExist(email) > 0) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Email already exists in the database.");
+            return;
+            
+        }
         userDAO.ajouter(user);
-
+    
         try {
+
             TransactionManager.commit();
+
+            sendEmail(email);
+            showAlert(Alert.AlertType.INFORMATION, "Success", "User registered successfully!");
         } catch (SQLException e) {
             e.printStackTrace();
-            showAlert(Alert.AlertType.INFORMATION, "Error", "User registeration is failed");
-            System.out.println("erreur de commit");
+            showAlert(Alert.AlertType.ERROR, "Error", "User registration failed.");
+            return;
         }
+    
+        // Send a confirmation email after user registration
+        sendEmail(email);
+    
         showAlert(Alert.AlertType.INFORMATION, "Success", "User registered successfully!");
         usernameField.clear();
         lastNameField.clear();
         emailField.clear();
         userTypeComboBox.setValue(null);
     }
+    
 
+
+    public void sendEmail(String recipientEmail) {
+        // Sender's email and SMTP server settings
+        String senderEmail = "malalyassin6@gmail.com";  // Sender's email address
+        String senderPassword = "cseu vjve evjc lfcf"; // Sender's email password
+        String subject = "Welcome to Our Service!";
+        String messageBody = "Thank you for registering with us. We are glad to have you on our service!";
+    
+        // Set up the properties for the SMTP server
+        Properties properties = new Properties();
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.smtp.host", "smtp.gmail.com");
+        properties.put("mail.smtp.port", "587");
+    
+        // Get the Session object and authenticate using the sender's email credentials
+        Session session = Session.getInstance(properties, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(senderEmail, senderPassword);
+            }
+        });
+    
+        try {
+            // Create a MimeMessage object
+            MimeMessage message = new MimeMessage(session);
+    
+            // Set the sender and recipient addresses
+            message.setFrom(new InternetAddress(senderEmail));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipientEmail));
+    
+            // Set the email subject and body
+            message.setSubject(subject);
+            message.setText(messageBody);
+    
+            // Send the email
+            Transport.send(message);
+            System.out.println("Email sent successfully to " + recipientEmail);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Error", "Failed to send the email.");
+        }
+    }
+
+        
     // Method to display the Delete User form
     public void displayAllUsers() {
         if (addUserForm != null) {

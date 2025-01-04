@@ -1,0 +1,16 @@
+-------------------------------------------------------------------------------
+Test set: com.example.TestJunite.UserDAOTest
+-------------------------------------------------------------------------------
+Tests run: 4, Failures: 3, Errors: 0, Skipped: 0, Time elapsed: 0.209 s <<< FAILURE! - in com.example.TestJunite.UserDAOTest
+com.example.TestJunite.UserDAOTest.testAfficherUsers  Time elapsed: 0.059 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: <2> but was: <5>
+	at com.example.TestJunite.UserDAOTest.testAfficherUsers(UserDAOTest.java:55)
+
+com.example.TestJunite.UserDAOTest.testUpdateUser  Time elapsed: 0.038 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: not <null>
+	at com.example.TestJunite.UserDAOTest.testUpdateUser(UserDAOTest.java:69)
+
+com.example.TestJunite.UserDAOTest.testAjouterUser  Time elapsed: 0.052 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: not <null>
+	at com.example.TestJunite.UserDAOTest.testAjouterUser(UserDAOTest.java:38)
+

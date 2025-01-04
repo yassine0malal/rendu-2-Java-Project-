@@ -1,0 +1,5 @@
+com\example\TestJunite\SalleDAOTest.class
+com\example\TestJunite\EvenementDAOTest.class
+com\example\TestJunite\UserDAOTest.class
+com\example\TestJunite\TerrainDAOTest.class
+com\example\TestJunite\ReservationDAOTest.class

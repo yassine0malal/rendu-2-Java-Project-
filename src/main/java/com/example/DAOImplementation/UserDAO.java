@@ -24,15 +24,20 @@ public class UserDAO implements GenericDAO<User> {
                 return;
             }
 
-            String verfifeir = "SELECT COUNT(*) FROM utilisateurs WHERE email = ?";
-            try (PreparedStatement prep = connexion.prepareStatement(verfifeir)) {
-                prep.setString(1, user.getEmail());
-                try (ResultSet result = prep.executeQuery()) {
-                    if (result.next() && result.getInt(1) > 0) {
-                        System.out.println("Email already exists in the database.");
-                        return;
-                    }
-                }
+            // String verfifeir = "SELECT COUNT(*) FROM utilisateurs WHERE email = ?";
+            // try (PreparedStatement prep = connexion.prepareStatement(verfifeir)) {
+            //     prep.setString(1, user.getEmail());
+            //     try (ResultSet result = prep.executeQuery()) {
+            //         if (result.next() && result.getInt(1) > 0) {
+            //             System.out.println("Email already exists in the database.");
+            //             return;
+            //         }
+            //     }
+            // }
+            if (verifyEmailExist(user.getEmail()) > 0) {
+                System.out.println("Email already exists in the database.");
+                return;
+                
             }
 
             String query = "INSERT INTO utilisateurs (nom, prenom, email, type) VALUES (?, ?, ?, ?)";
@@ -143,4 +148,25 @@ public class UserDAO implements GenericDAO<User> {
         }
         return null;
     }
+
+    public int verifyEmailExist(String email) {
+        try {
+            String query = "SELECT COUNT(*) FROM utilisateurs WHERE email = ?";
+            try (PreparedStatement prep = connexion.prepareStatement(query)) {
+                prep.setString(1, email);
+                try (ResultSet rs = prep.executeQuery()) {
+                    if (rs.next()) {
+                        return rs.getInt(1);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("SQL error during email verification.");
+        }
+        return 0;
+    }
+
+
+
 }

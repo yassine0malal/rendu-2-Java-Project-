@@ -1,5 +1,8 @@
 package com.example.JavaFx.graphics;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -11,6 +14,13 @@ import com.example.DAOImplementation.UserDAO;
 import com.example.Models.Evenement;
 import com.example.Models.Reservation;
 import com.example.transaction.TransactionManager;
+
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import javafx.stage.FileChooser;
+import javafx.stage.Window;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -24,6 +34,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.stage.FileChooser;
 
 public class TestReservation extends GridPane {
 
@@ -42,54 +53,55 @@ public class TestReservation extends GridPane {
         this.setVgap(10);
         this.setPadding(new Insets(20));
         this.setStyle("-fx-background-color:#DEDEDE");
-        
 
         contentArea = new AnchorPane();
         contentArea.setPrefSize(800, 600);
 
         // Create CRUD Menu
         crudMenu = new HBox(10);
-        crudMenu.setPadding(new Insets(20,20,20,330));
+        crudMenu.setPadding(new Insets(20, 20, 20, 330));
         crudMenu.setSpacing(10);
         crudMenu.setStyle("""
-            -fx-background-color: linear-gradient(to right, #4A90E2, #50B3A2); /* Gradient from blue to aqua */
-            -fx-padding: 10 0 10 200px; /* Top, Right, Bottom, Left padding */
-            -fx-border-radius: 20px; /* Smooth rounded edges */
-            -fx-background-radius: 20px;
-            -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0, 4, 4); /* Soft drop shadow */
-            -fx-border-width: 2px;
-            -fx-border-color: rgba(255, 255, 255, 0.2); /* Subtle border */
-        """);
+                    -fx-background-color: linear-gradient(to right, #4A90E2, #50B3A2); /* Gradient from blue to aqua */
+                    -fx-padding: 10 0 10 200px; /* Top, Right, Bottom, Left padding */
+                    -fx-border-radius: 20px; /* Smooth rounded edges */
+                    -fx-background-radius: 20px;
+                    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0, 4, 4); /* Soft drop shadow */
+                    -fx-border-width: 2px;
+                    -fx-border-color: rgba(255, 255, 255, 0.2); /* Subtle border */
+                """);
         crudMenu.setOnMouseEntered(e -> {
-            crudMenu.setStyle("""
-                -fx-background-color: linear-gradient(to right, #50B3A2, #4A90E2); /* Reversed gradient on hover */
-                -fx-padding: 10 0 10 200px;
-                -fx-border-radius: 20px;
-                -fx-background-radius: 20px;
-                -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 15, 0, 5, 5);
-                -fx-border-width: 2px;
-                -fx-border-color: rgba(255, 255, 255, 0.4); /* More visible border on hover */
-            """);
+            crudMenu.setStyle(
+                    """
+                                -fx-background-color: linear-gradient(to right, #50B3A2, #4A90E2); /* Reversed gradient on hover */
+                                -fx-padding: 10 0 10 200px;
+                                -fx-border-radius: 20px;
+                                -fx-background-radius: 20px;
+                                -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 15, 0, 5, 5);
+                                -fx-border-width: 2px;
+                                -fx-border-color: rgba(255, 255, 255, 0.4); /* More visible border on hover */
+                            """);
         });
         crudMenu.setOnMouseExited(e -> {
             crudMenu.setStyle("""
-                -fx-background-color: linear-gradient(to right, #4A90E2, #50B3A2); 
-                -fx-padding: 10 0 10 200px;
-                -fx-border-radius: 20px;
-                -fx-background-radius: 20px;
-                -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0, 4, 4);
-                -fx-border-width: 2px;
-                -fx-border-color: rgba(255, 255, 255, 0.2); /* Reset border */
-            """);
+                        -fx-background-color: linear-gradient(to right, #4A90E2, #50B3A2);
+                        -fx-padding: 10 0 10 200px;
+                        -fx-border-radius: 20px;
+                        -fx-background-radius: 20px;
+                        -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0, 4, 4);
+                        -fx-border-width: 2px;
+                        -fx-border-color: rgba(255, 255, 255, 0.2); /* Reset border */
+                    """);
         });
-        
-        crudMenu.setMinWidth(1000);
 
+        crudMenu.setMinWidth(1000);
 
         Button addReservationButton = new Button("Add Reservation");
         Button displayReservationsButton = new Button("Display Reservations");
-        addReservationButton.setStyle("-fx-font-size: 14px; -fx-background-color:#5211e9; -fx-text-fill: white; -f-decoration: none; -fx-background-radius: 15px;");
-        displayReservationsButton.setStyle("-fx-font-size: 14px; -fx-background-color:#5211e9; -fx-text-fill: white; -f-decoration: none; -fx-background-radius: 15px;");
+        addReservationButton.setStyle(
+                "-fx-font-size: 14px; -fx-background-color:#5211e9; -fx-text-fill: white; -f-decoration: none; -fx-background-radius: 15px;");
+        displayReservationsButton.setStyle(
+                "-fx-font-size: 14px; -fx-background-color:#5211e9; -fx-text-fill: white; -f-decoration: none; -fx-background-radius: 15px;");
 
         addReservationButton.setOnAction(e -> displayAddReservationForm());
         displayReservationsButton.setOnAction(e -> displayAllReservations());
@@ -98,7 +110,7 @@ public class TestReservation extends GridPane {
         this.add(crudMenu, 0, 0);
 
         // Empty content area
-                Label emptyLabel = new Label("Select an action from the navbar above");
+        Label emptyLabel = new Label("Select an action from the navbar above");
         emptyLabel.setStyle("-fx-font-size: 18px;");
         StackPane stackPane = new StackPane(emptyLabel);
         stackPane.setPrefSize(1000, 600);
@@ -109,10 +121,10 @@ public class TestReservation extends GridPane {
         this.add(contentArea, 0, 1, 2, 1);
     }
 
-    private void displayAddReservationForm() {
+    public void displayAddReservationForm() {
         // Clear the content area
         clearContentArea();
-    
+
         // Initialize the reservation form layout
         addReservationForm = new GridPane();
         addReservationForm.setAlignment(Pos.CENTER);
@@ -121,13 +133,13 @@ public class TestReservation extends GridPane {
         addReservationForm.setPadding(new Insets(20));
         addReservationForm.setStyle(
                 "-fx-background-color: #f9f9f9; -fx-border-radius: 15px; -fx-background-radius: 15px; -fx-padding: 20;");
-    
+
         // Title Label
         Label titleLabel = new Label("Add New Reservation");
         titleLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #333;");
         addReservationForm.add(titleLabel, 0, 0, 2, 1);
         GridPane.setHalignment(titleLabel, HPos.CENTER);
-    
+
         // User Selection
         Label userIdLabel = new Label("User:");
         userIdLabel.setStyle("-fx-font-size: 14px;");
@@ -136,7 +148,7 @@ public class TestReservation extends GridPane {
         userComboBox.setStyle("-fx-font-size: 14px; -fx-pref-width: 250px;");
         addReservationForm.add(userIdLabel, 0, 1);
         addReservationForm.add(userComboBox, 1, 1);
-    
+
         // Terrain Selection
         Label terrainIdLabel = new Label("Terrain:");
         terrainIdLabel.setStyle("-fx-font-size: 14px;");
@@ -145,7 +157,7 @@ public class TestReservation extends GridPane {
         terrainComboBox.setStyle("-fx-font-size: 14px; -fx-pref-width: 250px;");
         addReservationForm.add(terrainIdLabel, 0, 2);
         addReservationForm.add(terrainComboBox, 1, 2);
-    
+
         // Salle Selection
         Label salleIdLabel = new Label("Salle:");
         salleIdLabel.setStyle("-fx-font-size: 14px;");
@@ -154,7 +166,7 @@ public class TestReservation extends GridPane {
         salleComboBox.setStyle("-fx-font-size: 14px; -fx-pref-width: 250px;");
         addReservationForm.add(salleIdLabel, 0, 3);
         addReservationForm.add(salleComboBox, 1, 3);
-    
+
         // Event Selection
         Label eventIdLabel = new Label("Event:");
         eventIdLabel.setStyle("-fx-font-size: 14px;");
@@ -163,7 +175,7 @@ public class TestReservation extends GridPane {
         eventComboBox.setStyle("-fx-font-size: 14px; -fx-pref-width: 250px;");
         addReservationForm.add(eventIdLabel, 0, 4);
         addReservationForm.add(eventComboBox, 1, 4);
-    
+
         // Date Picker
         Label reservationDateLabel = new Label("Reservation Date:");
         reservationDateLabel.setStyle("-fx-font-size: 14px;");
@@ -172,7 +184,7 @@ public class TestReservation extends GridPane {
         reservationDatePicker.setStyle("-fx-font-size: 14px; -fx-pref-width: 250px;");
         addReservationForm.add(reservationDateLabel, 0, 5);
         addReservationForm.add(reservationDatePicker, 1, 5);
-    
+
         // Add Reservation Button
         addReservationButton = new Button("Add Reservation");
         addReservationButton.setStyle(
@@ -188,15 +200,15 @@ public class TestReservation extends GridPane {
                 int salleId = Integer.parseInt(salleComboBox.getValue().split(" - ")[0]);
                 int eventId = Integer.parseInt(eventComboBox.getValue().split(" - ")[0]);
                 Date reservationDate = Date.valueOf(reservationDatePicker.getValue());
-    
+
                 Reservation reservation = new Reservation(userId, terrainId, salleId, eventId, reservationDate);
-    
+
                 TransactionManager.beginTransaction();
                 ReservationDAO reservationDAO = new ReservationDAO();
                 reservationDAO.setConexion(TransactionManager.getCurrentConnection());
                 reservationDAO.ajouter(reservation);
                 TransactionManager.commit();
-    
+
                 showAlert(Alert.AlertType.INFORMATION, "Success", "Reservation added successfully!");
                 displayAllReservations();
             } catch (Exception ex) {
@@ -204,31 +216,33 @@ public class TestReservation extends GridPane {
                 showAlert(Alert.AlertType.ERROR, "Error", "Failed to add the reservation.");
             }
         });
-    
+
         addReservationForm.add(addReservationButton, 1, 6);
         GridPane.setHalignment(addReservationButton, HPos.RIGHT);
-    
+
         // Add form to the content area with proper anchoring
         contentArea.getChildren().add(addReservationForm);
         AnchorPane.setTopAnchor(addReservationForm, 50.0);
         AnchorPane.setLeftAnchor(addReservationForm, 100.0);
         AnchorPane.setRightAnchor(addReservationForm, 100.0);
-    
+
         this.add(contentArea, 0, 1, 2, 1);
     }
-    
-    private void displayAllReservations() {
+
+    public void displayAllReservations() {
         clearContentArea();
         if (addReservationForm != null) {
-this.getChildren().remove(addReservationForm);
+            this.getChildren().remove(addReservationForm);
         }
         reservationTable = new TableView<>();
         reservationTable.setPrefWidth(1000);
         reservationTable.setPrefHeight(TableView.USE_COMPUTED_SIZE);
         reservationTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        reservationTable.setStyle("-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0, 4, 4); -fx-border-color: rgba(71, 68, 68, 0.2);");
-        reservationTable.setStyle("-fx-border-radius: 15px; -fx-background-radius: 15px; -fx-padding: 20; -fx-border-width: 2px;");
-    
+        reservationTable.setStyle(
+                "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0, 4, 4); -fx-border-color: rgba(71, 68, 68, 0.2);");
+        reservationTable.setStyle(
+                "-fx-border-radius: 15px; -fx-background-radius: 15px; -fx-padding: 20; -fx-border-width: 2px;");
+
         TableColumn<Reservation, String> userIdColumn = new TableColumn<>("User Name");
         userIdColumn.setMinWidth(166.7);
         userIdColumn.setCellValueFactory(cellData -> {
@@ -253,7 +267,6 @@ this.getChildren().remove(addReservationForm);
         TableColumn<Reservation, String> eventIdColumn = new TableColumn<>("Event Name");
         eventIdColumn.setMinWidth(166.7);
         eventIdColumn.setCellValueFactory(cellData -> {
-            // System.out.println("*******************"+cellData.getValue().getId_event());
             int id_event = cellData.getValue().getId_event();
             String eventName = getEventName(id_event);
             return new SimpleStringProperty(eventName);
@@ -294,14 +307,62 @@ this.getChildren().remove(addReservationForm);
             }
         });
 
+      
         reservationTable.getColumns().addAll(userIdColumn, terrainIdColumn, salleIdColumn, eventIdColumn, dateColumn,
                 action);
 
+        
         reservationTable.setItems(getReservationsFromDatabase());
         contentArea.getChildren().add(reservationTable);
+        Button downloadAllButton = new Button("Download All Reservations");
+        downloadAllButton.setStyle("-fx-background-color: #008CBA; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 12px; ");
+        downloadAllButton.setOnAction(event -> handleDownloadAllReservations());
+        // downloadAllButton.setStyle("-fx-padding: 10px 20px; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-border-radius: 5px;");
+        // contentArea.getChildren().add(downloadAllButton);
+        StackPane stackPane = new StackPane(downloadAllButton);
+        stackPane.setPrefSize(1000, 1000);
+        stackPane.setStyle("-fx-content-display: center; -fx-alignment: center;");
+        contentArea.getChildren().add(stackPane);
+
+
     }
 
-    private void modifyReservationForm(Reservation reservation) {
+
+    public void handleDownloadAllReservations() {
+    // Get all reservations from the table
+    ObservableList<Reservation> allReservations = reservationTable.getItems();
+    
+    String fileName = "all_reservations.csv";
+    
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+    fileChooser.setInitialFileName(fileName);
+    
+    File file = fileChooser.showSaveDialog(contentArea.getScene().getWindow());
+    if (file != null) {
+        try (FileWriter writer = new FileWriter(file)) {
+            writer.append("Reservation ID,User Name,Terrain Name,Salle Name,Event Name,Reservation Date\n");
+
+            for (Reservation reservation : allReservations) {
+                writer.append(reservation.getId_reservation() + ",");
+                writer.append(getUserName(reservation.getId_user()) + ",");
+                writer.append(getTerrainName(reservation.getId_terrain()) + ",");
+                writer.append(getSalleName(reservation.getId_salle()) + ",");
+                writer.append(getEventName(reservation.getId_event()) + ",");
+                writer.append(reservation.getDate_reservation().toString() + "\n");
+            }
+
+            showAlert(Alert.AlertType.INFORMATION, "Success", "All reservations have been saved to file.");
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Error", "Failed to save the reservation file.");
+        }
+    }
+}
+
+
+
+    public void modifyReservationForm(Reservation reservation) {
         clearContentArea();
         if (addReservationForm != null) {
             contentArea.getChildren().remove(addReservationForm);
@@ -364,7 +425,7 @@ this.getChildren().remove(addReservationForm);
         contentArea.getChildren().add(addReservationForm);
     }
 
-    private void handleUpdateReservation(Reservation reservation) {
+    public void handleUpdateReservation(Reservation reservation) {
         try {
             TransactionManager.beginTransaction();
             ReservationDAO reservationDAO = new ReservationDAO();
@@ -380,7 +441,7 @@ this.getChildren().remove(addReservationForm);
         }
     }
 
-    private ObservableList<String> getUsersFromDatabase() {
+    public ObservableList<String> getUsersFromDatabase() {
         ObservableList<String> users = FXCollections.observableArrayList();
         try {
             TransactionManager.beginTransaction();
@@ -395,7 +456,7 @@ this.getChildren().remove(addReservationForm);
         return users;
     }
 
-    private ObservableList<String> getTerrainsFromDatabase() {
+    public ObservableList<String> getTerrainsFromDatabase() {
         ObservableList<String> terrains = FXCollections.observableArrayList();
         try {
             TransactionManager.beginTransaction();
@@ -420,7 +481,7 @@ this.getChildren().remove(addReservationForm);
         return terrains;
     }
 
-    private ObservableList<String> getSallesFromDatabase() {
+    public ObservableList<String> getSallesFromDatabase() {
         ObservableList<String> salles = FXCollections.observableArrayList();
         try {
             TransactionManager.beginTransaction();
@@ -440,7 +501,7 @@ this.getChildren().remove(addReservationForm);
         return salles;
     }
 
-    private ObservableList<String> getEventsFromDatabase() {
+    public ObservableList<String> getEventsFromDatabase() {
         ObservableList<String> events = FXCollections.observableArrayList();
         try {
             TransactionManager.beginTransaction();
@@ -460,7 +521,7 @@ this.getChildren().remove(addReservationForm);
         return events;
     }
 
-    private ObservableList<Reservation> getReservationsFromDatabase() {
+    public ObservableList<Reservation> getReservationsFromDatabase() {
         ObservableList<Reservation> reservations = FXCollections.observableArrayList();
         try {
             TransactionManager.beginTransaction();
@@ -474,7 +535,7 @@ this.getChildren().remove(addReservationForm);
         return reservations;
     }
 
-    private String getEventName(int id_event) {
+    public String getEventName(int id_event) {
         String eventName = "Unknown";
         try {
             TransactionManager.beginTransaction();
@@ -494,7 +555,7 @@ this.getChildren().remove(addReservationForm);
 
     }
 
-    private String getUserName(int id_user) {
+    public String getUserName(int id_user) {
         String userName = "Unknown";
 
         try {
@@ -516,7 +577,7 @@ this.getChildren().remove(addReservationForm);
 
     }
 
-    private String getSalleName(int id_salle) {
+    public String getSalleName(int id_salle) {
         String salle_name = "Unknown";
 
         try {
@@ -537,7 +598,7 @@ this.getChildren().remove(addReservationForm);
 
     }
 
-    private String getTerrainName(int id_terrain) {
+    public String getTerrainName(int id_terrain) {
         String terrainName = "wihout Terrain";
 
         try {
@@ -574,11 +635,11 @@ this.getChildren().remove(addReservationForm);
         }
     }
 
-    private void clearContentArea() {
+    public void clearContentArea() {
         contentArea.getChildren().clear();
     }
 
-    private void showAlert(Alert.AlertType alertType, String title, String message) {
+    public void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(null);
