@@ -2,11 +2,11 @@ package com.example.JavaFx;
 
 import java.util.Stack;
 
-import com.example.JavaFx.graphics.TestEvent;
-import com.example.JavaFx.graphics.TestReservation;
-import com.example.JavaFx.graphics.TestSalle;
-import com.example.JavaFx.graphics.TestTerrain;
-import com.example.JavaFx.graphics.testUser;
+import com.example.JavaFx.graphics.EventPage;
+import com.example.JavaFx.graphics.ReservationPage;
+import com.example.JavaFx.graphics.SallePage;
+import com.example.JavaFx.graphics.TerrainPage;
+import com.example.JavaFx.graphics.UserPage;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -26,8 +26,6 @@ public class DashbordCode extends Application {
     @Override
     public void start(Stage primaryStage) {
         root = new BorderPane();
-        // Image image = new Image(getClass().getResourceAsStream("/images/dashboard.jpg"));
-        // root.setStyle("-fx-background-image: url('images/dashboard.jpg'); -fx-background-size: cover;");
         VBox navigationMenu = createNavigationMenu();
 
         root.setLeft(navigationMenu);
@@ -104,8 +102,8 @@ public class DashbordCode extends Application {
         salleButton.setOnAction(e -> loadSallePage());
         eventButton.setOnAction(e -> loadEventsPage());
         reservationButton.setOnAction(e -> loadReservationPage());
-        userPageButton.setOnAction(event -> root.setCenter(new testUser()));
-        terrainPageButton.setOnAction(event -> root.setCenter(new TestTerrain()));
+        userPageButton.setOnAction(event -> root.setCenter(new UserPage()));
+        terrainPageButton.setOnAction(event -> root.setCenter(new TerrainPage()));
     
         navigationMenu.getChildren().addAll(menuLabel, userPageButton, salleButton, reservationButton, eventButton, terrainPageButton);
     
@@ -155,20 +153,20 @@ public class DashbordCode extends Application {
 
    
     private void loadSallePage() {
-        TestSalle testSalle = new TestSalle();
+        SallePage testSalle = new SallePage();
 
         root.setCenter(testSalle);
     }
 
 
     private void loadEventsPage() {
-       TestEvent testEvent = new TestEvent();
+       EventPage testEvent = new EventPage();
         root.setCenter(testEvent);
     }
 
     private void loadReservationPage() {
 
-        TestReservation testReservation = new TestReservation();
+        ReservationPage testReservation = new ReservationPage();
         root.setCenter(testReservation);
     }
 

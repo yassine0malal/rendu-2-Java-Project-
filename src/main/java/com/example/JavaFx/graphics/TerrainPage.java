@@ -19,7 +19,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 
-public class TestTerrain extends GridPane {
+public class TerrainPage extends GridPane {
 
     private TextField nameField;
     private TextField typeField;
@@ -30,7 +30,7 @@ public class TestTerrain extends GridPane {
     private GridPane addTerrainForm;
     private TableView<Terrain> terrainTable;
 
-    public TestTerrain() {
+    public TerrainPage() {
         this.setAlignment(Pos.CENTER);
         this.setHgap(10);
         this.setVgap(10);

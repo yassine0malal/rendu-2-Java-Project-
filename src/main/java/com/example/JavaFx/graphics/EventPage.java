@@ -24,7 +24,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 
-public class TestEvent extends GridPane {
+public class EventPage extends GridPane {
 
     private TextField eventNameField;
     private TextField eventDescriptionField;
@@ -39,7 +39,7 @@ public class TestEvent extends GridPane {
     private ComboBox<String> userComboBox;
 
 
-    public TestEvent() {
+    public EventPage() {
         // Set grid properties
         this.setAlignment(Pos.CENTER);
         this.setHgap(10);

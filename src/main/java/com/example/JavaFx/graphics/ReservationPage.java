@@ -36,7 +36,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 
-public class TestReservation extends GridPane {
+public class ReservationPage extends GridPane {
 
     private DatePicker reservationDatePicker;
     private Button addReservationButton;
@@ -46,7 +46,7 @@ public class TestReservation extends GridPane {
     private GridPane addReservationForm;
     private TableView<Reservation> reservationTable;
 
-    public TestReservation() {
+    public ReservationPage() {
         // Set grid properties
         this.setAlignment(Pos.CENTER);
         this.setHgap(10);

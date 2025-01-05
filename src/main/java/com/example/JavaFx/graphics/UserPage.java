@@ -1,7 +1,6 @@
 package com.example.JavaFx.graphics;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Properties;
 
 import com.example.DAOImplementation.UserDAO;
@@ -28,7 +27,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 
-public class testUser extends GridPane { // Extend GridPane
+public class UserPage extends GridPane { // Extend GridPane
     private TextField usernameField;
     private TextField lastNameField;
     private TextField emailField;
@@ -42,7 +41,7 @@ public class testUser extends GridPane { // Extend GridPane
 
     private TableView<User> userTable; // TableView for displaying users
 
-    public testUser() {
+    public UserPage() {
         // Set grid properties
         this.setAlignment(Pos.CENTER);
         this.setHgap(10);
@@ -262,10 +261,8 @@ public boolean isValidEmail(String email) {
             return;
         }
     
-        // Send a confirmation email after user registration
-        sendEmail(email);
-    
-        showAlert(Alert.AlertType.INFORMATION, "Success", "User registered successfully!");
+        // Send a confirmation email after user registration    
+        // showAlert(Alert.AlertType.INFORMATION, "Success", "User registered successfully!");
         usernameField.clear();
         lastNameField.clear();
         emailField.clear();

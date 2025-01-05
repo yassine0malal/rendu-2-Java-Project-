@@ -1,6 +1,5 @@
 package com.example.Models;
 public class User {
-    private static int counter = 0; 
     private int id;
     private String nom;
     private String prenom;
@@ -38,7 +37,6 @@ public class User {
     }
 
     public User(){
-        id=++counter; 
     }
     
     public User(String nom, String prenom, String email, String typeUser){
@@ -46,6 +44,5 @@ public class User {
         this.prenom = prenom;
         this.email = email;
         this.typeUser = typeUser;
-        id=++counter;
     }
 }

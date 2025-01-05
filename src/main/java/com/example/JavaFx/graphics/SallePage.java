@@ -18,7 +18,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 
-public class TestSalle extends GridPane {
+public class SallePage extends GridPane {
 
     private TextField nameField;
     private TextField capacityField;
@@ -29,7 +29,7 @@ public class TestSalle extends GridPane {
     private GridPane addSalleForm;
     private TableView<Salle> salleTable;
 
-    public TestSalle() {
+    public SallePage() {
         this.setAlignment(Pos.CENTER);
         this.setHgap(10);
         this.setVgap(10);

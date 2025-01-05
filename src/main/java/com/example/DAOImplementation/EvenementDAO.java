@@ -38,6 +38,27 @@ private Connection conexion;
                 System.out.println("ggff");
             }
     }
+    public void ajouterTest(Evenement evenement) {
+
+            String query = "INSERT INTO evenements (nom, date_event, description, id_user,id_event) VALUES (?,?, ?, ?, ?)";
+            try (PreparedStatement prep = conexion.prepareStatement(query)) {
+                prep.setString(1, evenement.getNomEvent());
+                prep.setDate(2, evenement.getDate());
+                prep.setString(3, evenement.getDescription());
+                prep.setInt(4, evenement.getId_user());
+                prep.setInt(5, evenement.getId());
+                // prep.setInt(6, 12);
+                int rowsInserted = prep.executeUpdate();
+
+                if (rowsInserted > 0){
+                    System.out.println("New event added to a user successfully.");
+                }
+            } catch (Exception e) {
+                // TODO: handle exception
+                e.printStackTrace();
+                System.out.println("ggff");
+            }
+    }
 
     @Override
     public ArrayList<Evenement> afficher() {

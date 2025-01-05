@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.example.TestJunite.TerrainDAOTest" time="0.166" tests="3" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.example.TestJunite.TerrainDAOTest" time="0.181" tests="3" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="22"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -15,7 +15,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="US"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk-22\bin"/>
-    <property name="sun.java.command" value="C:\Users\dell\AppData\Local\Temp\surefire5188466934178200803\surefirebooter5824814309712141939.jar C:\Users\dell\AppData\Local\Temp\surefire5188466934178200803 2025-01-04T23-58-25_099-jvmRun1 surefire12880058966149963729tmp surefire_06153679822867948348tmp"/>
+    <property name="sun.java.command" value="C:\Users\dell\AppData\Local\Temp\surefire9681167691793936330\surefirebooter5515667206498652629.jar C:\Users\dell\AppData\Local\Temp\surefire9681167691793936330 2025-01-05T09-09-53_337-jvmRun1 surefire4998681555618470301tmp surefire_016664612965120504064tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="C:\JavaFxProject\mini-project\target\test-classes;C:\JavaFxProject\mini-project\target\classes;C:\Users\dell\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.7.1\junit-jupiter-api-5.7.1.jar;C:\Users\dell\.m2\repository\org\apiguardian\apiguardian-api\1.1.0\apiguardian-api-1.1.0.jar;C:\Users\dell\.m2\repository\org\opentest4j\opentest4j\1.2.0\opentest4j-1.2.0.jar;C:\Users\dell\.m2\repository\org\junit\platform\junit-platform-commons\1.7.1\junit-platform-commons-1.7.1.jar;C:\Users\dell\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.7.1\junit-jupiter-engine-5.7.1.jar;C:\Users\dell\.m2\repository\org\junit\platform\junit-platform-engine\1.7.1\junit-platform-engine-1.7.1.jar;C:\Users\dell\.m2\repository\org\testcontainers\postgresql\1.17.3\postgresql-1.17.3.jar;C:\Users\dell\.m2\repository\org\testcontainers\jdbc\1.17.3\jdbc-1.17.3.jar;C:\Users\dell\.m2\repository\org\testcontainers\database-commons\1.17.3\database-commons-1.17.3.jar;C:\Users\dell\.m2\repository\org\testcontainers\testcontainers\1.17.3\testcontainers-1.17.3.jar;C:\Users\dell\.m2\repository\junit\junit\4.13.2\junit-4.13.2.jar;C:\Users\dell\.m2\repository\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar;C:\Users\dell\.m2\repository\org\slf4j\slf4j-api\1.7.36\slf4j-api-1.7.36.jar;C:\Users\dell\.m2\repository\org\apache\commons\commons-compress\1.21\commons-compress-1.21.jar;C:\Users\dell\.m2\repository\org\rnorth\duct-tape\duct-tape\1.0.8\duct-tape-1.0.8.jar;C:\Users\dell\.m2\repository\org\jetbrains\annotations\17.0.0\annotations-17.0.0.jar;C:\Users\dell\.m2\repository\com\github\docker-java\docker-java-api\3.2.13\docker-java-api-3.2.13.jar;C:\Users\dell\.m2\repository\com\fasterxml\jackson\core\jackson-annotations\2.10.3\jackson-annotations-2.10.3.jar;C:\Users\dell\.m2\repository\com\github\docker-java\docker-java-transport-zerodep\3.2.13\docker-java-transport-zerodep-3.2.13.jar;C:\Users\dell\.m2\repository\com\github\docker-java\docker-java-transport\3.2.13\docker-java-transport-3.2.13.jar;C:\Users\dell\.m2\repository\net\java\dev\jna\jna\5.8.0\jna-5.8.0.jar;C:\Users\dell\.m2\repository\org\postgresql\postgresql\42.6.0\postgresql-42.6.0.jar;C:\Users\dell\.m2\repository\org\checkerframework\checker-qual\3.31.0\checker-qual-3.31.0.jar;C:\Users\dell\.m2\repository\org\openjfx\javafx-controls\13\javafx-controls-13.jar;C:\Users\dell\.m2\repository\org\openjfx\javafx-controls\13\javafx-controls-13-win.jar;C:\Users\dell\.m2\repository\org\openjfx\javafx-graphics\13\javafx-graphics-13.jar;C:\Users\dell\.m2\repository\org\openjfx\javafx-graphics\13\javafx-graphics-13-win.jar;C:\Users\dell\.m2\repository\org\openjfx\javafx-base\13\javafx-base-13.jar;C:\Users\dell\.m2\repository\org\openjfx\javafx-base\13\javafx-base-13-win.jar;C:\Users\dell\.m2\repository\org\openjfx\javafx-fxml\13\javafx-fxml-13.jar;C:\Users\dell\.m2\repository\org\openjfx\javafx-fxml\13\javafx-fxml-13-win.jar;C:\Users\dell\.m2\repository\com\sun\mail\javax.mail\1.6.2\javax.mail-1.6.2.jar;C:\Users\dell\.m2\repository\javax\activation\activation\1.1\activation-1.1.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -30,7 +30,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="C:\Users\dell\AppData\Local\Temp\surefire5188466934178200803\surefirebooter5824814309712141939.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\dell\AppData\Local\Temp\surefire9681167691793936330\surefirebooter5515667206498652629.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="22.0.1+8-16"/>
@@ -58,16 +58,16 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="66.0"/>
   </properties>
-  <testcase name="testSupprimerTerrain" classname="com.example.TestJunite.TerrainDAOTest" time="0.067">
+  <testcase name="testSupprimerTerrain" classname="com.example.TestJunite.TerrainDAOTest" time="0.063">
     <system-out><![CDATA[New terrain added  successfully.
 Terrain deleted successfully.
 ]]></system-out>
   </testcase>
-  <testcase name="testAjouterTerrain" classname="com.example.TestJunite.TerrainDAOTest" time="0.052">
+  <testcase name="testAjouterTerrain" classname="com.example.TestJunite.TerrainDAOTest" time="0.049">
     <system-out><![CDATA[New terrain added  successfully.
 ]]></system-out>
   </testcase>
-  <testcase name="testAfficherTerrains" classname="com.example.TestJunite.TerrainDAOTest" time="0.046">
+  <testcase name="testAfficherTerrains" classname="com.example.TestJunite.TerrainDAOTest" time="0.068">
     <system-out><![CDATA[New terrain added  successfully.
 Terrain deleted successfully.
 ]]></system-out>
