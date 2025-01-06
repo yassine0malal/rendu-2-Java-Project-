@@ -1,8 +1,12 @@
 package com.example.JavaFx.graphics;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.SQLException;
 
 import com.example.DAOImplementation.SalleDAO;
+import com.example.Models.Salle;
 import com.example.Models.Salle;
 import com.example.transaction.TransactionManager;
 
@@ -17,6 +21,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 
 public class SallePage extends GridPane {
 
@@ -196,82 +202,113 @@ public class SallePage extends GridPane {
         capacityField.clear();
     }
 
-    private void displayAllSalles() {
-        clearContentArea();
-        if (addSalleForm != null) {
-            this.getChildren().remove(addSalleForm);
-            
-        }
-        if (salleTable != null) {
-            salleTable.getItems().clear();
-            
-        }
-    
-       salleTable = new TableView<>();
-        salleTable.setPrefWidth(1000);
-        salleTable.setPrefHeight(TableView.USE_COMPUTED_SIZE);
-        salleTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        salleTable.setStyle("-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0, 4, 4); -fx-border-color: rgba(71, 68, 68, 0.2);");
-        salleTable.setStyle("-fx-border-radius: 15px; -fx-background-radius: 15px; -fx-padding: 20; -fx-border-width: 2px;");
-    
-        // ID Column
-        // TableColumn<Salle, Integer> idColumn = new TableColumn<>("ID");
-        
-        // // idColumn.setStyle(" -fx-background-radius: 15px; -fx-border-radius: 15px;");
-        // idColumn.setPrefWidth(60);
-        // idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-    
-        // Name Column
-        TableColumn<Salle, String> nameColumn = new TableColumn<>("Name");
-        nameColumn.setPrefWidth(333.4);
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("nom"));
-    
-        // Capacity Column
-        TableColumn<Salle, Integer> capacityColumn = new TableColumn<>("Capacity");
-        capacityColumn.setPrefWidth(333.4);
-        capacityColumn.setCellValueFactory(new PropertyValueFactory<>("capacite"));
-    
-        // Action Column
-        TableColumn<Salle, Void> actionColumn = new TableColumn<>("Action");
-        actionColumn.setPrefWidth(333.4);
-    
-        actionColumn.setCellFactory(param -> new TableCell<>() {
-            private final Button updateButton = new Button("Update");
-            private final Button deleteButton = new Button("Delete");
-    
-            {
-                updateButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
-                deleteButton.setStyle("-fx-background-color: #f44336; -fx-text-fill: white;");
-    
-                updateButton.setOnAction(event -> {
-                    Salle salle = getTableView().getItems().get(getIndex());
-                    modifySalleForm(salle);
-                });
-    
-                deleteButton.setOnAction(event -> {
-                    Salle salle = getTableView().getItems().get(getIndex());
-                    handleDeleteSalle(salle);
-                });
-    
-                HBox actionButtons = new HBox(10, updateButton, deleteButton);
-                actionButtons.setAlignment(Pos.CENTER);
-                setGraphic(actionButtons);
-            }
-    
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                setGraphic(empty ? null : getGraphic());
-            }
-        });
-    
-        salleTable.getColumns().addAll(nameColumn, capacityColumn, actionColumn);
-        salleTable.setItems(getSallesFromDatabase());
-    
-        contentArea.getChildren().add(salleTable);
-        this.add(contentArea, 0, 4, 2, 1);
+   private void displayAllSalles() {
+    clearContentArea();
+    if (addSalleForm != null) {
+        this.getChildren().remove(addSalleForm);
     }
+    if (salleTable != null) {
+        salleTable.getItems().clear();
+    }
+
+    salleTable = new TableView<>();
+    salleTable.setPrefWidth(1000);
+    salleTable.setPrefHeight(TableView.USE_COMPUTED_SIZE);
+    salleTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    salleTable.setStyle("-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0, 4, 4); -fx-border-color: rgba(71, 68, 68, 0.2);");
+    salleTable.setStyle("-fx-border-radius: 15px; -fx-background-radius: 15px; -fx-padding: 20; -fx-border-width: 2px;");
+
+    // Name Column
+    TableColumn<Salle, String> nameColumn = new TableColumn<>("Name");
+    nameColumn.setPrefWidth(333.4);
+    nameColumn.setCellValueFactory(new PropertyValueFactory<>("nom"));
+
+    // Capacity Column
+    TableColumn<Salle, Integer> capacityColumn = new TableColumn<>("Capacity");
+    capacityColumn.setPrefWidth(333.4);
+    capacityColumn.setCellValueFactory(new PropertyValueFactory<>("capacite"));
+
+    // Action Column
+    TableColumn<Salle, Void> actionColumn = new TableColumn<>("Action");
+    actionColumn.setPrefWidth(333.4);
+    actionColumn.setCellFactory(param -> new TableCell<>() {
+        private final Button updateButton = new Button("Update");
+        private final Button deleteButton = new Button("Delete");
+
+        {
+            updateButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
+            deleteButton.setStyle("-fx-background-color: #f44336; -fx-text-fill: white;");
+
+            updateButton.setOnAction(event -> {
+                Salle salle = getTableView().getItems().get(getIndex());
+                modifySalleForm(salle);
+            });
+
+            deleteButton.setOnAction(event -> {
+                Salle salle = getTableView().getItems().get(getIndex());
+                handleDeleteSalle(salle);
+            });
+
+            HBox actionButtons = new HBox(10, updateButton, deleteButton);
+            actionButtons.setAlignment(Pos.CENTER);
+            setGraphic(actionButtons);
+        }
+
+        @Override
+        protected void updateItem(Void item, boolean empty) {
+            super.updateItem(item, empty);
+            setGraphic(empty ? null : getGraphic());
+        }
+    });
+
+    salleTable.getColumns().addAll(nameColumn, capacityColumn, actionColumn);
+    salleTable.setItems(getSallesFromDatabase());
+
+    // Add the table to the content area
+    contentArea.getChildren().add(salleTable);
+
+    // Create a "Download All Salles" button
+    Button downloadButton = new Button("Download All Salles");
+    downloadButton.setStyle("-fx-background-color: #0078D7; -fx-text-fill: white; -fx-padding: 10; -fx-border-radius: 5px; -fx-font-weight: bold; -fx-font-size: 14px; -fx-border-radius: 5px; -fx-padding: 10px 20px;");
+    downloadButton.setOnAction(event -> handleDownloadAllSalles());
+
+    // Add the button to the layout
+    VBox container = new VBox(10, salleTable, downloadButton);
+    container.setAlignment(Pos.CENTER);
+    contentArea.getChildren().clear();
+    contentArea.getChildren().add(container);
+
+    this.add(contentArea, 0, 4, 2, 1);
+}
+
+public void handleDownloadAllSalles() {
+    ObservableList<Salle> allSalles = salleTable.getItems();
     
+    String fileName = "all_Salles.csv";
+    
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+    fileChooser.setInitialFileName(fileName);
+    
+    File file = fileChooser.showSaveDialog(contentArea.getScene().getWindow());
+    if (file != null) {
+        try (FileWriter writer = new FileWriter(file)) {
+            writer.append("ID ,Salle Name,Salle Capacite \n");
+
+            for (Salle salle : allSalles) {
+                writer.append(salle.getId() + ",");
+                writer.append(salle.getNom() + ",");
+                writer.append(salle.getCapacite() + "\n");
+            }
+
+            showAlert(Alert.AlertType.INFORMATION, "Success", "All reservations have been saved to file.");
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Error", "Failed to save the reservation file.");
+        }
+    }
+}
+
     // Method to modify Salle
     private void modifySalleForm(Salle salle) {
         clearContentArea();

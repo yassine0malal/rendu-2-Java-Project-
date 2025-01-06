@@ -13,6 +13,7 @@ com\example\Models\Evenement.class
 com\example\JavaFx\graphics\UserPage$2.class
 com\example\JavaFx\graphics\TerrainPage$1.class
 com\example\JavaFx\other\MainApp.class
+com\example\JavaFx\graphics\AiAssistancePage.class
 com\example\JavaFx\graphics\SallePage.class
 com\example\Models\User.class
 com\example\transaction\TransactionManager.class
@@ -27,4 +28,5 @@ com\example\JavaFx\graphics\UserPage$1.class
 com\example\DAOImplementation\GenericDAO.class
 com\example\Models\Salle.class
 com\example\JavaFx\graphics\ReservationPage.class
+com\example\JavaFx\graphics\HomePage.class
 com\example\JavaFx\other\RegisterController.class

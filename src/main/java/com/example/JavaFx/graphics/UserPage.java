@@ -1,16 +1,19 @@
 package com.example.JavaFx.graphics;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Properties;
 
 import com.example.DAOImplementation.UserDAO;
+import com.example.Models.Reservation;
 import com.example.Models.User;
 import com.example.transaction.TransactionManager;
 
 import java.util.Properties;
 import javax.mail.*;
 import javax.mail.internet.*;
-
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,20 +29,22 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 
-public class UserPage extends GridPane { // Extend GridPane
+public class UserPage extends GridPane { 
     private TextField usernameField;
     private TextField lastNameField;
     private TextField emailField;
     private ChoiceBox<String> userTypeComboBox;
     private Button registerButton;
 
-    private HBox crudMenu; // HBox for CRUD buttons
-    private AnchorPane contentArea; // Area to display the content after button clicks
+    private HBox crudMenu; 
+    private AnchorPane contentArea; 
 
-    private GridPane addUserForm; // Form for adding a user
+    private GridPane addUserForm; 
 
-    private TableView<User> userTable; // TableView for displaying users
+    private TableView<User> userTable; 
 
     public UserPage() {
         // Set grid properties
@@ -58,47 +63,48 @@ public class UserPage extends GridPane { // Extend GridPane
         crudMenu.setPadding(new Insets(10));
         crudMenu.setSpacing(10);
         crudMenu.setStyle("""
-    -fx-background-color: linear-gradient(to right, #4A90E2, #50B3A2); /* Gradient from blue to aqua */
-    -fx-padding: 10 0 10 200px; /* Top, Right, Bottom, Left padding */
-    -fx-border-radius: 20px; /* Smooth rounded edges */
-    -fx-background-radius: 20px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0, 4, 4); /* Soft drop shadow */
-    -fx-border-width: 2px;
-    -fx-border-color: rgba(255, 255, 255, 0.2); /* Subtle border */
-""");
-crudMenu.setOnMouseEntered(e -> {
-    crudMenu.setStyle("""
-        -fx-background-color: linear-gradient(to right, #50B3A2, #4A90E2); /* Reversed gradient on hover */
-        -fx-padding: 10 0 10 200px;
-        -fx-border-radius: 20px;
-        -fx-background-radius: 20px;
-        -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 15, 0, 5, 5);
-        -fx-border-width: 2px;
-        -fx-border-color: rgba(255, 255, 255, 0.4); /* More visible border on hover */
-    """);
-});
-crudMenu.setOnMouseExited(e -> {
-    crudMenu.setStyle("""
-        -fx-background-color: linear-gradient(to right, #4A90E2, #50B3A2); /* Reset to original gradient */
-        -fx-padding: 10 0 10 200px;
-        -fx-border-radius: 20px;
-        -fx-background-radius: 20px;
-        -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0, 4, 4);
-        -fx-border-width: 2px;
-        -fx-border-color: rgba(255, 255, 255, 0.2); /* Reset border */
-    """);
-    
-});
+                    -fx-background-color: linear-gradient(to right, #4A90E2, #50B3A2); /* Gradient from blue to aqua */
+                    -fx-padding: 10 0 10 200px; /* Top, Right, Bottom, Left padding */
+                    -fx-border-radius: 20px; /* Smooth rounded edges */
+                    -fx-background-radius: 20px;
+                    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0, 4, 4); /* Soft drop shadow */
+                    -fx-border-width: 2px;
+                    -fx-border-color: rgba(255, 255, 255, 0.2); /* Subtle border */
+                """);
+        crudMenu.setOnMouseEntered(e -> {
+            crudMenu.setStyle(
+                    """
+                                -fx-background-color: linear-gradient(to right, #50B3A2, #4A90E2); /* Reversed gradient on hover */
+                                -fx-padding: 10 0 10 200px;
+                                -fx-border-radius: 20px;
+                                -fx-background-radius: 20px;
+                                -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 15, 0, 5, 5);
+                                -fx-border-width: 2px;
+                                -fx-border-color: rgba(255, 255, 255, 0.4); /* More visible border on hover */
+                            """);
+        });
+        crudMenu.setOnMouseExited(e -> {
+            crudMenu.setStyle(
+                    """
+                                -fx-background-color: linear-gradient(to right, #4A90E2, #50B3A2); /* Reset to original gradient */
+                                -fx-padding: 10 0 10 200px;
+                                -fx-border-radius: 20px;
+                                -fx-background-radius: 20px;
+                                -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0, 4, 4);
+                                -fx-border-width: 2px;
+                                -fx-border-color: rgba(255, 255, 255, 0.2); /* Reset border */
+                            """);
 
-        
+        });
+
         crudMenu.setMinWidth(1000);
-
 
         Button addUserButton = new Button("Add User");
         Button displayUserButton = new Button("Daisplay Users");
-        addUserButton.setStyle("-fx-font-size: 14px; -fx-background-color:#5211e9; -fx-text-fill: white; -f-decoration: none; -fx-background-radius: 15px;");
-        displayUserButton.setStyle("-fx-font-size: 14px; -fx-background-color:#5211e9; -fx-text-fill: white; -f-decoration: none; -fx-background-radius: 15px;");
-
+        addUserButton.setStyle(
+                "-fx-font-size: 14px; -fx-background-color:#5211e9; -fx-text-fill: white; -f-decoration: none; -fx-background-radius: 15px;");
+        displayUserButton.setStyle(
+                "-fx-font-size: 14px; -fx-background-color:#5211e9; -fx-text-fill: white; -f-decoration: none; -fx-background-radius: 15px;");
 
         addUserButton.setOnAction(e -> displayAddUserForm());
         displayUserButton.setOnAction(e -> displayAllUsers());
@@ -114,7 +120,7 @@ crudMenu.setOnMouseExited(e -> {
         stackPane.setStyle("-fx-content-display: center; -fx-alignment: center;");
 
         contentArea.getChildren().add(stackPane);
-        this.add(contentArea, 0, 1, 2, 1); // Place contentArea below the navbar
+        this.add(contentArea, 0, 1, 2, 1);
 
         registerButton = new Button("Register");
         registerButton.setStyle(
@@ -124,15 +130,12 @@ crudMenu.setOnMouseExited(e -> {
     }
 
     public void displayAddUserForm() {
-        // Remove the user table if it's present
         if (userTable != null) {
             this.getChildren().remove(userTable);
         }
-    
-        // Clear content area to ensure no overlapping content
+
         clearContentArea();
-    
-        // Initialize the add user form
+
         addUserForm = new GridPane();
         addUserForm.setAlignment(Pos.CENTER);
         addUserForm.setHgap(10);
@@ -140,14 +143,12 @@ crudMenu.setOnMouseExited(e -> {
         addUserForm.setPadding(new Insets(20));
         addUserForm.setStyle(
                 "-fx-background-color: #F9F9F9; -fx-border-radius: 15px; -fx-background-radius: 15px; -fx-padding: 20;");
-    
-        // Add a title for the form
+
         Label titleLabel = new Label("User Registration");
         titleLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #333;");
         addUserForm.add(titleLabel, 0, 0, 2, 1);
         GridPane.setHalignment(titleLabel, HPos.CENTER);
-    
-        // Add username field
+
         Label usernameLabel = new Label("Username:");
         usernameLabel.setStyle("-fx-font-size: 14px;");
         usernameField = new TextField();
@@ -155,8 +156,7 @@ crudMenu.setOnMouseExited(e -> {
         usernameField.setStyle("-fx-font-size: 14px; -fx-pref-width: 250px;");
         addUserForm.add(usernameLabel, 0, 1);
         addUserForm.add(usernameField, 1, 1);
-    
-        // Add last name field
+
         Label lastNameLabel = new Label("Last Name:");
         lastNameLabel.setStyle("-fx-font-size: 14px;");
         lastNameField = new TextField();
@@ -164,8 +164,7 @@ crudMenu.setOnMouseExited(e -> {
         lastNameField.setStyle("-fx-font-size: 14px; -fx-pref-width: 250px;");
         addUserForm.add(lastNameLabel, 0, 2);
         addUserForm.add(lastNameField, 1, 2);
-    
-        // Add email field
+
         Label emailLabel = new Label("Email:");
         emailLabel.setStyle("-fx-font-size: 14px;");
         emailField = new TextField();
@@ -173,8 +172,7 @@ crudMenu.setOnMouseExited(e -> {
         emailField.setStyle("-fx-font-size: 14px; -fx-pref-width: 250px;");
         addUserForm.add(emailLabel, 0, 3);
         addUserForm.add(emailField, 1, 3);
-    
-        // Add user type field
+
         Label userTypeLabel = new Label("User Type:");
         userTypeLabel.setStyle("-fx-font-size: 14px;");
         userTypeComboBox = new ChoiceBox<>();
@@ -182,8 +180,7 @@ crudMenu.setOnMouseExited(e -> {
         userTypeComboBox.setStyle("-fx-font-size: 14px; -fx-pref-width: 250px;");
         addUserForm.add(userTypeLabel, 0, 4);
         addUserForm.add(userTypeComboBox, 1, 4);
-    
-        // Add register button
+
         registerButton = new Button("Register");
         registerButton.setStyle(
                 "-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-border-radius: 5px; -fx-padding: 10px 20px;");
@@ -193,35 +190,32 @@ crudMenu.setOnMouseExited(e -> {
                 "-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-border-radius: 5px; -fx-padding: 10px 20px;"));
         addUserForm.add(registerButton, 1, 6);
         GridPane.setHalignment(registerButton, HPos.RIGHT);
-    
-        // Add action to button
+
         registerButton.setOnAction(event -> handleRegister());
-    
-        // Add form to the content area and ensure proper positioning
+
         contentArea.getChildren().add(addUserForm);
         AnchorPane.setTopAnchor(addUserForm, 50.0);
         AnchorPane.setLeftAnchor(addUserForm, 100.0);
         AnchorPane.setRightAnchor(addUserForm, 100.0);
-    
+
         this.add(contentArea, 0, 1, 2, 1);
+
     }
-    
 
-
-public boolean isValidEmail(String email) {
-    // Regular expression to validate email format
-    String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
-    Pattern pattern = Pattern.compile(emailRegex);
-    Matcher matcher = pattern.matcher(email);
-    return matcher.matches();
-}
+    public boolean isValidEmail(String email) {
+        // Regular expression to validate email format
+        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        Pattern pattern = Pattern.compile(emailRegex);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
 
     public void handleRegister() {
         String username = usernameField.getText();
         String lastName = lastNameField.getText();
         String email = emailField.getText();
         String userType = userTypeComboBox.getValue();
-    
+
         if (username.isEmpty() || lastName.isEmpty() || email.isEmpty() || userType == null) {
             showAlert(Alert.AlertType.ERROR, "Error", "All fields are required!");
             return;
@@ -230,7 +224,7 @@ public boolean isValidEmail(String email) {
             showAlert(Alert.AlertType.ERROR, "Error", "Invalid email format!");
             return;
         }
-    
+
         try {
             TransactionManager.beginTransaction();
         } catch (SQLException e) {
@@ -238,17 +232,17 @@ public boolean isValidEmail(String email) {
             showAlert(Alert.AlertType.ERROR, "Error", "Failed to connect to the database.");
             return;
         }
-    
+
         UserDAO userDAO = new UserDAO();
         userDAO.setConnection(TransactionManager.getCurrentConnection());
         User user = new User(username, lastName, email, userType);
         if (userDAO.verifyEmailExist(email) > 0) {
             showAlert(Alert.AlertType.ERROR, "Error", "Email already exists in the database.");
             return;
-            
+
         }
         userDAO.ajouter(user);
-    
+
         try {
 
             TransactionManager.commit();
@@ -260,31 +254,57 @@ public boolean isValidEmail(String email) {
             showAlert(Alert.AlertType.ERROR, "Error", "User registration failed.");
             return;
         }
-    
-        // Send a confirmation email after user registration    
-        // showAlert(Alert.AlertType.INFORMATION, "Success", "User registered successfully!");
+
         usernameField.clear();
         lastNameField.clear();
         emailField.clear();
         userTypeComboBox.setValue(null);
     }
-    
 
+    public void handleDownloadAllUsers() {
+        ObservableList<User> allUsers = userTable.getItems();
+
+        String fileName = "all_users.csv";
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+        fileChooser.setInitialFileName(fileName);
+
+        File file = fileChooser.showSaveDialog(contentArea.getScene().getWindow());
+        if (file != null) {
+            try (FileWriter writer = new FileWriter(file)) {
+                writer.append("ID ,Last Name,First Name, Email,User Type\n");
+
+                for (User user : allUsers) {
+                    writer.append(user.getId() + ",");
+                    writer.append(user.getNom() + ",");
+                    writer.append(user.getPrenom() + ",");
+                    writer.append(user.getEmail() + ",");
+                    writer.append(user.getTypeUser() + "\n");
+                }
+
+                showAlert(Alert.AlertType.INFORMATION, "Success", "All reservations have been saved to file.");
+            } catch (IOException e) {
+                e.printStackTrace();
+                showAlert(Alert.AlertType.ERROR, "Error", "Failed to save the reservation file.");
+            }
+        }
+    }
 
     public void sendEmail(String recipientEmail) {
         // Sender's email and SMTP server settings
-        String senderEmail = "malalyassin6@gmail.com";  // Sender's email address
+        String senderEmail = "malalyassin6@gmail.com"; // Sender's email address
         String senderPassword = "cseu vjve evjc lfcf"; // Sender's email password
         String subject = "Welcome to Our Service!";
         String messageBody = "Thank you for registering with us. We are glad to have you on our service!";
-    
+
         // Set up the properties for the SMTP server
         Properties properties = new Properties();
         properties.put("mail.smtp.auth", "true");
         properties.put("mail.smtp.starttls.enable", "true");
         properties.put("mail.smtp.host", "smtp.gmail.com");
         properties.put("mail.smtp.port", "587");
-    
+
         // Get the Session object and authenticate using the sender's email credentials
         Session session = Session.getInstance(properties, new Authenticator() {
             @Override
@@ -292,19 +312,19 @@ public boolean isValidEmail(String email) {
                 return new PasswordAuthentication(senderEmail, senderPassword);
             }
         });
-    
+
         try {
             // Create a MimeMessage object
             MimeMessage message = new MimeMessage(session);
-    
+
             // Set the sender and recipient addresses
             message.setFrom(new InternetAddress(senderEmail));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipientEmail));
-    
+
             // Set the email subject and body
             message.setSubject(subject);
             message.setText(messageBody);
-    
+
             // Send the email
             Transport.send(message);
             System.out.println("Email sent successfully to " + recipientEmail);
@@ -314,23 +334,21 @@ public boolean isValidEmail(String email) {
         }
     }
 
-        
-    // Method to display the Delete User form
     public void displayAllUsers() {
         if (addUserForm != null) {
             this.getChildren().remove(addUserForm);
         }
         clearContentArea();
 
-        // Initialisation du TableView
         userTable = new TableView<>();
         userTable.setPrefWidth(1000);
         userTable.setPrefHeight(TableView.USE_COMPUTED_SIZE);
         userTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        userTable.setStyle("-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0, 4, 4); -fx-border-color: rgba(71, 68, 68, 0.2);");
-        userTable.setStyle("-fx-border-radius: 15px; -fx-background-radius: 15px; -fx-padding: 20; -fx-border-width: 2px;");
+        userTable.setStyle(
+                "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0, 4, 4); -fx-border-color: rgba(71, 68, 68, 0.2);");
+        userTable.setStyle(
+                "-fx-border-radius: 15px; -fx-background-radius: 15px; -fx-padding: 20; -fx-border-width: 2px;");
 
-        // Colonnes existantes
         TableColumn<User, String> usernameColumn = new TableColumn<>("Username");
         usernameColumn.setPrefWidth(200);
         usernameColumn.setCellValueFactory(new PropertyValueFactory<>("prenom"));
@@ -347,7 +365,6 @@ public boolean isValidEmail(String email) {
         userTypeColumn.setPrefWidth(200);
         userTypeColumn.setCellValueFactory(new PropertyValueFactory<>("typeUser"));
 
-        // Nouvelle colonne Action
         TableColumn<User, Void> actionColumn = new TableColumn<>("Action");
         actionColumn.setCellFactory(param -> new TableCell<>() {
             private final Button modifyButton = new Button("Modify");
@@ -355,18 +372,15 @@ public boolean isValidEmail(String email) {
             private final HBox actionButtons = new HBox(10, modifyButton, deleteButton);
 
             {
-                // Style des boutons
                 modifyButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
                 deleteButton.setStyle("-fx-background-color: #f44336; -fx-text-fill: white;");
 
-                // Action sur le bouton Modifier
                 modifyButton.setOnAction(event -> {
                     User selectedUser = getTableView().getItems().get(getIndex());
                     System.out.println("Selected user: " + selectedUser.getTypeUser());
                     modifyUserForm(selectedUser);
                 });
 
-                // Action sur le bouton Supprimer
                 deleteButton.setOnAction(event -> {
                     User selectedUser = getTableView().getItems().get(getIndex());
                     deleteUser(selectedUser);
@@ -388,7 +402,23 @@ public boolean isValidEmail(String email) {
 
         userTable.setItems(getUsersFromDatabase());
 
-        contentArea.getChildren().add(userTable);
+        VBox contentLayout = new VBox(20);
+        contentLayout.setAlignment(Pos.CENTER);
+        contentLayout.setPadding(new Insets(20));
+
+        contentLayout.getChildren().add(userTable);
+
+        Button downloadAllUsersButton = new Button("Download All Users");
+        downloadAllUsersButton.setStyle(
+                "-fx-background-color: #0078D7; -fx-text-fill: white; -fx-padding: 10; -fx-border-radius: 5px; -fx-font-weight: bold; -fx-font-size: 14px; -fx-border-radius: 5px; -fx-padding: 10px 20px;");
+        downloadAllUsersButton.setOnAction(event -> handleDownloadAllUsers());
+
+        VBox buttonContainer = new VBox(downloadAllUsersButton);
+        buttonContainer.setAlignment(Pos.CENTER);
+        contentLayout.getChildren().add(buttonContainer);
+
+        contentArea.getChildren().add(contentLayout);
+
         this.add(contentArea, 0, 4, 2, 1);
     }
 
@@ -414,7 +444,6 @@ public boolean isValidEmail(String email) {
         displayAllUsers();
     }
 
-    // Method to clear the content area and grid pane also
     public void clearContentArea() {
 
         contentArea.getChildren().clear();

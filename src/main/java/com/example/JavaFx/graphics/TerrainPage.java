@@ -1,9 +1,13 @@
 package com.example.JavaFx.graphics;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.example.DAOImplementation.TerrainDAO;
+import com.example.Models.Evenement;
 import com.example.Models.Terrain;
 import com.example.transaction.TransactionManager;
 
@@ -18,6 +22,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 
 public class TerrainPage extends GridPane {
 
@@ -199,75 +205,108 @@ crudMenu.setOnMouseExited(e -> {
         typeField.clear();
     }
 
-    private void displayAllTerrains() {
-        clearContentArea();
-        if (addTerrainForm != null) {
-            this.getChildren().remove(addTerrainForm);
-        }
-      
-
-    
-        terrainTable = new TableView<>();
-        terrainTable.setPrefWidth(1000);
-        terrainTable.setPrefHeight(TableView.USE_COMPUTED_SIZE);
-        terrainTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        terrainTable.setStyle("-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0, 4, 4); -fx-border-color: rgba(71, 68, 68, 0.2);");
-        terrainTable.setStyle("-fx-border-radius: 15px; -fx-background-radius: 15px; -fx-padding: 20; -fx-border-width: 2px;");
-    
-        // TableColumn<Terrain, Integer> idColumn = new TableColumn<>("Number");
-        // idColumn.setPrefWidth(333.4);
-        // idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-    
-        TableColumn<Terrain, String> nameColumn = new TableColumn<>("Name");
-        nameColumn.setPrefWidth(333.4);
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("nom"));
-    
-        TableColumn<Terrain, String> typeColumn = new TableColumn<>("Type");
-        typeColumn.setPrefWidth(333.4);
-        typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
-    
-        // Add an "Action" column
-        TableColumn<Terrain, Void> actionColumn = new TableColumn<>("Action");
-        actionColumn.setPrefWidth(333.4);
-    
-        actionColumn.setCellFactory(param -> new TableCell<>() {
-            private final Button updateButton = new Button("Update");
-            private final Button deleteButton = new Button("Delete");
-    
-            {
-                updateButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
-                deleteButton.setStyle("-fx-background-color: #f44336; -fx-text-fill: white;");
-    
-                updateButton.setOnAction(event -> {
-                    Terrain terrain = getTableView().getItems().get(getIndex());
-                    modifyTerrainForm(terrain);
-                
-                });
-    
-                deleteButton.setOnAction(event -> {
-                    Terrain terrain = getTableView().getItems().get(getIndex());
-                    handleDelete(terrain);
-                });
-    
-                HBox actionButtons = new HBox(10, updateButton, deleteButton);
-                actionButtons.setAlignment(Pos.CENTER);
-                setGraphic(actionButtons);
-            }
-    
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                setGraphic(empty ? null : getGraphic());
-            }
-        });
-    
-        terrainTable.getColumns().addAll(nameColumn, typeColumn, actionColumn);
-        terrainTable.setItems(getTerrainsFromDatabase());
-    
-        contentArea.getChildren().add(terrainTable);
-        this.add(contentArea, 0, 4, 2, 1);
+ private void displayAllTerrains() {
+    clearContentArea();
+    if (addTerrainForm != null) {
+        this.getChildren().remove(addTerrainForm);
     }
+
+    terrainTable = new TableView<>();
+    terrainTable.setPrefWidth(1000);
+    terrainTable.setPrefHeight(TableView.USE_COMPUTED_SIZE);
+    terrainTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    terrainTable.setStyle("-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0, 4, 4); -fx-border-color: rgba(71, 68, 68, 0.2);");
+    terrainTable.setStyle("-fx-border-radius: 15px; -fx-background-radius: 15px; -fx-padding: 20; -fx-border-width: 2px;");
+
+    // Name Column
+    TableColumn<Terrain, String> nameColumn = new TableColumn<>("Name");
+    nameColumn.setPrefWidth(333.4);
+    nameColumn.setCellValueFactory(new PropertyValueFactory<>("nom"));
+
+    // Type Column
+    TableColumn<Terrain, String> typeColumn = new TableColumn<>("Type");
+    typeColumn.setPrefWidth(333.4);
+    typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
+
+    // Action Column
+    TableColumn<Terrain, Void> actionColumn = new TableColumn<>("Action");
+    actionColumn.setPrefWidth(333.4);
+
+    actionColumn.setCellFactory(param -> new TableCell<>() {
+        private final Button updateButton = new Button("Update");
+        private final Button deleteButton = new Button("Delete");
+
+        {
+            updateButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
+            deleteButton.setStyle("-fx-background-color: #f44336; -fx-text-fill: white;");
+
+            updateButton.setOnAction(event -> {
+                Terrain terrain = getTableView().getItems().get(getIndex());
+                modifyTerrainForm(terrain);
+            });
+
+            deleteButton.setOnAction(event -> {
+                Terrain terrain = getTableView().getItems().get(getIndex());
+                handleDelete(terrain);
+            });
+
+            HBox actionButtons = new HBox(10, updateButton, deleteButton);
+            actionButtons.setAlignment(Pos.CENTER);
+            setGraphic(actionButtons);
+        }
+
+        @Override
+        protected void updateItem(Void item, boolean empty) {
+            super.updateItem(item, empty);
+            setGraphic(empty ? null : getGraphic());
+        }
+    });
+
+    terrainTable.getColumns().addAll(nameColumn, typeColumn, actionColumn);
+    terrainTable.setItems(getTerrainsFromDatabase());
+
+    // Create a "Download All Terrains" button
+    Button downloadButton = new Button("Download All Terrains");
+    downloadButton.setStyle("-fx-background-color: #0078D7; -fx-text-fill: white; -fx-padding: 10; -fx-border-radius: 5px; -fx-font-weight: bold; -fx-font-size: 14px; -fx-border-radius: 5px; -fx-padding: 10px 20px;");
+    downloadButton.setOnAction(event -> handleDownloadAllTerrains());
+
+    // Layout: Add table and button to a VBox
+    VBox container = new VBox(10, terrainTable, downloadButton);
+    container.setAlignment(Pos.CENTER);
+    contentArea.getChildren().clear();
+    contentArea.getChildren().add(container);
+
+    this.add(contentArea, 0, 4, 2, 1);
+}
+
+     public void handleDownloadAllTerrains() {
+    ObservableList<Terrain> allTerrains = terrainTable.getItems();
     
+    String fileName = "all_Terrains.csv";
+    
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+    fileChooser.setInitialFileName(fileName);
+    
+    File file = fileChooser.showSaveDialog(contentArea.getScene().getWindow());
+    if (file != null) {
+        try (FileWriter writer = new FileWriter(file)) {
+            writer.append("ID ,Terrain Name,Terrain Type, \n");
+
+            for (Terrain terrain : allTerrains) {
+                writer.append(terrain.getId() + ",");
+                writer.append(terrain.getNom() + ",");
+                writer.append(terrain.getType() + "\n");
+            }
+
+            showAlert(Alert.AlertType.INFORMATION, "Success", "All reservations have been saved to file.");
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Error", "Failed to save the reservation file.");
+        }
+    }
+}
+
     private void modifyTerrainForm(Terrain terrain) {
         clearContentArea();
     
@@ -338,7 +377,6 @@ crudMenu.setOnMouseExited(e -> {
         }
     }
     
-    // Method to handle delete action
     private void handleDelete(Terrain terrain) {
         try {
             TransactionManager.beginTransaction();

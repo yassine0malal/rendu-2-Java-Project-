@@ -1,5 +1,9 @@
 package com.example.JavaFx.graphics;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -9,6 +13,7 @@ import java.sql.SQLException;
 import com.example.DAOImplementation.EvenementDAO;
 import com.example.DAOImplementation.UserDAO;
 import com.example.Models.Evenement;
+import com.example.Models.User;
 import com.example.transaction.TransactionManager;
 
 import javafx.beans.property.SimpleStringProperty;
@@ -23,6 +28,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 
 public class EventPage extends GridPane {
 
@@ -261,84 +268,130 @@ public class EventPage extends GridPane {
         }
     }
     
-    public void displayAllEvents() {
-        clearContentArea();
-    
-        eventTable = new TableView<>();
-        eventTable.setPrefWidth(990);
-        eventTable.setPrefHeight(TableView.USE_COMPUTED_SIZE);
-        eventTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        eventTable.setStyle("-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0, 4, 4); -fx-border-color: rgba(71, 68, 68, 0.2);");
+ public void displayAllEvents() {
+    clearContentArea();
 
-        TableColumn<Evenement, String> nameColumn = new TableColumn<>("Event Name");
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("nomEvent"));
-        nameColumn.setMinWidth(100);
-    
-        TableColumn<Evenement, String> descriptionColumn = new TableColumn<>("Description");
-        descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
-        descriptionColumn.setMinWidth(180);
-    
-        TableColumn<Evenement, Date> dateColumn = new TableColumn<>("Date");
-        dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
-        dateColumn.setMinWidth(180);
-    
+    eventTable = new TableView<>();
+    eventTable.setPrefWidth(990);
+    eventTable.setPrefHeight(TableView.USE_COMPUTED_SIZE);
+    eventTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    eventTable.setStyle("-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0, 4, 4); -fx-border-color: rgba(71, 68, 68, 0.2);");
 
-        TableColumn<Evenement, String> userNameColumn = new TableColumn<>("User Name");
-        userNameColumn.setMinWidth(180);
-        userNameColumn.setCellValueFactory(cellData -> {
-            System.out.println(cellData.getValue().getId_user());
+    // Event Name Column
+    TableColumn<Evenement, String> nameColumn = new TableColumn<>("Event Name");
+    nameColumn.setCellValueFactory(new PropertyValueFactory<>("nomEvent"));
+    nameColumn.setMinWidth(100);
+
+    // Description Column
+    TableColumn<Evenement, String> descriptionColumn = new TableColumn<>("Description");
+    descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+    descriptionColumn.setMinWidth(180);
+
+    // Date Column
+    TableColumn<Evenement, Date> dateColumn = new TableColumn<>("Date");
+    dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
+    dateColumn.setMinWidth(180);
+
+    // User Name Column
+    TableColumn<Evenement, String> userNameColumn = new TableColumn<>("User Name");
+    userNameColumn.setMinWidth(180);
+    userNameColumn.setCellValueFactory(cellData -> {
         int userId = cellData.getValue().getId_user();
         String userName = getUserNameById(userId); // Fetch username based on user ID
-        eventTable.setStyle("-fx-background-color: #f9f9f9; -fx-border-radius: 15px; -fx-background-radius: 15px; -fx-padding: 20; -fx-border-width: 2px; -fx-border-color: #DEDEDE;");
         return new SimpleStringProperty(userName);
     });
 
+    // Action Column
+    TableColumn<Evenement, Void> actionColumn = new TableColumn<>("Action");
+    actionColumn.setMinWidth(180);
+    actionColumn.setCellFactory(param -> new TableCell<>() {
+        private final Button updateButton = new Button("Update");
+        private final Button deleteButton = new Button("Delete");
+        private final HBox actionButtons = new HBox(10, updateButton, deleteButton);
 
+        {
+            updateButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
+            deleteButton.setStyle("-fx-background-color: #f44336; -fx-text-fill: white;");
+
+            // Update action
+            updateButton.setOnAction(event -> {
+                Evenement evenement = getTableView().getItems().get(getIndex());
+                modifyEventForm(evenement);
+            });
+
+            // Delete action
+            deleteButton.setOnAction(event -> {
+                Evenement evenement = getTableView().getItems().get(getIndex());
+                handleDeleteEvent(evenement);
+            });
+
+            actionButtons.setAlignment(Pos.CENTER);
+            setGraphic(actionButtons);
+        }
+
+        @Override
+        protected void updateItem(Void item, boolean empty) {
+            super.updateItem(item, empty);
+            setGraphic(empty ? null : actionButtons);
+        }
+    });
+
+    eventTable.getColumns().addAll(nameColumn, descriptionColumn, dateColumn, userNameColumn, actionColumn);
+
+    eventTable.setItems(getEventsFromDatabase());
+
+    // Create a VBox layout to hold the table and button
+    VBox contentLayout = new VBox(20); // Vertical spacing of 20
+    contentLayout.setAlignment(Pos.CENTER);
+    contentLayout.setPadding(new Insets(20));
+
+    // Add the table to the content layout
+    contentLayout.getChildren().add(eventTable);
+
+    // Create the "Download All Events" button
+    Button downloadAllEventsButton = new Button("Download All Events");
+    downloadAllEventsButton.setStyle("-fx-background-color: #0078D7; -fx-text-fill: white; -fx-padding: 10; -fx-border-radius: 5px; -fx-font-weight: bold; -fx-font-size: 14px; -fx-border-radius: 5px; -fx-padding: 10px 20px;");
+    downloadAllEventsButton.setOnAction(event -> handleDownloadAllEvents());
+
+    // Add the button to the bottom of the content layout
+    VBox buttonContainer = new VBox(downloadAllEventsButton);
+    buttonContainer.setAlignment(Pos.CENTER);
+    contentLayout.getChildren().add(buttonContainer);
+
+    // Add the entire layout to the scene
+    contentArea.getChildren().add(contentLayout);
+}
+
+
+  public void handleDownloadAllEvents() {
+    ObservableList<Evenement> allEvenements = eventTable.getItems();
     
-        // Action column
-        TableColumn<Evenement, Void> actionColumn = new TableColumn<>("Action");
-        actionColumn.setMinWidth(180);
-        // actionColumn.setStyle("-fx-background-color: #f9f9f9; -fx-border-clolor:rgb(189, 185, 185); -fx-border-color:rgb(199, 193, 193); -fx-border-width: 1px; ");
-        actionColumn.setCellFactory(param -> new TableCell<>() {
-            private final Button updateButton = new Button("Update");
-            private final Button deleteButton = new Button("Delete");
+    String fileName = "all_Evenements.csv";
     
-            {
-                updateButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
-                deleteButton.setStyle("-fx-background-color: #f44336; -fx-text-fill: white;");
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+    fileChooser.setInitialFileName(fileName);
     
-                // Update action
-                updateButton.setOnAction(event -> {
-                    Evenement evenement = getTableView().getItems().get(getIndex());
-                    modifyEventForm(evenement);
-                });
-    
-                // Delete action
-                deleteButton.setOnAction(event -> {
-                    Evenement evenement = getTableView().getItems().get(getIndex());
-                    handleDeleteEvent(evenement);
-                });
-    
-                HBox actionButtons = new HBox(10, updateButton, deleteButton);
-                actionButtons.setAlignment(Pos.CENTER);
-                setGraphic(actionButtons);
+    File file = fileChooser.showSaveDialog(contentArea.getScene().getWindow());
+    if (file != null) {
+        try (FileWriter writer = new FileWriter(file)) {
+            writer.append("ID ,Event Name,Event Description,Event User,Event Date \n");
+
+            for (Evenement evenement : allEvenements) {
+                writer.append(evenement.getId() + ",");
+                writer.append(evenement.getNomEvent() + ",");
+                writer.append(evenement.getDescription() + ",");
+                writer.append(getUserNameById(evenement.getId_user()) + ",");
+                writer.append(evenement.getDate() + "\n");
             }
-    
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                setGraphic(empty ? null : getGraphic());
-            }
-        });
-    
-        // Add columns to the table
-        eventTable.getColumns().addAll(nameColumn, descriptionColumn, dateColumn, userNameColumn, actionColumn);
-        eventTable.setItems(getEventsFromDatabase());
-        contentArea.getChildren().add(eventTable);
+
+            showAlert(Alert.AlertType.INFORMATION, "Success", "All reservations have been saved to file.");
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Error", "Failed to save the reservation file.");
+        }
     }
-    
-
-
+}
 
 public String getUserNameById(int userId) {
     try {

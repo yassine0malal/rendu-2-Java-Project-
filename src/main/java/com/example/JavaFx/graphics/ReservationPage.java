@@ -315,10 +315,8 @@ public class ReservationPage extends GridPane {
         reservationTable.setItems(getReservationsFromDatabase());
         contentArea.getChildren().add(reservationTable);
         Button downloadAllButton = new Button("Download All Reservations");
-        downloadAllButton.setStyle("-fx-background-color: #008CBA; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 12px; ");
+        downloadAllButton.setStyle("-fx-background-color: #0078D7; -fx-text-fill: white; -fx-padding: 10; -fx-border-radius: 5px; -fx-font-weight: bold; -fx-font-size: 14px; -fx-border-radius: 5px; -fx-padding: 10px 20px;");
         downloadAllButton.setOnAction(event -> handleDownloadAllReservations());
-        // downloadAllButton.setStyle("-fx-padding: 10px 20px; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-border-radius: 5px;");
-        // contentArea.getChildren().add(downloadAllButton);
         StackPane stackPane = new StackPane(downloadAllButton);
         stackPane.setPrefSize(1000, 1000);
         stackPane.setStyle("-fx-content-display: center; -fx-alignment: center;");
@@ -329,7 +327,6 @@ public class ReservationPage extends GridPane {
 
 
     public void handleDownloadAllReservations() {
-    // Get all reservations from the table
     ObservableList<Reservation> allReservations = reservationTable.getItems();
     
     String fileName = "all_reservations.csv";
