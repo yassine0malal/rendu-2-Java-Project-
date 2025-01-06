@@ -3,24 +3,30 @@ package com.example.JavaFx.graphics;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Properties;
+
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 import com.example.DAOImplementation.ReservationDAO;
 import com.example.DAOImplementation.UserDAO;
-import com.example.Models.Evenement;
 import com.example.Models.Reservation;
 import com.example.transaction.TransactionManager;
 
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.util.Properties;
+import javax.mail.*;
+import javax.mail.internet.*;
+
+
+
 import javafx.stage.FileChooser;
-import javafx.stage.Window;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -34,7 +40,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.stage.FileChooser;
+import javafx.scene.layout.VBox;
 
 public class ReservationPage extends GridPane {
 
@@ -134,13 +140,11 @@ public class ReservationPage extends GridPane {
         addReservationForm.setStyle(
                 "-fx-background-color: #f9f9f9; -fx-border-radius: 15px; -fx-background-radius: 15px; -fx-padding: 20;");
 
-        // Title Label
         Label titleLabel = new Label("Add New Reservation");
         titleLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #333;");
         addReservationForm.add(titleLabel, 0, 0, 2, 1);
         GridPane.setHalignment(titleLabel, HPos.CENTER);
 
-        // User Selection
         Label userIdLabel = new Label("User:");
         userIdLabel.setStyle("-fx-font-size: 14px;");
         ComboBox<String> userComboBox = new ComboBox<>(getUsersFromDatabase());
@@ -149,7 +153,6 @@ public class ReservationPage extends GridPane {
         addReservationForm.add(userIdLabel, 0, 1);
         addReservationForm.add(userComboBox, 1, 1);
 
-        // Terrain Selection
         Label terrainIdLabel = new Label("Terrain:");
         terrainIdLabel.setStyle("-fx-font-size: 14px;");
         ComboBox<String> terrainComboBox = new ComboBox<>(getTerrainsFromDatabase());
@@ -158,7 +161,6 @@ public class ReservationPage extends GridPane {
         addReservationForm.add(terrainIdLabel, 0, 2);
         addReservationForm.add(terrainComboBox, 1, 2);
 
-        // Salle Selection
         Label salleIdLabel = new Label("Salle:");
         salleIdLabel.setStyle("-fx-font-size: 14px;");
         ComboBox<String> salleComboBox = new ComboBox<>(getSallesFromDatabase());
@@ -167,7 +169,6 @@ public class ReservationPage extends GridPane {
         addReservationForm.add(salleIdLabel, 0, 3);
         addReservationForm.add(salleComboBox, 1, 3);
 
-        // Event Selection
         Label eventIdLabel = new Label("Event:");
         eventIdLabel.setStyle("-fx-font-size: 14px;");
         ComboBox<String> eventComboBox = new ComboBox<>(getEventsFromDatabase());
@@ -176,7 +177,6 @@ public class ReservationPage extends GridPane {
         addReservationForm.add(eventIdLabel, 0, 4);
         addReservationForm.add(eventComboBox, 1, 4);
 
-        // Date Picker
         Label reservationDateLabel = new Label("Reservation Date:");
         reservationDateLabel.setStyle("-fx-font-size: 14px;");
         reservationDatePicker = new DatePicker();
@@ -185,7 +185,6 @@ public class ReservationPage extends GridPane {
         addReservationForm.add(reservationDateLabel, 0, 5);
         addReservationForm.add(reservationDatePicker, 1, 5);
 
-        // Add Reservation Button
         addReservationButton = new Button("Add Reservation");
         addReservationButton.setStyle(
                 "-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-border-radius: 5px; -fx-padding: 10px 20px;");
@@ -208,7 +207,9 @@ public class ReservationPage extends GridPane {
                 reservationDAO.setConexion(TransactionManager.getCurrentConnection());
                 reservationDAO.ajouter(reservation);
                 TransactionManager.commit();
-
+                TransactionManager.closeConnection();
+                String userEmail = getUserEmail(userId);
+                sendEmail(userEmail,userId,reservationDate);
                 showAlert(Alert.AlertType.INFORMATION, "Success", "Reservation added successfully!");
                 displayAllReservations();
             } catch (Exception ex) {
@@ -220,7 +221,6 @@ public class ReservationPage extends GridPane {
         addReservationForm.add(addReservationButton, 1, 6);
         GridPane.setHalignment(addReservationButton, HPos.RIGHT);
 
-        // Add form to the content area with proper anchoring
         contentArea.getChildren().add(addReservationForm);
         AnchorPane.setTopAnchor(addReservationForm, 50.0);
         AnchorPane.setLeftAnchor(addReservationForm, 100.0);
@@ -229,102 +229,171 @@ public class ReservationPage extends GridPane {
         this.add(contentArea, 0, 1, 2, 1);
     }
 
-    public void displayAllReservations() {
-        clearContentArea();
-        if (addReservationForm != null) {
-            this.getChildren().remove(addReservationForm);
-        }
-        reservationTable = new TableView<>();
-        reservationTable.setPrefWidth(1000);
-        reservationTable.setPrefHeight(TableView.USE_COMPUTED_SIZE);
-        reservationTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        reservationTable.setStyle(
-                "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0, 4, 4); -fx-border-color: rgba(71, 68, 68, 0.2);");
-        reservationTable.setStyle(
-                "-fx-border-radius: 15px; -fx-background-radius: 15px; -fx-padding: 20; -fx-border-width: 2px;");
+    public void sendEmail(String recipientEmail,int userId,Date reservationDate) {
+        String senderEmail = "malalyassin6@gmail.com"; 
+        String senderPassword = "cseu vjve evjc lfcf"; 
+        String fromName ="IT ESTE";
+        String subject = "Your Order is added Succssefly !";
+        String messageBody = "Mr \""+ getUserName(userId) +"\" your reservation has been registered successfly.Don't forget to plan it \n Your meeting will be in this Date "+reservationDate +"\n\n Thank you for using our service . \n\n Best regards, IT ESTE";
 
-        TableColumn<Reservation, String> userIdColumn = new TableColumn<>("User Name");
-        userIdColumn.setMinWidth(166.7);
-        userIdColumn.setCellValueFactory(cellData -> {
-            int id_user = cellData.getValue().getId_user();
-            return new SimpleStringProperty(getUserName(id_user));
-        });
+        Properties properties = new Properties();
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.smtp.host", "smtp.gmail.com");
+        properties.put("mail.smtp.port", "587");
 
-        TableColumn<Reservation, String> terrainIdColumn = new TableColumn<>("Terrain Name");
-        terrainIdColumn.setMinWidth(166.7);
-        terrainIdColumn.setCellValueFactory(cellData -> {
-            int id_terrain = cellData.getValue().getId_terrain();
-            return new SimpleStringProperty(getTerrainName(id_terrain));
-        });
-
-        TableColumn<Reservation, String> salleIdColumn = new TableColumn<>("Salle Name");
-        salleIdColumn.setMinWidth(166.7);
-        salleIdColumn.setCellValueFactory(cellData -> {
-            int id_salle = cellData.getValue().getId_salle();
-            return new SimpleStringProperty(getSalleName(id_salle));
-        });
-
-        TableColumn<Reservation, String> eventIdColumn = new TableColumn<>("Event Name");
-        eventIdColumn.setMinWidth(166.7);
-        eventIdColumn.setCellValueFactory(cellData -> {
-            int id_event = cellData.getValue().getId_event();
-            String eventName = getEventName(id_event);
-            return new SimpleStringProperty(eventName);
-        });
-
-        TableColumn<Reservation, Date> dateColumn = new TableColumn<>("Reservation Date");
-        dateColumn.setMinWidth(166.7);
-        dateColumn.setCellValueFactory(new PropertyValueFactory<>("date_reservation"));
-
-        TableColumn<Reservation, String> action = new TableColumn<>("Action");
-        action.setMinWidth(166.7);
-        action.setCellFactory(param -> new TableCell<>() {
-            private final Button updateButton = new Button("Update");
-            private final Button deleteButton = new Button("Delete");
-            {
-                updateButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
-                deleteButton.setStyle("-fx-background-color: #f44336; -fx-text-fill: white;");
-
-                updateButton.setOnAction(reserv -> {
-                    Reservation reservation = getTableView().getItems().get(getIndex());
-                    modifyReservationForm(reservation);
-                });
-
-                deleteButton.setOnAction(event -> {
-                    Reservation evenement = getTableView().getItems().get(getIndex());
-                    handleDeleteReservation(evenement);
-                });
-
-                HBox actionButtons = new HBox(10, updateButton, deleteButton);
-                actionButtons.setAlignment(Pos.CENTER);
-                setGraphic(actionButtons);
-            }
-
+        Session session = Session.getInstance(properties, new Authenticator() {
             @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                setGraphic(empty ? null : getGraphic());
+            protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
+                return new javax.mail.PasswordAuthentication(senderEmail, senderPassword);
             }
         });
 
-      
-        reservationTable.getColumns().addAll(userIdColumn, terrainIdColumn, salleIdColumn, eventIdColumn, dateColumn,
-                action);
+        try {
+            MimeMessage message = new MimeMessage(session);
+            try {
+                message.setFrom(new InternetAddress(senderEmail, fromName));
+            } catch (UnsupportedEncodingException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipientEmail));
+            message.setSubject(subject);
+            message.setText(messageBody);
 
-        
-        reservationTable.setItems(getReservationsFromDatabase());
-        contentArea.getChildren().add(reservationTable);
-        Button downloadAllButton = new Button("Download All Reservations");
-        downloadAllButton.setStyle("-fx-background-color: #0078D7; -fx-text-fill: white; -fx-padding: 10; -fx-border-radius: 5px; -fx-font-weight: bold; -fx-font-size: 14px; -fx-border-radius: 5px; -fx-padding: 10px 20px;");
-        downloadAllButton.setOnAction(event -> handleDownloadAllReservations());
-        StackPane stackPane = new StackPane(downloadAllButton);
-        stackPane.setPrefSize(1000, 1000);
-        stackPane.setStyle("-fx-content-display: center; -fx-alignment: center;");
-        contentArea.getChildren().add(stackPane);
-
-
+            Transport.send(message);
+            System.out.println("Email sent successfully to " + recipientEmail);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Error", "Failed to send the email.");
+        }
     }
 
+
+    public String getUserEmail(int id_user) {
+    
+            try {
+                TransactionManager.beginTransaction();
+                Connection connection = TransactionManager.getCurrentConnection();
+                PreparedStatement preparedStatement = connection
+                        .prepareStatement("SELECT email FROM utilisateurs WHERE id_user = ?");
+                preparedStatement.setInt(1, id_user);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                if (resultSet.next()) {
+                    String userName = resultSet.getString("email");
+                    
+                    TransactionManager.closeConnection();
+                    return userName;
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return null;
+    
+        }
+
+   public void displayAllReservations() {
+    clearContentArea();
+
+    if (addReservationForm != null) {
+        this.getChildren().remove(addReservationForm);
+    }
+
+    reservationTable = new TableView<>();
+    reservationTable.setPrefWidth(1000);
+    reservationTable.setPrefHeight(TableView.USE_COMPUTED_SIZE);
+    reservationTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    reservationTable.setStyle(
+            "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0, 4, 4); -fx-border-color: rgba(71, 68, 68, 0.2);"
+    );
+    reservationTable.setStyle(
+            "-fx-border-radius: 15px; -fx-background-radius: 15px; -fx-padding: 20; -fx-border-width: 2px;"
+    );
+
+    // Columns for the reservationTable
+    TableColumn<Reservation, String> userIdColumn = new TableColumn<>("User Name");
+    userIdColumn.setMinWidth(166.7);
+    userIdColumn.setCellValueFactory(cellData -> {
+        int id_user = cellData.getValue().getId_user();
+        return new SimpleStringProperty(getUserName(id_user));
+    });
+
+    TableColumn<Reservation, String> terrainIdColumn = new TableColumn<>("Terrain Name");
+    terrainIdColumn.setMinWidth(166.7);
+    terrainIdColumn.setCellValueFactory(cellData -> {
+        int id_terrain = cellData.getValue().getId_terrain();
+        return new SimpleStringProperty(getTerrainName(id_terrain));
+    });
+
+    TableColumn<Reservation, String> salleIdColumn = new TableColumn<>("Salle Name");
+    salleIdColumn.setMinWidth(166.7);
+    salleIdColumn.setCellValueFactory(cellData -> {
+        int id_salle = cellData.getValue().getId_salle();
+        return new SimpleStringProperty(getSalleName(id_salle));
+    });
+
+    TableColumn<Reservation, String> eventIdColumn = new TableColumn<>("Event Name");
+    eventIdColumn.setMinWidth(166.7);
+    eventIdColumn.setCellValueFactory(cellData -> {
+        int id_event = cellData.getValue().getId_event();
+        return new SimpleStringProperty(getEventName(id_event));
+    });
+
+    TableColumn<Reservation, Date> dateColumn = new TableColumn<>("Reservation Date");
+    dateColumn.setMinWidth(166.7);
+    dateColumn.setCellValueFactory(new PropertyValueFactory<>("date_reservation"));
+
+    TableColumn<Reservation, String> action = new TableColumn<>("Action");
+    action.setMinWidth(166.7);
+    action.setCellFactory(param -> new TableCell<>() {
+        private final Button updateButton = new Button("Update");
+        private final Button deleteButton = new Button("Delete");
+
+        {
+            updateButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
+            deleteButton.setStyle("-fx-background-color: #f44336; -fx-text-fill: white;");
+
+            updateButton.setOnAction(reserv -> {
+                Reservation reservation = getTableView().getItems().get(getIndex());
+                modifyReservationForm(reservation);
+            });
+
+            deleteButton.setOnAction(event -> {
+                Reservation reservation = getTableView().getItems().get(getIndex());
+                handleDeleteReservation(reservation);
+            });
+
+            HBox actionButtons = new HBox(10, updateButton, deleteButton);
+            actionButtons.setAlignment(Pos.CENTER);
+            setGraphic(actionButtons);
+        }
+
+        @Override
+        protected void updateItem(String item, boolean empty) {
+            super.updateItem(item, empty);
+            setGraphic(empty ? null : getGraphic());
+        }
+    });
+
+    reservationTable.getColumns().addAll(userIdColumn, terrainIdColumn, salleIdColumn, eventIdColumn, dateColumn, action);
+    reservationTable.setItems(getReservationsFromDatabase());
+
+    // Button for downloading all reservations
+    Button downloadAllButton = new Button("Download All Reservations");
+    downloadAllButton.setStyle(
+            "-fx-background-color: #0078D7; -fx-text-fill: white; -fx-padding: 10; -fx-border-radius: 5px; " +
+            "-fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px 20px;"
+    );
+    downloadAllButton.setOnAction(event -> handleDownloadAllReservations());
+
+    // VBox to stack the table and the button
+    VBox layout = new VBox(20); // 20px spacing between the table and the button
+    layout.setAlignment(Pos.CENTER);
+    layout.getChildren().addAll(reservationTable, downloadAllButton);
+
+    contentArea.getChildren().clear();
+    contentArea.getChildren().add(layout);
+}
 
     public void handleDownloadAllReservations() {
     ObservableList<Reservation> allReservations = reservationTable.getItems();

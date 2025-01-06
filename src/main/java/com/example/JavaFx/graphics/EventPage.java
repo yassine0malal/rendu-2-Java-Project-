@@ -4,11 +4,19 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Properties;
+
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import java.util.Properties;
+import javax.mail.*;
+import javax.mail.internet.*;
 
 import com.example.DAOImplementation.EvenementDAO;
 import com.example.DAOImplementation.UserDAO;
@@ -122,8 +130,6 @@ public class EventPage extends GridPane {
 
         this.add(contentArea, 0, 1, 2, 1);
     }
-
-
     public void displayAddEventForm() {
         // Clear the content area
         clearContentArea();
@@ -198,7 +204,6 @@ public class EventPage extends GridPane {
     
         this.add(contentArea, 0, 1, 2, 1);
     }
-    
     public void handleAddEvent() {
         String eventName = eventNameField.getText();
         String eventDescription = eventDescriptionField.getText();
@@ -235,22 +240,16 @@ public class EventPage extends GridPane {
         try {
             // Begin the transaction
             TransactionManager.beginTransaction();
-    
-            // Create the DAO and event object
             EvenementDAO eventDAO = new EvenementDAO();
             eventDAO.setConnection(TransactionManager.getCurrentConnection());
             Evenement event = new Evenement(eventName, eventDate, eventDescription, userId);
-    
-            // Add the event to the database
             eventDAO.ajouter(event);
-    
-            // Commit the transaction
             TransactionManager.commit();
     
-            // Show success message
+            TransactionManager.closeConnection();
+            sendEmail(getUserEmail(event.getId_user()), event.getId_user(), event.getDate());
             showAlert(Alert.AlertType.INFORMATION, "Success", "Event added successfully!");
     
-            // Refresh the event list and clear fields
             displayAllEvents();
             eventNameField.clear();
             eventDescriptionField.clear();
@@ -268,7 +267,90 @@ public class EventPage extends GridPane {
         }
     }
     
- public void displayAllEvents() {
+    public void sendEmail(String recipientEmail,int userId,Date reservationDate) {
+        String senderEmail = "malalyassin6@gmail.com"; 
+        String senderPassword = "cseu vjve evjc lfcf"; 
+        String fromName = "IT ESTE";
+        String subject = "Your Order is added Succssefly !";
+        String messageBody = "Mr \""+ getUserName(userId) +"\" your Event has been registered successfly.Prepare to it . \n Your meeting will be in this Date "+reservationDate +"\n\n Thank you for using our service. \n\n\n Best regards,  IT ESTE ";
+
+        Properties properties = new Properties();
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.smtp.host", "smtp.gmail.com");
+        properties.put("mail.smtp.port", "587");
+
+        Session session = Session.getInstance(properties, new Authenticator() {
+            @Override
+            protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
+                return new javax.mail.PasswordAuthentication(senderEmail, senderPassword);
+            }
+        });
+
+        try {
+            MimeMessage message = new MimeMessage(session);
+            try {
+                message.setFrom(new InternetAddress(senderEmail, fromName));
+            } catch (UnsupportedEncodingException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipientEmail));
+            message.setSubject(subject);
+            message.setText(messageBody);
+
+            Transport.send(message);
+            System.out.println("Email sent successfully to " + recipientEmail);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Error", "Failed to send the email.");
+        }
+    }
+ 
+    public String getUserEmail(int id_user) {
+    
+            try {
+                TransactionManager.beginTransaction();
+                Connection connection = TransactionManager.getCurrentConnection();
+                PreparedStatement preparedStatement = connection
+                        .prepareStatement("SELECT email FROM utilisateurs WHERE id_user = ?");
+                preparedStatement.setInt(1, id_user);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                if (resultSet.next()) {
+                    String userName = resultSet.getString("email");
+                    
+                    TransactionManager.closeConnection();
+                    return userName;
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return null;
+    
+        }
+    public String getUserName(int id_user) {
+            String userName = "Unknown";
+    
+            try {
+                TransactionManager.beginTransaction();
+                Connection connection = TransactionManager.getCurrentConnection();
+                PreparedStatement preparedStatement = connection
+                        .prepareStatement("SELECT nom,prenom FROM utilisateurs WHERE id_user = ?");
+                preparedStatement.setInt(1, id_user);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                if (resultSet.next()) {
+                    userName = resultSet.getString("nom") + " " + resultSet.getString("prenom");
+    
+                    TransactionManager.closeConnection();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return userName;
+    
+        }
+
+    public void displayAllEvents() {
     clearContentArea();
 
     eventTable = new TableView<>();
@@ -277,7 +359,12 @@ public class EventPage extends GridPane {
     eventTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     eventTable.setStyle("-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0, 4, 4); -fx-border-color: rgba(71, 68, 68, 0.2);");
 
-    // Event Name Column
+    eventTable.setStyle(
+            "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0, 4, 4); -fx-border-color: rgba(71, 68, 68, 0.2);"
+    );
+    eventTable.setStyle(
+            "-fx-border-radius: 15px; -fx-background-radius: 15px; -fx-padding: 20; -fx-border-width: 2px;"
+    );
     TableColumn<Evenement, String> nameColumn = new TableColumn<>("Event Name");
     nameColumn.setCellValueFactory(new PropertyValueFactory<>("nomEvent"));
     nameColumn.setMinWidth(100);
@@ -340,12 +427,10 @@ public class EventPage extends GridPane {
 
     eventTable.setItems(getEventsFromDatabase());
 
-    // Create a VBox layout to hold the table and button
     VBox contentLayout = new VBox(20); // Vertical spacing of 20
     contentLayout.setAlignment(Pos.CENTER);
     contentLayout.setPadding(new Insets(20));
 
-    // Add the table to the content layout
     contentLayout.getChildren().add(eventTable);
 
     // Create the "Download All Events" button
@@ -361,9 +446,7 @@ public class EventPage extends GridPane {
     // Add the entire layout to the scene
     contentArea.getChildren().add(contentLayout);
 }
-
-
-  public void handleDownloadAllEvents() {
+    public void handleDownloadAllEvents() {
     ObservableList<Evenement> allEvenements = eventTable.getItems();
     
     String fileName = "all_Evenements.csv";
@@ -392,8 +475,7 @@ public class EventPage extends GridPane {
         }
     }
 }
-
-public String getUserNameById(int userId) {
+    public String getUserNameById(int userId) {
     try {
     TransactionManager.beginTransaction();
     Connection connexion = TransactionManager.getCurrentConnection();
@@ -419,9 +501,6 @@ public String getUserNameById(int userId) {
 
     return "******"; // Return a default value if no username is found
 }
-
-
-
     public void modifyEventForm(Evenement evenement) {
         clearContentArea();
     

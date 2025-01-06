@@ -15,10 +15,14 @@ import javafx.animation.Timeline;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
@@ -73,28 +77,101 @@ public class HomePage extends GridPane {
         card.setPadding(new Insets(20));
         card.setStyle("-fx-background-color: #FFFFFF; -fx-border-radius: 10px; -fx-background-radius: 10px;"
                 + " -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0, 4, 4);");
-
+    
         // Title
         Text cardTitle = new Text(title);
         cardTitle.setStyle(
                 "-fx-font-size: 18px; -fx-font-weight: bold; -fx-font-family: 'Courier New'; -fx-fill: linear-gradient(to right, #0078D7, #00BFFF);");
-
+    
+        // Nbr Text
         Text nbrText = new Text(" " + nbr + " ");
         nbrText.setStyle(
-                "-fx-font-size: 30px; -fx-font-weight: bold; -fx-font-family:'Tahoma'; -fx-fill: linear-gradient(to right, #50B3A2, #4A90E2);");
-
+                "-fx-font-size: 30px; -fx-font-weight: bold; -fx-font-family:'Tahoma'; -fx-fill: linear-gradient(to right, #50B3A2, #4A90E2); -fx-shadow: 0 0 10px rgba(0, 0, 0, 0.3);");
+    
         Text cardDescription = new Text(description);
-        cardDescription.setStyle("-fx-font-size: 14px; -fx-fill: #666666; -fx-font-family: 'Courier New';");
+        cardDescription.setStyle("-fx-font-size: 14px; -fx-fill: #666666; -fx-font-family: 'Courier New';-fx-shadow: 0 0 10px rgba(0, 0, 0, 0.3);");
+    
+        Button viewButton = new Button();
+        if (cardNumber == 3) {
+            Image icon = new Image(getClass().getResourceAsStream("/icons/reservation.png"));
+            ImageView iconView = new ImageView(icon);
+            iconView.setFitWidth(60);
+            iconView.setFitHeight(60);
+    
+            Rectangle clip = new Rectangle(iconView.getFitWidth(), iconView.getFitHeight());
+            clip.setArcWidth(20);  
+            clip.setArcHeight(20);
+            iconView.setClip(clip);
+    
+            viewButton.setGraphic(iconView);
+        }else if (cardNumber == 6) {
+            Image icon = new Image(getClass().getResourceAsStream("/icons/AI.png"));
+            ImageView iconView = new ImageView(icon);
+            iconView.setFitWidth(60);
+            iconView.setFitHeight(60);
 
-        Button viewButton = new Button("-->");
+            Rectangle clip = new Rectangle(iconView.getFitWidth(), iconView.getFitHeight());
+            clip.setArcWidth(20);  
+            clip.setArcHeight(20);
+            iconView.setClip(clip);
+
+            viewButton.setGraphic(iconView);
+        }else if (cardNumber == 4) {
+            Image icon = new Image(getClass().getResourceAsStream("/icons/event.png"));
+            ImageView iconView = new ImageView(icon);
+            iconView.setFitWidth(60);
+            iconView.setFitHeight(60);
+
+            Rectangle clip = new Rectangle(iconView.getFitWidth(), iconView.getFitHeight());
+            clip.setArcWidth(20);
+            clip.setArcHeight(20);
+            iconView.setClip(clip);
+
+            viewButton.setGraphic(iconView);
+        }else if (cardNumber ==1) {
+            Image icon = new Image(getClass().getResourceAsStream("/icons/user.png"));
+            ImageView iconView = new ImageView(icon);
+            iconView.setFitWidth(60);
+            iconView.setFitHeight(60);
+            Rectangle clip = new Rectangle(iconView.getFitWidth(), iconView.getFitHeight());
+            clip.setArcWidth(20);
+            clip.setArcHeight(20);
+            iconView.setClip(clip);
+            viewButton.setGraphic(iconView);
+        }else if (cardNumber == 2) {
+            Image icon = new Image(getClass().getResourceAsStream("/icons/salle.png"));
+            ImageView iconView = new ImageView(icon);
+            iconView.setFitWidth(60);
+            iconView.setFitHeight(60);
+            Rectangle clip = new Rectangle(iconView.getFitWidth(), iconView.getFitHeight());
+            clip.setArcWidth(20);
+            clip.setArcHeight(20);
+            iconView.setClip(clip);
+            viewButton.setGraphic(iconView);
+        }else if (cardNumber == 5) {
+            Image icon = new Image(getClass().getResourceAsStream("/icons/terrain1.png"));
+            ImageView iconView = new ImageView(icon);
+            iconView.setFitWidth(60);
+            iconView.setFitHeight(60);
+            Rectangle clip = new Rectangle(iconView.getFitWidth(), iconView.getFitHeight());
+            clip.setArcWidth(20);
+            clip.setArcHeight(20);
+            iconView.setClip(clip);
+            viewButton.setGraphic(iconView);
+            
+        }
+    
+
+
+
         viewButton.setStyle(
-                "-fx-background-color: #0078D7; -fx-text-fill: white; -fx-padding: 5 15; -fx-font-family: 'Courier New'; -fx-width: 100px; -fx-height: 30px;");
-
+                "-fx-background-color: #0078D7; -fx-text-fill: white; -fx-padding: 5 15; -fx-font-family: 'Courier New'; -fx-width: 100px; -fx-height: 30px;-fx-border-radius: 5px; -fx-background-radius: 5px; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0, 4, 4);");
+    
         Timeline enterTimeline = new Timeline(
                 new KeyFrame(Duration.ZERO,
                         new KeyValue(viewButton.styleProperty(),
                                 "-fx-background-color: linear-gradient(to right, #0078D7, #00BFFF);")),
-                new KeyFrame(Duration.seconds(1),
+                new KeyFrame(Duration.seconds(0.25),
                         new KeyValue(viewButton.styleProperty(), "-fx-background-color: #0078D7;")));
         Timeline exitTimeline = new Timeline(
                 new KeyFrame(Duration.ZERO,
@@ -102,42 +179,36 @@ public class HomePage extends GridPane {
                                 "-fx-background-color: linear-gradient(to right, #0078D7, #00BFFF);")),
                 new KeyFrame(Duration.seconds(1),
                         new KeyValue(viewButton.styleProperty(), "-fx-background-color: #0078D7;")));
-        viewButton.setOnMouseEntered(event -> {
-            enterTimeline.play();
-        });
-        viewButton.setOnMouseExited(event -> {
-            exitTimeline.play();
-        });
+        // viewButton.setOnMouseEntered(event -> enterTimeline.play());
+        // viewButton.setOnMouseExited(event -> exitTimeline.play());
         viewButton.setPrefSize(200, 30);
+    
         HBox buttonBox = new HBox(10, viewButton);
         buttonBox.setAlignment(Pos.CENTER);
-
+    
         Timeline enterTimeline2 = new Timeline(
-                new KeyFrame(Duration.ZERO, new KeyValue(card.styleProperty(), "-fx-background-color: red;")),
-                new KeyFrame(Duration.seconds(1), new KeyValue(card.styleProperty(),"-fx-background-color: #DEDEDE; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 15, 0, 5, 5); -fx-border-width: 2px; -fx-border-color: rgba(255, 255, 255, 0.4);")));
+                new KeyFrame(Duration.ZERO, new KeyValue(card.styleProperty(), "-fx-background-color: #DEDEDE; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 15, 0, 5, 5); -fx-border-width: 2px; -fx-border-color: rgba(255, 255, 255, 0.4);")),
+                new KeyFrame(Duration.seconds(1), new KeyValue(card.styleProperty(),
+                        "-fx-background-color: #DEDEDE; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 15, 0, 5, 5); -fx-border-width: 2px; -fx-border-color: rgba(255, 255, 255, 0.4);")));
         Timeline exitTimeline2 = new Timeline(
-                new KeyFrame(Duration.ZERO, new KeyValue(card.styleProperty(), " -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 15, 0, 5, 5); -fx-border-width: 2px; -fx-border-color: rgba(255, 255, 255, 0.4);")),
-                new KeyFrame(Duration.seconds(1), new KeyValue(card.styleProperty(), "-fx-background-color: blue;")));
+                new KeyFrame(Duration.ZERO, new KeyValue(card.styleProperty(),
+                        "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 15, 0, 5, 5); -fx-border-width: 2px; -fx-border-color: rgba(255, 255, 255, 0.4);")),
+                new KeyFrame(Duration.seconds(0.25), new KeyValue(card.styleProperty(), "-fx-background-color: #FFFFFF; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 15, 0, 5, 5); -fx-border-width: 2px; -fx-border-color: rgba(255, 255, 255, 0.4);"))); 
         card.setOnMouseEntered(event -> enterTimeline2.play());
         card.setOnMouseExited(event -> exitTimeline2.play());
-
-        card.setOnMouseEntered(event -> enterTimeline.play());
-        card.setOnMouseExited(event -> exitTimeline.play());
-        if (nbr==0&&cardNumber==6) {
+    
+        if (nbr == 0 && cardNumber == 6) {
             card.getChildren().addAll(cardTitle, cardDescription, buttonBox);
-        }else{
+            Text ld =new Text("Select Me From The Menu To Chat");
+            ld.setStyle("-fx-font-size: 14px; -fx-fill: #666666; -fx-font-family: 'Courier New';-fx-shadow: 0 0 10px rgba(0, 0, 0, 0.3); -fx-font-weight: bold; -fx-text-fill: #333333; -fx-text-alignment: center;");
+            card.getChildren().add(ld);
+        } else {
             card.getChildren().addAll(nbrText, cardTitle, cardDescription, buttonBox);
         }
-
-        // if (cardNumber==1) {
-        //     viewButton.setOnAction(event -> {  
-        //         DashbordCode.loadSallePage();});
-        //     }
-            
-        // }
+    
         return card;
     }
-
+    
     public int getTerrainsNumber() {
         int terrainCount = 0;
         try {

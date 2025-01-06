@@ -7,11 +7,9 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 import com.example.DAOImplementation.UserDAO;
-import com.example.Models.Reservation;
 import com.example.Models.User;
 import com.example.transaction.TransactionManager;
 
-import java.util.Properties;
 import javax.mail.*;
 import javax.mail.internet.*;
 
@@ -292,20 +290,17 @@ public class UserPage extends GridPane {
     }
 
     public void sendEmail(String recipientEmail) {
-        // Sender's email and SMTP server settings
-        String senderEmail = "malalyassin6@gmail.com"; // Sender's email address
-        String senderPassword = "cseu vjve evjc lfcf"; // Sender's email password
+        String senderEmail = "malalyassin6@gmail.com"; 
+        String senderPassword = "cseu vjve evjc lfcf"; 
         String subject = "Welcome to Our Service!";
         String messageBody = "Thank you for registering with us. We are glad to have you on our service!";
 
-        // Set up the properties for the SMTP server
         Properties properties = new Properties();
         properties.put("mail.smtp.auth", "true");
         properties.put("mail.smtp.starttls.enable", "true");
         properties.put("mail.smtp.host", "smtp.gmail.com");
         properties.put("mail.smtp.port", "587");
 
-        // Get the Session object and authenticate using the sender's email credentials
         Session session = Session.getInstance(properties, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
@@ -314,18 +309,12 @@ public class UserPage extends GridPane {
         });
 
         try {
-            // Create a MimeMessage object
             MimeMessage message = new MimeMessage(session);
-
-            // Set the sender and recipient addresses
             message.setFrom(new InternetAddress(senderEmail));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipientEmail));
-
-            // Set the email subject and body
             message.setSubject(subject);
             message.setText(messageBody);
 
-            // Send the email
             Transport.send(message);
             System.out.println("Email sent successfully to " + recipientEmail);
         } catch (MessagingException e) {

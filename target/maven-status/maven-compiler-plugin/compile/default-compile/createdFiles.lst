@@ -25,6 +25,8 @@ com\example\JavaFx\graphics\EventPage.class
 com\example\DAOImplementation\EvenementDAO.class
 com\example\JavaFx\graphics\SallePage$1.class
 com\example\JavaFx\graphics\UserPage$1.class
+com\example\JavaFx\graphics\EventPage$2.class
+com\example\JavaFx\graphics\ReservationPage$2.class
 com\example\DAOImplementation\GenericDAO.class
 com\example\Models\Salle.class
 com\example\JavaFx\graphics\ReservationPage.class

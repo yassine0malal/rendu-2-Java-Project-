@@ -20,7 +20,8 @@ public class AiAssistancePage extends GridPane {
 
 
     public AiAssistancePage() {
-        this.setAlignment(Pos.CENTER);
+
+        handleUIElements();        this.setAlignment(Pos.CENTER);
         this.setHgap(10);
         this.setVgap(10);
         this.setPadding(new Insets(20));
@@ -29,7 +30,6 @@ public class AiAssistancePage extends GridPane {
         this.setStyle("-fx-border-color: #f9f9f9; -fx-border-width: 5px;");
         this.setStyle("-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0, 4, 4);");
 
-        handleUIElements();
     }
 
     private void handleUIElements() {
@@ -49,7 +49,7 @@ public class AiAssistancePage extends GridPane {
 
         inputField = new TextField();
         inputField.setPromptText("Ask a question...");
-        inputField.setStyle("-fx-font-size: 14px; -fx-border-radius: 10px;");
+        inputField.setStyle("-fx-font-size: 14px; -fx-border-radius: 10px; -fx-background-radius: 10px; -fx-padding: 10;");
 
         submitButton = new Button("Submit");
         submitButton.setStyle("-fx-font-size: 14px; -fx-background-color: linear-gradient(to right,rgb(72, 183, 83), #50B3A2); -fx-text-fill: white; -fx-border-radius: 10px; -fx-background-radius: 10px; -fx-font-weight: bold;");
