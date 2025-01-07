@@ -54,8 +54,8 @@ public class EvenementDAOTest {
         assertTrue(events.size() > 0);
 
         Evenement fetchedEvent = events.get(1);
-        assertEquals("thsi asfhk", fetchedEvent.getNomEvent());
-        assertEquals(Date.valueOf("2025-01-08"), fetchedEvent.getDate());
+        assertEquals("dsfhg", fetchedEvent.getNomEvent());
+        assertEquals(Date.valueOf("2025-01-22"), fetchedEvent.getDate());
         // assertEquals("Séminaire sur l'innovation", fetchedEvent.getDescription());
     }
 

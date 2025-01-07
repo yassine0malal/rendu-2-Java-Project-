@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class SalleDAO implements GenericDAO<Salle> {
-    private Connection conexion;
+    private Connection conexion =null;
     public SalleDAO() {
     }
     public void setConexion(Connection conexion) {
@@ -21,12 +21,11 @@ public class SalleDAO implements GenericDAO<Salle> {
                 prep.setInt(2, salle.getCapacite());
                 int rowsInserted = prep.executeUpdate();
                 if (rowsInserted > 0){
-                    System.out.println("New salle added to a user successfully.");
+                    System.out.println("New salle added  successfully.");
                 }
             }catch (Exception e) {
-                // TODO: handle exception
                 e.printStackTrace();
-                System.out.println("Error: " + e.getMessage());
+                System.out.println("Error: ********************_____________************** " + e.getMessage());
             }
         
     }

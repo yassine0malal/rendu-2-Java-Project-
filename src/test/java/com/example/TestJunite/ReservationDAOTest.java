@@ -36,7 +36,7 @@ public class ReservationDAOTest {
         reservation.setId_user(69);
         reservation.setId_terrain(23);
         reservation.setId_event(52);
-        reservation.setId_salle(37);
+        reservation.setId_salle(227);
         reservation.setDate_reservation(Date.valueOf("2024-12-25"));
 
         reservationDAO.ajouter(reservation);
@@ -44,10 +44,10 @@ public class ReservationDAOTest {
         List<Reservation> reservations = reservationDAO.afficher();
         assertNotNull(reservations);
         assertTrue(reservations.stream().anyMatch(r -> r.getDate_reservation().equals(Date.valueOf("2024-12-25"))
-                && r.getId_salle() == 37));
+                && r.getId_salle() == 227));
 
         reservations.stream()
-                .filter(r -> r.getDate_reservation().equals(Date.valueOf("2024-12-25")) && r.getId_salle() ==37)
+                .filter(r -> r.getDate_reservation().equals(Date.valueOf("2024-12-25")) && r.getId_salle() ==227)
                 .findFirst()
                 .ifPresent(r -> reservationDAO.supprimer(r.getId_reservation()));
     }
@@ -58,7 +58,7 @@ public class ReservationDAOTest {
         reservation.setId_user(69);
         reservation.setId_terrain(23);
         reservation.setId_event(52);
-        reservation.setId_salle(37);
+        reservation.setId_salle(227);
         reservation.setDate_reservation(Date.valueOf("2024-12-26"));
 
         reservationDAO.ajouter(reservation);
@@ -68,7 +68,7 @@ public class ReservationDAOTest {
         assertTrue(reservations.size() > 0);
 
         Reservation fetchedReservation = reservations.stream()
-                .filter(r -> r.getDate_reservation().equals(Date.valueOf("2024-12-26")) && r.getId_salle() ==37)
+                .filter(r -> r.getDate_reservation().equals(Date.valueOf("2024-12-26")) && r.getId_salle() ==227)
                 .findFirst()
                 .orElse(null);
 
@@ -83,14 +83,14 @@ public class ReservationDAOTest {
         reservation.setId_user(69);
         reservation.setId_terrain(23);
         reservation.setId_event(52);
-        reservation.setId_salle(37);
+        reservation.setId_salle(227);
         reservation.setDate_reservation(Date.valueOf("2024-12-27"));
 
         reservationDAO.ajouter(reservation);
 
         List<Reservation> reservations = reservationDAO.afficher();
         Reservation existingReservation = reservations.stream()
-                .filter(r -> r.getDate_reservation().equals(Date.valueOf("2024-12-27")) && r.getId_salle() ==37)
+                .filter(r -> r.getDate_reservation().equals(Date.valueOf("2024-12-27")) && r.getId_salle() ==227)
                 .findFirst()
                 .orElse(null);
 
@@ -99,7 +99,7 @@ public class ReservationDAOTest {
         reservationDAO.supprimer(existingReservation.getId_reservation());
 
         Reservation deletedReservation = reservationDAO.afficher().stream()
-                .filter(r -> r.getDate_reservation().equals(Date.valueOf("2024-12-27")) && r.getId_salle() ==37)
+                .filter(r -> r.getDate_reservation().equals(Date.valueOf("2024-12-27")) && r.getId_salle() ==227)
                 .findFirst()
                 .orElse(null);
 
@@ -112,14 +112,14 @@ public class ReservationDAOTest {
         reservation.setId_user(69);
         reservation.setId_terrain(23);
         reservation.setId_event(52);
-        reservation.setId_salle(37);
+        reservation.setId_salle(227);
         reservation.setDate_reservation(Date.valueOf("2024-12-28"));
 
         reservationDAO.ajouter(reservation);
 
         List<Reservation> reservations = reservationDAO.afficher();
         Reservation existingReservation = reservations.stream()
-                .filter(r -> r.getDate_reservation().equals(Date.valueOf("2024-12-28")) && r.getId_salle() ==37)
+                .filter(r -> r.getDate_reservation().equals(Date.valueOf("2024-12-28")) && r.getId_salle() ==227)
                 .findFirst()
                 .orElse(null);
 
@@ -141,21 +141,21 @@ public class ReservationDAOTest {
         reservation.setId_user(69);
         reservation.setId_terrain(23);
         reservation.setId_event(52);
-        reservation.setId_salle(37);
+        reservation.setId_salle(227);
         reservation.setDate_reservation(Date.valueOf("2024-12-30"));
 
         reservationDAO.ajouter(reservation);
 
         int disponible = reservationDAO.verifierDisponible(
                 Date.valueOf("2024-12-30"),
-                37
+                227
         );
 
         assertEquals(0, disponible);
 
         List<Reservation> reservations = reservationDAO.afficher();
         reservations.stream()
-                .filter(r -> r.getDate_reservation().equals(Date.valueOf("2024-12-30")) && r.getId_salle() ==37)
+                .filter(r -> r.getDate_reservation().equals(Date.valueOf("2024-12-30")) && r.getId_salle() ==227)
                 .findFirst()
                 .ifPresent(r -> reservationDAO.supprimer(r.getId_reservation()));
     }

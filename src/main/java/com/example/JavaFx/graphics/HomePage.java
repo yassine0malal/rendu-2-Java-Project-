@@ -80,13 +80,11 @@ public class HomePage extends GridPane {
     
         // Title
         Text cardTitle = new Text(title);
-        cardTitle.setStyle(
-                "-fx-font-size: 18px; -fx-font-weight: bold; -fx-font-family: 'Courier New'; -fx-fill: linear-gradient(to right, #0078D7, #00BFFF);");
+        cardTitle.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-font-family: 'Courier New'; -fx-fill: linear-gradient(to right, #0078D7, #00BFFF);");
     
         // Nbr Text
         Text nbrText = new Text(" " + nbr + " ");
-        nbrText.setStyle(
-                "-fx-font-size: 30px; -fx-font-weight: bold; -fx-font-family:'Tahoma'; -fx-fill: linear-gradient(to right, #50B3A2, #4A90E2); -fx-shadow: 0 0 10px rgba(0, 0, 0, 0.3);");
+        nbrText.setStyle("-fx-font-size: 30px; -fx-font-weight: bold; -fx-font-family:'Tahoma'; -fx-fill: linear-gradient(to right, #50B3A2, #4A90E2); -fx-shadow: 0 0 10px rgba(0, 0, 0, 0.3);");
     
         Text cardDescription = new Text(description);
         cardDescription.setStyle("-fx-font-size: 14px; -fx-fill: #666666; -fx-font-family: 'Courier New';-fx-shadow: 0 0 10px rgba(0, 0, 0, 0.3);");

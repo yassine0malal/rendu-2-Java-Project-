@@ -110,32 +110,21 @@ crudMenu.setOnMouseExited(e -> {
     private void displayAddTerrainForm() {
         // Clear the content area to remove any previous content
         clearContentArea();
-    
-        // Remove any existing terrain table data
-        if (terrainTable != null) {
-            this.getChildren().remove(terrainTable);
-        }
-    
-        // Clear and reset the terrain form if it exists
-        if (addTerrainForm != null) {
-            this.getChildren().remove(addTerrainForm);
-        }
-    
+        
         // Initialize the terrain form layout
         addTerrainForm = new GridPane();
         addTerrainForm.setAlignment(Pos.CENTER);
         addTerrainForm.setHgap(10);
         addTerrainForm.setVgap(10);
         addTerrainForm.setPadding(new Insets(20));
-        addTerrainForm.setStyle(
-                "-fx-background-color: #f9f9f9; -fx-border-radius: 15px; -fx-background-radius: 15px; -fx-padding: 20;");
-    
+        addTerrainForm.setStyle("-fx-background-color: #f9f9f9; -fx-border-radius: 15px; -fx-background-radius: 15px; -fx-padding: 20;");
+        
         // Add a title for the form
         Label titleLabel = new Label("Terrain Registration");
         titleLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #333;");
         addTerrainForm.add(titleLabel, 0, 0, 2, 1);
         GridPane.setHalignment(titleLabel, HPos.CENTER);
-    
+        
         // Add terrain name field
         Label nameLabel = new Label("Terrain Name:");
         nameLabel.setStyle("-fx-font-size: 14px;");
@@ -144,7 +133,7 @@ crudMenu.setOnMouseExited(e -> {
         nameField.setStyle("-fx-font-size: 14px; -fx-pref-width: 250px;");
         addTerrainForm.add(nameLabel, 0, 1);
         addTerrainForm.add(nameField, 1, 1);
-    
+        
         // Add terrain type field
         Label typeLabel = new Label("Terrain Type:");
         typeLabel.setStyle("-fx-font-size: 14px;");
@@ -153,30 +142,24 @@ crudMenu.setOnMouseExited(e -> {
         typeField.setStyle("-fx-font-size: 14px; -fx-pref-width: 250px;");
         addTerrainForm.add(typeLabel, 0, 2);
         addTerrainForm.add(typeField, 1, 2);
-    
+        
         // Add register button
         registerButton = new Button("Register");
-        registerButton.setStyle(
-                "-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-border-radius: 5px; -fx-padding: 10px 20px;");
-        registerButton.setOnMouseEntered(e -> registerButton.setStyle(
-                "-fx-background-color:rgb(158, 226, 13); -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-border-radius: 5px; -fx-padding: 10px 20px;"));
-        registerButton.setOnMouseExited(e -> registerButton.setStyle(
-                "-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-border-radius: 5px; -fx-padding: 10px 20px;"));
+        registerButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-border-radius: 5px; -fx-padding: 10px 20px;");
+        registerButton.setOnMouseEntered(e -> registerButton.setStyle("-fx-background-color:rgb(158, 226, 13); -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-border-radius: 5px; -fx-padding: 10px 20px;"));
+        registerButton.setOnMouseExited(e -> registerButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-border-radius: 5px; -fx-padding: 10px 20px;"));
         addTerrainForm.add(registerButton, 1, 3);
         GridPane.setHalignment(registerButton, HPos.RIGHT);
-    
+        
         // Add form to the content area and ensure proper positioning
         contentArea.getChildren().add(addTerrainForm);
         AnchorPane.setTopAnchor(addTerrainForm, 50.0);
         AnchorPane.setLeftAnchor(addTerrainForm, 100.0);
         AnchorPane.setRightAnchor(addTerrainForm, 100.0);
-    
-        this.add(contentArea, 0, 1, 2, 1);
-    
+        
         // Set action for register button
         registerButton.setOnAction(event -> handleRegister());
     }
-    
     private void handleRegister() {
         String name = nameField.getText();
         String type = typeField.getText();

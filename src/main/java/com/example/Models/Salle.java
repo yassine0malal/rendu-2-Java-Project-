@@ -1,6 +1,5 @@
 package com.example.Models;
 public class Salle {
-    private int count = 0;
     private int id;
     private String nom;
     private int capacite;
@@ -9,6 +8,7 @@ public class Salle {
         return id;
     }
     public String getNom() {
+        
         return nom;
     }
     public int getCapacite() {
@@ -16,9 +16,15 @@ public class Salle {
     }
 
     public void setNom(String nom) {
+        if (nom==null) {
+            nom ="hhhh";
+        }
         this.nom = nom;
     }
     public void setCapacite(int capacite) {
+        if (capacite<0) {
+            capacite=0;
+        }
         this.capacite = capacite;
     }
     public void setId(int id) {
@@ -26,7 +32,6 @@ public class Salle {
     }
 
     public Salle(){
-        id=++count;
     }
     public Salle(String nom, int capacite) {
         this.nom = nom;

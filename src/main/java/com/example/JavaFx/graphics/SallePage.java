@@ -93,7 +93,7 @@ public class SallePage extends GridPane {
         crudMenu.getChildren().addAll(addSalleButton, displaySalleButton);
         this.add(crudMenu, 0, 0);
 
-               Label emptyLabel = new Label("Select an action from the navbar above");
+        Label emptyLabel = new Label("Select an action from the navbar above");
         emptyLabel.setStyle("-fx-font-size: 18px;");
         StackPane stackPane = new StackPane(emptyLabel);
         stackPane.setPrefSize(1000, 600);
@@ -107,32 +107,31 @@ public class SallePage extends GridPane {
     private void displayAddSalleForm() {
         // Clear the content area to remove any previous content
         clearContentArea();
-    
+        
         // Remove any existing salle table data
         if (salleTable != null) {
             this.getChildren().remove(salleTable);
         }
-    
+        
         // Clear and reset the salle form if it exists
         if (addSalleForm != null) {
             this.getChildren().remove(addSalleForm);
         }
-    
+        
         // Initialize the salle form layout
         addSalleForm = new GridPane();
         addSalleForm.setAlignment(Pos.CENTER);
         addSalleForm.setHgap(10);
         addSalleForm.setVgap(10);
         addSalleForm.setPadding(new Insets(20));
-        addSalleForm.setStyle(
-                "-fx-background-color: #f9f9f9; -fx-border-radius: 15px; -fx-background-radius: 15px; -fx-padding: 20;");
-    
+        addSalleForm.setStyle("-fx-background-color: #f9f9f9; -fx-border-radius: 15px; -fx-background-radius: 15px; -fx-padding: 20;");
+        
         // Add a title for the form
         Label titleLabel = new Label("Salle Registration");
         titleLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #333;");
         addSalleForm.add(titleLabel, 0, 0, 2, 1);
         GridPane.setHalignment(titleLabel, HPos.CENTER);
-    
+        
         // Add salle name field
         Label nameLabel = new Label("Salle Name:");
         nameLabel.setStyle("-fx-font-size: 14px;");
@@ -141,7 +140,7 @@ public class SallePage extends GridPane {
         nameField.setStyle("-fx-font-size: 14px; -fx-pref-width: 250px;");
         addSalleForm.add(nameLabel, 0, 1);
         addSalleForm.add(nameField, 1, 1);
-    
+        
         // Add salle capacity field
         Label capacityLabel = new Label("Capacity:");
         capacityLabel.setStyle("-fx-font-size: 14px;");
@@ -150,37 +149,36 @@ public class SallePage extends GridPane {
         capacityField.setStyle("-fx-font-size: 14px; -fx-pref-width: 250px;");
         addSalleForm.add(capacityLabel, 0, 2);
         addSalleForm.add(capacityField, 1, 2);
-    
+        
         // Add register button
         registerButton = new Button("Register");
-        registerButton.setStyle(
-                "-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-border-radius: 5px; -fx-padding: 10px 20px;");
-        registerButton.setOnMouseEntered(e -> registerButton.setStyle(
-                "-fx-background-color:rgb(158, 226, 13); -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-border-radius: 5px; -fx-padding: 10px 20px;"));
-        registerButton.setOnMouseExited(e -> registerButton.setStyle(
-                "-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-border-radius: 5px; -fx-padding: 10px 20px;"));
+        registerButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-border-radius: 5px; -fx-padding: 10px 20px;");
+        registerButton.setOnMouseEntered(e -> registerButton.setStyle("-fx-background-color:rgb(158, 226, 13); -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-border-radius: 5px; -fx-padding: 10px 20px;"));
+        registerButton.setOnMouseExited(e -> registerButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-border-radius: 5px; -fx-padding: 10px 20px;"));
         addSalleForm.add(registerButton, 1, 3);
         GridPane.setHalignment(registerButton, HPos.RIGHT);
-    
+        
         // Add form to the content area and ensure proper positioning
         contentArea.getChildren().add(addSalleForm);
         AnchorPane.setTopAnchor(addSalleForm, 50.0);
         AnchorPane.setLeftAnchor(addSalleForm, 100.0);
         AnchorPane.setRightAnchor(addSalleForm, 100.0);
-    
-        this.add(contentArea, 0, 1, 2, 1);
-    
-        // Set action for register button
+        
+        // Set action for register button to call handleRegister method
         registerButton.setOnAction(event -> handleRegister());
-    }
-    
-    private void handleRegister() {
+    }    private void handleRegister() {
         String name = nameField.getText();
-        int capacity = Integer.parseInt(capacityField.getText());
+        int capacity;
+
+        try {
+            capacity = Integer.parseInt(capacityField.getText());
+        } catch (NumberFormatException e) {
+            showAlert(Alert.AlertType.ERROR, "Invalid Input", "Capacity must be a number.");
+            return;
+        }
 
         try {
             TransactionManager.beginTransaction();
-
             SalleDAO salleDAO = new SalleDAO();
             salleDAO.setConexion(TransactionManager.getCurrentConnection());
 
@@ -189,13 +187,13 @@ public class SallePage extends GridPane {
             salle.setCapacite(capacity);
 
             salleDAO.ajouter(salle);
-
             TransactionManager.commit();
+
             showAlert(Alert.AlertType.INFORMATION, "Success", "Salle registered successfully!");
             displayAllSalles();
         } catch (SQLException e) {
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Error", "Salle registration failed.");
+            showAlert(Alert.AlertType.ERROR, "Database Error", "Failed to register salle.");
         }
 
         nameField.clear();

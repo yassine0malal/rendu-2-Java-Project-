@@ -132,7 +132,7 @@ public class AiAssistancePage extends GridPane {
     
     private String filterOffensiveContent(String response) {
       
-        response = response.split("\"")[5];
+        response = response.split("\"")[7];
         response = removeNonAlphanumericCharacters(response);
         return response;
     }
