@@ -37,27 +37,27 @@ public class HomePage extends GridPane {
 
         for (int i = 0; i < 6; i++) {
             if (i == 0) {
-                VBox card = createCard("Total Users ", "Go to Users", i + 1, getUsersNumber());
+                VBox card = createCard("Total Users ", "Select it From Navbar and Go to Explore Users", i + 1, getUsersNumber());
                 card.setPrefSize(200, 300);
                 ;
                 this.add(card, i % 3, i / 3);
             } else if (i == 2) {
-                VBox card = createCard("Total Reservations ", "Go to Reservations", i + 1, getReservationsNumber());
+                VBox card = createCard("Total Reservations ", "Select it From Navbar and Go to Explore Reservations", i + 1, getReservationsNumber());
                 card.setPrefSize(400, 300);
                 ;
                 this.add(card, i % 3, i / 3);
             } else if (i == 1) {
-                VBox card = createCard("Total Salles ", "Go to Salles", i + 1, getSallesNumber());
+                VBox card = createCard("Total Salles ", "Select it From Navbar and Go to Explore Salles", i + 1, getSallesNumber());
                 card.setPrefSize(400, 300);
                 ;
                 this.add(card, i % 3, i / 3);
             } else if (i == 4) {
-                VBox card = createCard("Total Terrains ", "Go to Terrains", i + 1, getTerrainsNumber());
+                VBox card = createCard("Total Terrains ", "Select it From Navbar and Go to Explore Terrains", i + 1, getTerrainsNumber());
                 card.setPrefSize(400, 300);
                 ;
                 this.add(card, i % 3, i / 3);
             } else if (i == 3) {
-                VBox card = createCard("Total Evenements", "Go to Evenements", i + 1, getEvenementsNumber());
+                VBox card = createCard("Total Evenements", "Select it From Navbar and Go to Explore Evenements", i + 1, getEvenementsNumber());
                 card.setPrefSize(400, 300);
                 ;
                 this.add(card, i % 3, i / 3);
@@ -127,7 +127,7 @@ public class HomePage extends GridPane {
 
             viewButton.setGraphic(iconView);
         }else if (cardNumber ==1) {
-            Image icon = new Image(getClass().getResourceAsStream("/icons/user.png"));
+            Image icon = new Image(getClass().getResourceAsStream("/icons/ua.png"));
             ImageView iconView = new ImageView(icon);
             iconView.setFitWidth(60);
             iconView.setFitHeight(60);
