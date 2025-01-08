@@ -205,13 +205,18 @@ public class ReservationPage extends GridPane {
                 TransactionManager.beginTransaction();
                 ReservationDAO reservationDAO = new ReservationDAO();
                 reservationDAO.setConexion(TransactionManager.getCurrentConnection());
-                reservationDAO.ajouter(reservation);
-                TransactionManager.commit();
-                TransactionManager.closeConnection();
-                String userEmail = getUserEmail(userId);
-                sendEmail(userEmail,userId,reservationDate);
-                showAlert(Alert.AlertType.INFORMATION, "Success", "Reservation added successfully!");
-                displayAllReservations();
+                try {
+                    reservationDAO.ajouter(reservation);
+                    TransactionManager.commit();
+                    TransactionManager.closeConnection();
+                    String userEmail = getUserEmail(userId);
+                    sendEmail(userEmail,userId,reservationDate);
+                    showAlert(Alert.AlertType.INFORMATION, "Success", "Reservation added successfully!");
+                    displayAllReservations();
+                } catch (Exception ed) {
+                    TransactionManager.closeConnection();
+                    showAlert(Alert.AlertType.ERROR, "Error", "this salle is already reserved in this date ");
+                }
             } catch (Exception ex) {
                 ex.printStackTrace();
                 showAlert(Alert.AlertType.ERROR, "Error", "Failed to add the reservation.");

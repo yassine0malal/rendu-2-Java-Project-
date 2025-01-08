@@ -19,8 +19,9 @@ public class ReservationDAO implements GenericDAO<Reservation> {
     public void ajouter(Reservation reservation) {
 
                 if (this.verifierDisponible(reservation.getDate_reservation(), reservation.getId_salle()) == 0) {
-                System.out.println("La salle n'est pas disponible pour cette date");
-                return;
+                    throw new IllegalArgumentException("La salle n'est pas disponible pour cette date");
+                // System.out.println("La salle n'est pas disponible pour cette date");
+                // return;
             }
             String query = "INSERT INTO reservations (id_user, id_terrain, id_event, id_salle, date_reservation) VALUES (?, ?, ?, ?, ?)";
             try (PreparedStatement prep = conexion.prepareStatement(query)) {
