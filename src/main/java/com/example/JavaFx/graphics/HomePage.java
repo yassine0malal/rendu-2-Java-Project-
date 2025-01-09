@@ -38,175 +38,128 @@ public class HomePage extends GridPane {
         for (int i = 0; i < 6; i++) {
             if (i == 0) {
                 VBox card = createCard("Total Users ", "Select it From Navbar and Go to Explore Users", i + 1, getUsersNumber());
-                card.setPrefSize(200, 300);
-                ;
+                // card.setPrefSize(250, 150); // Adjusted card size
+                
                 this.add(card, i % 3, i / 3);
             } else if (i == 2) {
                 VBox card = createCard("Total Reservations ", "Select it From Navbar and Go to Explore Reservations", i + 1, getReservationsNumber());
-                card.setPrefSize(400, 300);
-                ;
+                // card.setPrefSize(250, 150); // Adjusted card size
+                
                 this.add(card, i % 3, i / 3);
             } else if (i == 1) {
                 VBox card = createCard("Total Salles ", "Select it From Navbar and Go to Explore Salles", i + 1, getSallesNumber());
-                card.setPrefSize(400, 300);
-                ;
+                // card.setPrefSize(250, 150); // Adjusted card size
+        
                 this.add(card, i % 3, i / 3);
             } else if (i == 4) {
                 VBox card = createCard("Total Terrains ", "Select it From Navbar and Go to Explore Terrains", i + 1, getTerrainsNumber());
-                card.setPrefSize(400, 300);
-                ;
+                // card.setPrefSize(250, 150); // Adjusted card size
+                
                 this.add(card, i % 3, i / 3);
             } else if (i == 3) {
                 VBox card = createCard("Total Evenements", "Select it From Navbar and Go to Explore Evenements", i + 1, getEvenementsNumber());
-                card.setPrefSize(400, 300);
-                ;
+                // card.setPrefSize(250, 150); // Adjusted card size
+                
                 this.add(card, i % 3, i / 3);
             } else if (i == 5) {
                 VBox card = createCard("Ai Assistance ", "How  can i help you with your today planes ", i + 1, 0);
-                card.setPrefSize(400, 300);
-                ;
+                // card.setPrefSize(250, 150); // Adjusted card size
+                
                 this.add(card, i % 3, i / 3);
             }
         }
     }
 
-    private VBox createCard(String title, String description, int cardNumber, int nbr) {
-        // Card layout
-        VBox card = new VBox(10);
-        card.setAlignment(Pos.CENTER);
-        card.setPadding(new Insets(20));
-        card.setStyle("-fx-background-color: #FFFFFF; -fx-border-radius: 10px; -fx-background-radius: 10px;"
-                + " -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0, 4, 4);");
-    
-        // Title
-        Text cardTitle = new Text(title);
-        cardTitle.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-font-family: 'Courier New'; -fx-fill: linear-gradient(to right, #0078D7, #00BFFF);");
-    
-        // Nbr Text
-        Text nbrText = new Text(" " + nbr + " ");
-        nbrText.setStyle("-fx-font-size: 30px; -fx-font-weight: bold; -fx-font-family:'Tahoma'; -fx-fill: linear-gradient(to right, #50B3A2, #4A90E2); -fx-shadow: 0 0 10px rgba(0, 0, 0, 0.3);");
-    
-        Text cardDescription = new Text(description);
-        cardDescription.setStyle("-fx-font-size: 14px; -fx-fill: #666666; -fx-font-family: 'Courier New';-fx-shadow: 0 0 10px rgba(0, 0, 0, 0.3);");
-    
-        Button viewButton = new Button();
-        if (cardNumber == 3) {
-            Image icon = new Image(getClass().getResourceAsStream("/icons/reservation.png"));
-            ImageView iconView = new ImageView(icon);
-            iconView.setFitWidth(60);
-            iconView.setFitHeight(60);
-    
-            Rectangle clip = new Rectangle(iconView.getFitWidth(), iconView.getFitHeight());
-            clip.setArcWidth(20);  
-            clip.setArcHeight(20);
-            iconView.setClip(clip);
-    
-            viewButton.setGraphic(iconView);
-        }else if (cardNumber == 6) {
-            Image icon = new Image(getClass().getResourceAsStream("/icons/AI.png"));
-            ImageView iconView = new ImageView(icon);
-            iconView.setFitWidth(60);
-            iconView.setFitHeight(60);
+   private VBox createCard(String title, String description, int cardNumber, int nbr) {
+    // Card layout
+    VBox card = new VBox(10);
+    card.setAlignment(Pos.CENTER);
+    card.setPadding(new Insets(0, 0, 20, 0)); // Réduction des marges pour un ajustement plus compact
+    card.setStyle("-fx-background-color: #FFFFFF; -fx-border-radius: 10px; -fx-background-radius: 10px;"
+            + " -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0, 4, 4);");
 
-            Rectangle clip = new Rectangle(iconView.getFitWidth(), iconView.getFitHeight());
-            clip.setArcWidth(20);  
-            clip.setArcHeight(20);
-            iconView.setClip(clip);
+    // **Réduction de la taille des cartes**
+    card.setPrefWidth(210); // Largeur ajustée
+    card.setPrefHeight(200); // Hauteur ajustée
 
-            viewButton.setGraphic(iconView);
-        }else if (cardNumber == 4) {
-            Image icon = new Image(getClass().getResourceAsStream("/icons/event.png"));
-            ImageView iconView = new ImageView(icon);
-            iconView.setFitWidth(60);
-            iconView.setFitHeight(60);
+    // Title
+    Text cardTitle = new Text(title);
+    cardTitle.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-font-family: 'Courier New'; -fx-fill: linear-gradient(to right, #0078D7, #00BFFF);");
 
-            Rectangle clip = new Rectangle(iconView.getFitWidth(), iconView.getFitHeight());
-            clip.setArcWidth(20);
-            clip.setArcHeight(20);
-            iconView.setClip(clip);
+    // Nbr Text
+    Text nbrText = new Text(" " + nbr + " ");
+    nbrText.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-font-family: 'Tahoma'; -fx-fill: linear-gradient(to right, #50B3A2, #4A90E2);");
 
-            viewButton.setGraphic(iconView);
-        }else if (cardNumber ==1) {
-            Image icon = new Image(getClass().getResourceAsStream("/icons/ua.png"));
-            ImageView iconView = new ImageView(icon);
-            iconView.setFitWidth(60);
-            iconView.setFitHeight(60);
-            Rectangle clip = new Rectangle(iconView.getFitWidth(), iconView.getFitHeight());
-            clip.setArcWidth(20);
-            clip.setArcHeight(20);
-            iconView.setClip(clip);
-            viewButton.setGraphic(iconView);
-        }else if (cardNumber == 2) {
-            Image icon = new Image(getClass().getResourceAsStream("/icons/salle.png"));
-            ImageView iconView = new ImageView(icon);
-            iconView.setFitWidth(60);
-            iconView.setFitHeight(60);
-            Rectangle clip = new Rectangle(iconView.getFitWidth(), iconView.getFitHeight());
-            clip.setArcWidth(20);
-            clip.setArcHeight(20);
-            iconView.setClip(clip);
-            viewButton.setGraphic(iconView);
-        }else if (cardNumber == 5) {
-            Image icon = new Image(getClass().getResourceAsStream("/icons/terrain1.png"));
-            ImageView iconView = new ImageView(icon);
-            iconView.setFitWidth(60);
-            iconView.setFitHeight(60);
-            Rectangle clip = new Rectangle(iconView.getFitWidth(), iconView.getFitHeight());
-            clip.setArcWidth(20);
-            clip.setArcHeight(20);
-            iconView.setClip(clip);
-            viewButton.setGraphic(iconView);
-            
-        }
-    
+    // Description
+    Text cardDescription = new Text(description);
+    cardDescription.setStyle("-fx-font-size: 12px; -fx-fill: #666666; -fx-font-family: 'Courier New';");
 
+    // Button with icons (no changes made here)
+    Button viewButton = new Button();
+    if (cardNumber == 3 || cardNumber == 6 || cardNumber == 4 || cardNumber == 1 || cardNumber == 2 || cardNumber == 5) {
+        Image icon = new Image(getClass().getResourceAsStream(getIconPath(cardNumber)));
+        ImageView iconView = new ImageView(icon);
+        iconView.setFitWidth(40); // Ajustement de la taille de l'icône
+        iconView.setFitHeight(40);
 
+        Rectangle clip = new Rectangle(iconView.getFitWidth(), iconView.getFitHeight());
+        clip.setArcWidth(10);
+        clip.setArcHeight(10);
+        iconView.setClip(clip);
 
-        viewButton.setStyle(
-                "-fx-background-color: #0078D7; -fx-text-fill: white; -fx-padding: 5 15; -fx-font-family: 'Courier New'; -fx-width: 100px; -fx-height: 30px;-fx-border-radius: 5px; -fx-background-radius: 5px; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0, 4, 4);");
-    
-        Timeline enterTimeline = new Timeline(
-                new KeyFrame(Duration.ZERO,
-                        new KeyValue(viewButton.styleProperty(),
-                                "-fx-background-color: linear-gradient(to right, #0078D7, #00BFFF);")),
-                new KeyFrame(Duration.seconds(0.25),
-                        new KeyValue(viewButton.styleProperty(), "-fx-background-color: #0078D7;")));
-        Timeline exitTimeline = new Timeline(
-                new KeyFrame(Duration.ZERO,
-                        new KeyValue(viewButton.styleProperty(),
-                                "-fx-background-color: linear-gradient(to right, #0078D7, #00BFFF);")),
-                new KeyFrame(Duration.seconds(1),
-                        new KeyValue(viewButton.styleProperty(), "-fx-background-color: #0078D7;")));
-        // viewButton.setOnMouseEntered(event -> enterTimeline.play());
-        // viewButton.setOnMouseExited(event -> exitTimeline.play());
-        viewButton.setPrefSize(200, 30);
-    
-        HBox buttonBox = new HBox(10, viewButton);
-        buttonBox.setAlignment(Pos.CENTER);
-    
-        Timeline enterTimeline2 = new Timeline(
-                new KeyFrame(Duration.ZERO, new KeyValue(card.styleProperty(), "-fx-background-color: #DEDEDE; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 15, 0, 5, 5); -fx-border-width: 2px; -fx-border-color: rgba(255, 255, 255, 0.4);")),
-                new KeyFrame(Duration.seconds(1), new KeyValue(card.styleProperty(),
-                        "-fx-background-color: #DEDEDE; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 15, 0, 5, 5); -fx-border-width: 2px; -fx-border-color: rgba(255, 255, 255, 0.4);")));
-        Timeline exitTimeline2 = new Timeline(
-                new KeyFrame(Duration.ZERO, new KeyValue(card.styleProperty(),
-                        "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 15, 0, 5, 5); -fx-border-width: 2px; -fx-border-color: rgba(255, 255, 255, 0.4);")),
-                new KeyFrame(Duration.seconds(0.25), new KeyValue(card.styleProperty(), "-fx-background-color: #FFFFFF; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 15, 0, 5, 5); -fx-border-width: 2px; -fx-border-color: rgba(255, 255, 255, 0.4);"))); 
-        card.setOnMouseEntered(event -> enterTimeline2.play());
-        card.setOnMouseExited(event -> exitTimeline2.play());
-    
-        if (nbr == 0 && cardNumber == 6) {
-            card.getChildren().addAll(cardTitle, cardDescription, buttonBox);
-            Text ld =new Text("Select Me From The Menu To Chat");
-            ld.setStyle("-fx-font-size: 14px; -fx-fill: #666666; -fx-font-family: 'Courier New';-fx-shadow: 0 0 10px rgba(0, 0, 0, 0.3); -fx-font-weight: bold; -fx-text-fill: #333333; -fx-text-alignment: center;");
-            card.getChildren().add(ld);
-        } else {
-            card.getChildren().addAll(nbrText, cardTitle, cardDescription, buttonBox);
-        }
-    
-        return card;
+        viewButton.setGraphic(iconView);
     }
-    
+
+    viewButton.setStyle(
+            "-fx-background-color: #0078D7; -fx-text-fill: white; -fx-padding: 5 10; -fx-font-family: 'Courier New'; -fx-border-radius: 5px; -fx-background-radius: 5px;");
+    viewButton.setPrefSize(150, 25); // Réduction des dimensions du bouton
+
+    HBox buttonBox = new HBox(10, viewButton);
+    buttonBox.setAlignment(Pos.CENTER);
+
+    // Hover animation
+    Timeline enterTimeline2 = new Timeline(
+            new KeyFrame(Duration.ZERO, new KeyValue(card.styleProperty(), "-fx-background-color: #DEDEDE;")),
+            new KeyFrame(Duration.seconds(1), new KeyValue(card.styleProperty(), "-fx-background-color: #FFFFFF;")));
+    Timeline exitTimeline2 = new Timeline(
+            new KeyFrame(Duration.ZERO, new KeyValue(card.styleProperty(), "-fx-background-color: #FFFFFF;")),
+            new KeyFrame(Duration.seconds(0.25), new KeyValue(card.styleProperty(), "-fx-background-color: #FFFFFF;")));
+
+    card.setOnMouseEntered(event -> enterTimeline2.play());
+    card.setOnMouseExited(event -> exitTimeline2.play());
+
+    // Add components to the card
+    if (nbr == 0 && cardNumber == 6) {
+        card.getChildren().addAll(cardTitle, cardDescription, buttonBox);
+        Text ld = new Text("Select Me From The Menu To Chat");
+        ld.setStyle("-fx-font-size: 12px; -fx-fill: #666666; -fx-font-family: 'Courier New'; -fx-font-weight: bold;");
+        card.getChildren().add(ld);
+    } else {
+        card.getChildren().addAll(nbrText, cardTitle, cardDescription, buttonBox);
+    }
+
+    return card;
+}
+
+private String getIconPath(int cardNumber) {
+    switch (cardNumber) {
+        case 3:
+            return "/icons/reservation.png";
+        case 6:
+            return "/icons/AI.png";
+        case 4:
+            return "/icons/event.png";
+        case 1:
+            return "/icons/image.png";
+        case 2:
+            return "/icons/salle.png";
+        case 5:
+            return "/icons/terrain1.png";
+        default:
+            return "/icons/default.png";
+    }
+}
+
     public int getTerrainsNumber() {
         int terrainCount = 0;
         try {

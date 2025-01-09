@@ -154,6 +154,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>com.example.JavaFx.DashbordCode</mainClass>
+                            <failOnError>false</failOnError>
                         </configuration>
                     </execution>
                 </executions>
@@ -163,5 +164,17 @@
     </pluginManagement>
 </build>
 
+<!-- <build>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-clean-plugin</artifactId>
+            <version>3.1.0</version>
+            <configuration>
+                <failOnError>false</failOnError>
+            </configuration>
+        </plugin>
+    </plugins>
+</build> -->
 
 </project>
